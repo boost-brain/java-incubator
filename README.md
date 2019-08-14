@@ -8,3 +8,5 @@
 Каталог с профилями - team в ветке master
 
 Описание проекта "Реестр студентов" - https://github.com/boost-brain/java-incubator/wiki/Проект-"Реестр-студентов"/
+
+У нас есть чат в Telegram: https://t.me/joinchat/HhyEHBSepOkU5czZ3Cvx3A

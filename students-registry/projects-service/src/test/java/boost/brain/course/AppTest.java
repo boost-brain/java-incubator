@@ -2,11 +2,7 @@ package boost.brain.course;
 
 import static org.junit.Assert.assertTrue;
 
-import boost.brain.course.model.Project;
-import boost.brain.course.repository.ProjectRepository;
-import boost.brain.course.service.ProjectService;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
@@ -16,8 +12,6 @@ import java.io.IOException;
 public class AppTest 
 {
 
-    @Autowired
-    ProjectService projectService;
     @Test
     public void createProjectTest() throws IOException {
         String JSON="{\n" +

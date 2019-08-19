@@ -71,7 +71,8 @@ public class TasksController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody String update(@RequestBody TaskDto taskDto) {
         //Проверяем идентификаторы задания, проекта, автора и исполнителя задания
-        if (taskDto.getId() < 1 || taskDto.getProject() < 1 || taskDto.getImplementer() < 1) {
+        if (taskDto.getId() < 1 || taskDto.getProject() < 1 ||
+                taskDto.getAuthor() < 1 || taskDto.getImplementer() < 1) {
             throw new NotFoundException();
         }
         //Проверяем название задания

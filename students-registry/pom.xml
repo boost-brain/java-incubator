@@ -68,7 +68,6 @@
         </pluginManagement>
     </build>
 
-
     <modules>
         <module>frontend</module>
         <module>users-service</module>

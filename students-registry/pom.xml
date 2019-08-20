@@ -35,6 +35,12 @@
             </dependency>
 
             <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>2.9.2</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>1.18.8</version>
@@ -50,11 +56,25 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>1.4.12</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+
     <modules>
         <module>frontend</module>
         <module>users-service</module>
         <module>register-service</module>
         <module>auth-service</module>
         <module>example-service</module>
+        <module>tasks-service</module>
     </modules>
 </project>

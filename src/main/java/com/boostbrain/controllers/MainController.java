@@ -21,6 +21,7 @@ public class MainController {
         this.mainRepository = mainRepository;
     }
 
+    @Deprecated
     @RequestMapping(path = "/createStudentGET",
             method = RequestMethod.GET,
             produces= MediaType.APPLICATION_JSON_VALUE)
@@ -42,27 +43,24 @@ public class MainController {
     public @ResponseBody
     Student create(@RequestBody Student student) {
         Student result = mainRepository.create(student);
-
-
         return result;
     }
 
     @GetMapping(path = Constants.READ_PREFIX + "/{id}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    Student read(@PathVariable long id) throws NotFoundException {
+    Student read(@PathVariable long id) {
         Student result = mainRepository.read(id);
         if (result == null) {
             throw new NotFoundException();
         }
-
         return result;
     }
 
     @PatchMapping(path = Constants.UPDATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody String update(@RequestBody Student student) throws NotFoundException {
+    public @ResponseBody String update(@RequestBody Student student) {
         if (mainRepository.update(student)) {
             return HttpStatus.OK.getReasonPhrase();
         } else {
@@ -74,7 +72,7 @@ public class MainController {
 
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody String delete(@PathVariable long id) throws NotFoundException {
+    public @ResponseBody String delete(@PathVariable long id) {
         if (mainRepository.delete(id)) {
             return HttpStatus.OK.getReasonPhrase();
         } else {

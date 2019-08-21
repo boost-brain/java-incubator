@@ -86,10 +86,10 @@
                 search: '',
                 selected:[],
                 headers: [
-                    { text: 'id', value: 'id' },
-                    { text: 'ФИО', value: 'text' },
-                    { text: 'email', value: 'subject' },
-                    { text: 'Actions', value: 'action', sortable: false },
+                    { text: 'project Id', value: 'projectId' },
+                    { text: 'Описание проекта', value: 'description' },
+                    { text: 'Наименование проекта', value: 'projectName' },
+                    { text: 'URL', value: 'projectUrl', sortable: false },
                 ],
                 editedIndex: -1,
                 editedItem: {

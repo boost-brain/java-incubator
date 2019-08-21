@@ -34,7 +34,7 @@
         methods: {
             loadPoints () {
                 console.log("loadPoints()")
-                this.$store.resource = this.$resource('http://localhost:3000/restAPI')
+                this.$store.resource = this.$resource('http://localhost:8080/all')
                 this.$store.resource.get().then(response => response.json())
                     .then(points => {
                         for (var value of points) {

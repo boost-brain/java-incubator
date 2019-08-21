@@ -125,10 +125,58 @@ public class TasksController {
         }
 
         List<TaskDto> result = tasksRepository.getPage(page,size);
-        if (result == null || result.size() == 0) {
+        if (result == null) {
             throw new NotFoundException();
         }
 
+        return result;
+    }
+
+    @GetMapping(path = Constants.TASKS_FOR_PREFIX + "/{implementer}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    List<TaskDto> tasksFor(@PathVariable int implementer) {
+        //Проверяем идентификатор пользователя(исполнителя)
+        if (implementer < 1) {
+            throw new NotFoundException();
+        }
+
+        List<TaskDto> result = tasksRepository.tasksFor(implementer);
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
+    }
+
+    @GetMapping(path = Constants.TASKS_FROM_PREFIX + "/{author}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    List<TaskDto> tasksFrom(@PathVariable int author) {
+        //Проверяем идентификатор пользователя(автора)
+        if (author < 1) {
+            throw new NotFoundException();
+        }
+
+        List<TaskDto> result = tasksRepository.tasksFrom(author);
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
+    }
+
+    @GetMapping(path = Constants.TASKS_IN_PREFIX + "/{project}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    List<TaskDto> tasksIn(@PathVariable int project) {
+        //Проверяем идентификатор проекта
+        if (project < 1) {
+            throw new NotFoundException();
+        }
+
+        List<TaskDto> result = tasksRepository.tasksIn(project);
+        if (result == null) {
+            throw new NotFoundException();
+        }
         return result;
     }
 }

@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +95,7 @@ public class TasksRepository{
 
         CriteriaQuery<TaskEntity> criteriaQuery = criteriaBuilder.createQuery(TaskEntity.class);
         Root<TaskEntity> from = criteriaQuery.from(TaskEntity.class);
-        CriteriaQuery<TaskEntity> select = criteriaQuery.select(from);
+        CriteriaQuery<TaskEntity> select = criteriaQuery.select(from).where();
 
         TypedQuery<TaskEntity> typedQuery = entityManager.createQuery(select);
         typedQuery.setFirstResult((pageNumber - 1) * pageSize);
@@ -109,4 +110,65 @@ public class TasksRepository{
         }
         return result;
     }
+
+    public List<TaskDto> tasksFor(final int implementer) {
+        List<TaskDto> result = new ArrayList<>();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<TaskEntity> criteriaQuery = criteriaBuilder.createQuery(TaskEntity.class);
+        Root<TaskEntity> from = criteriaQuery.from(TaskEntity.class);
+        Predicate where = criteriaBuilder.equal(from.get("implementer"), implementer);
+        CriteriaQuery<TaskEntity> select = criteriaQuery.select(from).where(where);
+        TypedQuery<TaskEntity> typedQuery = entityManager.createQuery(select);
+
+        List<TaskEntity> taskEntities = typedQuery.getResultList();
+
+        for (TaskEntity taskEntity: taskEntities) {
+            TaskDto taskDto = new TaskDto();
+            BeanUtils.copyProperties(taskEntity, taskDto);
+            result.add(taskDto);
+        }
+        return result;
+    }
+
+    public List<TaskDto> tasksFrom(final int author) {
+        List<TaskDto> result = new ArrayList<>();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<TaskEntity> criteriaQuery = criteriaBuilder.createQuery(TaskEntity.class);
+        Root<TaskEntity> from = criteriaQuery.from(TaskEntity.class);
+        Predicate where = criteriaBuilder.equal(from.get("author"), author);
+        CriteriaQuery<TaskEntity> select = criteriaQuery.select(from).where(where);
+        TypedQuery<TaskEntity> typedQuery = entityManager.createQuery(select);
+
+        List<TaskEntity> taskEntities = typedQuery.getResultList();
+
+        for (TaskEntity taskEntity: taskEntities) {
+            TaskDto taskDto = new TaskDto();
+            BeanUtils.copyProperties(taskEntity, taskDto);
+            result.add(taskDto);
+        }
+        return result;
+    }
+
+    public List<TaskDto> tasksIn(final int project) {
+        List<TaskDto> result = new ArrayList<>();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<TaskEntity> criteriaQuery = criteriaBuilder.createQuery(TaskEntity.class);
+        Root<TaskEntity> from = criteriaQuery.from(TaskEntity.class);
+        Predicate where = criteriaBuilder.equal(from.get("project"), project);
+        CriteriaQuery<TaskEntity> select = criteriaQuery.select(from).where(where);
+        TypedQuery<TaskEntity> typedQuery = entityManager.createQuery(select);
+
+        List<TaskEntity> taskEntities = typedQuery.getResultList();
+
+        for (TaskEntity taskEntity: taskEntities) {
+            TaskDto taskDto = new TaskDto();
+            BeanUtils.copyProperties(taskEntity, taskDto);
+            result.add(taskDto);
+        }
+        return result;
+    }
+
 }

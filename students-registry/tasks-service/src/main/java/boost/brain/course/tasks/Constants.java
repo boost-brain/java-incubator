@@ -10,4 +10,8 @@ public interface Constants {
     String DELETE_PREFIX = "/delete";
     String COUNT_PREFIX = "/count";
     String PAGE_PREFIX = "/page";
+    String TASKS_FOR_PREFIX = "/for";
+    String TASKS_FROM_PREFIX = "/from";
+    String TASKS_IN_PREFIX = "/in";
+
 }

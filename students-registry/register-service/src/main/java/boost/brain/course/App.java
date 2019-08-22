@@ -13,11 +13,11 @@ import java.io.IOException;
 public class App 
 {
     public static void main( String[] args ) throws IOException, MessagingException {
-        //SendEmail.sendEmail();
+
         String s = "igor";
 
         System.out.println(DigestUtils.md5Hex(s));
         System.out.println(DigestUtils.md5Hex(s));
-        //MD5Util.md5Custom(s);
+
     }
 }

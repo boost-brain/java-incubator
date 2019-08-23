@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:api-getway}
+
+zuul:
+  prefix: ${ZUUL_PREFIX:/services}
+  routes:
+    tasks-service:
+      url: ${TASKS-SERVICE_URL:http://localhost:8081}
+
+server:
+  port: ${SERVER_PORT:8080}

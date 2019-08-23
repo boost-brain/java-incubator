@@ -1,4 +1,4 @@
-package boost.brain.course.service;
+package boost.brain.course.service.register;
 
 import boost.brain.course.entity.EmailEntity;
 

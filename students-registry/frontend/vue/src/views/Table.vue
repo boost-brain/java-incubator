@@ -16,6 +16,7 @@
                                 vertical
                         ></v-divider>
                         <v-spacer></v-spacer>
+
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="primary" dark class="mb-2" v-on="on">Ввести вручную</v-btn>
@@ -75,7 +76,7 @@
 
 <script>
 
-    // import EditPointModal from '../components/EditPointModal'
+    // import Point from '../components/Point'
     // import MenuIcon from "vue-material-design-icons/Menu.vue"
 
     export default {
@@ -90,6 +91,7 @@
                     { text: 'Описание проекта', value: 'description' },
                     { text: 'Наименование проекта', value: 'projectName' },
                     { text: 'URL', value: 'projectUrl', sortable: false },
+                    { text: 'Actions', value: 'action', sortable: false },
                 ],
                 editedIndex: -1,
                 editedItem: {
@@ -112,6 +114,7 @@
         },
 
         components: {
+            // point: Point
             //MenuIcon
         },
 

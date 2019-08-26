@@ -1,16 +1,14 @@
 package boost.brain.course.tasks.repository.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
+
 public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,4 +20,7 @@ public class TaskEntity {
     private String text;
     private long createDate;
     private long updateDate;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "taskId")
+    private List<CommentEntity> comments = new ArrayList<>();
 }

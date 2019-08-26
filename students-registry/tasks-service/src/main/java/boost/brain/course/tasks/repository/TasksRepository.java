@@ -37,7 +37,7 @@ public class TasksRepository{
         entityManager.persist(taskEntity);
 
         TaskDto result = new TaskDto();
-        BeanUtils.copyProperties(taskEntity, result);
+        BeanUtils.copyProperties(taskEntity, result, "comments");
 
         return result;
     }
@@ -101,11 +101,12 @@ public class TasksRepository{
         typedQuery.setFirstResult((pageNumber - 1) * pageSize);
         typedQuery.setMaxResults(pageSize);
 
+
         List<TaskEntity> taskEntities = typedQuery.getResultList();
 
         for (TaskEntity taskEntity: taskEntities) {
             TaskDto taskDto = new TaskDto();
-            BeanUtils.copyProperties(taskEntity, taskDto);
+            BeanUtils.copyProperties(taskEntity, taskDto, "comments");
             result.add(taskDto);
         }
         return result;
@@ -125,7 +126,7 @@ public class TasksRepository{
 
         for (TaskEntity taskEntity: taskEntities) {
             TaskDto taskDto = new TaskDto();
-            BeanUtils.copyProperties(taskEntity, taskDto);
+            BeanUtils.copyProperties(taskEntity, taskDto, "comments");
             result.add(taskDto);
         }
         return result;
@@ -145,7 +146,7 @@ public class TasksRepository{
 
         for (TaskEntity taskEntity: taskEntities) {
             TaskDto taskDto = new TaskDto();
-            BeanUtils.copyProperties(taskEntity, taskDto);
+            BeanUtils.copyProperties(taskEntity, taskDto, "comments");
             result.add(taskDto);
         }
         return result;
@@ -165,10 +166,39 @@ public class TasksRepository{
 
         for (TaskEntity taskEntity: taskEntities) {
             TaskDto taskDto = new TaskDto();
-            BeanUtils.copyProperties(taskEntity, taskDto);
+            BeanUtils.copyProperties(taskEntity, taskDto, "comments");
             result.add(taskDto);
         }
         return result;
     }
 
+    public List<TaskDto> filter(final int project, final int author, final int implementer) {
+        List<TaskDto> result = new ArrayList<>();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<TaskEntity> cq = cb.createQuery(TaskEntity.class);
+        Root<TaskEntity> from = cq.from(TaskEntity.class);
+        CriteriaQuery<TaskEntity> select = cq.select(from);
+        List<Predicate> predicateList = new ArrayList<>();
+        if (project > 0) {
+            predicateList.add(cb.equal(from.get("project"),project));
+        }
+        if (author > 0) {
+            predicateList.add(cb.equal(from.get("author"),author));
+        }
+        if (implementer > 0) {
+            predicateList.add(cb.equal(from.get("implementer"),implementer));
+        }
+        Predicate[] restrictions = new Predicate[predicateList.size()];
+        select.where(predicateList.toArray(restrictions));
+        TypedQuery<TaskEntity> typedQuery = entityManager.createQuery(select);
+
+        List<TaskEntity> taskEntities = typedQuery.getResultList();
+        for (TaskEntity taskEntity : taskEntities) {
+            TaskDto taskDto = new TaskDto();
+            BeanUtils.copyProperties(taskEntity, taskDto, "comments");
+            result.add(taskDto);
+        }
+        return result;
+    }
 }

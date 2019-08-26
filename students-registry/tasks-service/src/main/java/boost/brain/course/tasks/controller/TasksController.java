@@ -7,12 +7,11 @@ import boost.brain.course.tasks.repository.TasksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(Constants.TASKS_CONTROLLER_PREFIX)
 public class TasksController {
 
@@ -24,10 +23,9 @@ public class TasksController {
     }
 
     @PostMapping(path = Constants.CREATE_PREFIX,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    TaskDto create(@RequestBody TaskDto taskDto) {
+                consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public TaskDto create(@RequestBody TaskDto taskDto) {
         //Проверяем идентификаторы проекта, автора и исполнителя задания
         if (taskDto.getProject() < 1 || taskDto.getAuthor() < 1 || taskDto.getImplementer() < 1) {
             throw new NotFoundException();
@@ -50,26 +48,23 @@ public class TasksController {
     }
 
     @GetMapping(path = Constants.READ_PREFIX + "/{id}",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    TaskDto read(@PathVariable long id) {
+                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public TaskDto read(@PathVariable long id) {
         //Проверяем идентификатор задания
         if (id < 1) {
             throw new NotFoundException();
         }
-
         TaskDto result = tasksRepository.read(id);
         if (result == null) {
             throw new NotFoundException();
         }
-
         return result;
     }
 
     @PatchMapping(path = Constants.UPDATE_PREFIX,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+                consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody String update(@RequestBody TaskDto taskDto) {
+    public String update(@RequestBody TaskDto taskDto) {
         //Проверяем идентификаторы задания, проекта, автора и исполнителя задания
         if (taskDto.getId() < 1 || taskDto.getProject() < 1 ||
                 taskDto.getAuthor() < 1 || taskDto.getImplementer() < 1) {
@@ -95,7 +90,7 @@ public class TasksController {
 
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody String delete(@PathVariable long id) {
+    public String delete(@PathVariable long id) {
         //Проверяем идентификатор задания
         if (id < 1) {
             throw new NotFoundException();
@@ -109,38 +104,33 @@ public class TasksController {
     }
 
     @GetMapping(path = Constants.COUNT_PREFIX,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody long count() {
         return tasksRepository.count();
     }
 
     @GetMapping(path = Constants.PAGE_PREFIX + "/{page}/{size}",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    List<TaskDto> page(@PathVariable int page, @PathVariable int size) {
+                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<TaskDto> page(@PathVariable int page, @PathVariable int size) {
         //Проверяем номер страницы и размер
         if (page < 1 || size < 1) {
             throw new NotFoundException();
         }
-
         List<TaskDto> result = tasksRepository.getPage(page,size);
         if (result == null) {
             throw new NotFoundException();
         }
-
         return result;
     }
 
-    @GetMapping(path = Constants.TASKS_FOR_PREFIX + "/{implementer}",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    List<TaskDto> tasksFor(@PathVariable int implementer) {
+    @GetMapping(path = Constants.FOR_PREFIX + "/{implementer}",
+                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<TaskDto> tasksFor(@PathVariable int implementer) {
         //Проверяем идентификатор пользователя(исполнителя)
         if (implementer < 1) {
             throw new NotFoundException();
         }
-
         List<TaskDto> result = tasksRepository.tasksFor(implementer);
         if (result == null) {
             throw new NotFoundException();
@@ -148,15 +138,13 @@ public class TasksController {
         return result;
     }
 
-    @GetMapping(path = Constants.TASKS_FROM_PREFIX + "/{author}",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    List<TaskDto> tasksFrom(@PathVariable int author) {
+    @GetMapping(path = Constants.FROM_PREFIX + "/{author}",
+                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<TaskDto> tasksFrom(@PathVariable int author) {
         //Проверяем идентификатор пользователя(автора)
         if (author < 1) {
             throw new NotFoundException();
         }
-
         List<TaskDto> result = tasksRepository.tasksFrom(author);
         if (result == null) {
             throw new NotFoundException();
@@ -164,16 +152,26 @@ public class TasksController {
         return result;
     }
 
-    @GetMapping(path = Constants.TASKS_IN_PREFIX + "/{project}",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    List<TaskDto> tasksIn(@PathVariable int project) {
+    @GetMapping(path = Constants.IN_PREFIX + "/{project}",
+                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<TaskDto> tasksIn(@PathVariable int project) {
         //Проверяем идентификатор проекта
         if (project < 1) {
             throw new NotFoundException();
         }
-
         List<TaskDto> result = tasksRepository.tasksIn(project);
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
+    }
+
+    @GetMapping(path = Constants.FILTER_PREFIX,
+                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<TaskDto> filter( @RequestParam(required = false, defaultValue = "0") int project,
+                                 @RequestParam(required = false, defaultValue = "0") int author,
+                                 @RequestParam(required = false, defaultValue = "0") int implementer) {
+        List<TaskDto> result = tasksRepository.filter(project, author, implementer);
         if (result == null) {
             throw new NotFoundException();
         }

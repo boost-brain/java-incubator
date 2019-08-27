@@ -27,4 +27,6 @@ public interface ProjectRepository extends PagingAndSortingRepository<Project,In
     @Query("update Project u set u.projectUrl=?1, u.description=?2, u.projectName=?3 where u.projectId=?4")
     public void update(String Url, String desc, String Name, int id);
 
+    List<Project> findAll();
+
 }

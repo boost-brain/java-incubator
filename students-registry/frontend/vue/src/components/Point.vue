@@ -62,7 +62,7 @@
             removePoint () {
                 console.log("removePoint()")
                 this.removePointAction(this.point)
-                // this.$router.push('/list-by-addr')
+                this.$router.push('/Projects')
             },
             isNull () {
                 return this.point !== null

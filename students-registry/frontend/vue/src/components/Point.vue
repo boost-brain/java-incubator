@@ -5,18 +5,23 @@
                 <v-card v-show="isNull">
                     <v-card-text>
                         <v-text-field
-                                v-model="point.id"
+                                v-model="point.projectId"
                                 label="id"
                                 readonly
                         ></v-text-field>
                         <v-text-field
-                                v-model="point.text"
+                                v-model="point.description"
                                 label="Адрес"
                                 readonly
                         ></v-text-field>
                         <v-text-field
-                                v-model="point.subject"
+                                v-model="point.projectName"
                                 label="Название"
+                                readonly
+                        ></v-text-field>
+                        <v-text-field
+                                v-model="point.projectUrl"
+                                label="Адрес"
                                 readonly
                         ></v-text-field>
                     </v-card-text>
@@ -42,10 +47,10 @@
 
     export default {
         name: "point",
-        props: ['id'],
+        props: ['projectId'],
         computed: {
             point () {
-                const id = this.id
+                const id = this.projectId
                 return this.$store.getters.pointById(id)
             }
         },
@@ -57,7 +62,7 @@
             removePoint () {
                 console.log("removePoint()")
                 this.removePointAction(this.point)
-                this.$router.push('/list-by-addr')
+                this.$router.push('/Projects')
             },
             isNull () {
                 return this.point !== null

@@ -76,7 +76,7 @@ export default new Vuex.Store({
             commit('updatePointMutation', data)
         },
         async removePointAction({commit}, point) {
-            const result = await restApi.remove(point['@unid'])
+            const result = await restApi.remove(point.projectId)
             if (result.ok) {
                 commit('removePointMutation', point)
             }

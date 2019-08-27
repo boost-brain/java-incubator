@@ -1,5 +1,6 @@
 package boost.brain.course.controller;
 
+import boost.brain.course.model.Project;
 import boost.brain.course.model.ProjectDTO;
 import boost.brain.course.model.ProjectMapper;
 import boost.brain.course.repository.ProjectRepository;
@@ -10,10 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
 @Controller
+@CrossOrigin(origins = "*")
 public class ProjectController {
 
     @Autowired
@@ -54,6 +57,13 @@ public class ProjectController {
         projectRepository.deleteProjectByProjectId(projectMapper.toProject(project).getProjectId());
         return result;
     }
+
+    @ResponseBody
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable("id") Project project) {
+        projectRepository.delete(project);
+    }
+
     @ResponseBody
     @RequestMapping(value="/watch", method = RequestMethod.GET)
     public Page<ProjectDTO> watch(){
@@ -72,4 +82,11 @@ public class ProjectController {
         System.out.println("Success");
         return project;
     }
+
+    @ResponseBody
+    @GetMapping("/all")
+    public List<Project> list() {
+        return projectRepository.findAll();
+    }
+
 }

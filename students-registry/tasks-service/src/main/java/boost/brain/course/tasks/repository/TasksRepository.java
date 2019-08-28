@@ -2,10 +2,12 @@ package boost.brain.course.tasks.repository;
 
 import boost.brain.course.tasks.controller.dto.TaskDto;
 import boost.brain.course.tasks.repository.entities.TaskEntity;
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -31,14 +33,11 @@ public class TasksRepository{
         if (taskDto == null) {
             return null;
         }
-
         TaskEntity taskEntity = new TaskEntity();
         BeanUtils.copyProperties(taskDto, taskEntity, "id");
         entityManager.persist(taskEntity);
-
         TaskDto result = new TaskDto();
         BeanUtils.copyProperties(taskEntity, result, "comments");
-
         return result;
     }
 
@@ -47,10 +46,8 @@ public class TasksRepository{
         if (taskEntity == null) {
             return null;
         }
-
         TaskDto result = new TaskDto();
         BeanUtils.copyProperties(taskEntity, result);
-
         return result;
     }
 
@@ -58,15 +55,12 @@ public class TasksRepository{
         if (taskDto == null) {
             return false;
         }
-
         TaskEntity taskEntity = entityManager.find(TaskEntity.class, taskDto.getId());
         if (taskEntity == null) {
             return false;
         }
-
         BeanUtils.copyProperties(taskDto, taskEntity, "createDate", "author");
         entityManager.merge(taskEntity);
-
         return true;
     }
 
@@ -75,7 +69,6 @@ public class TasksRepository{
         if (taskEntity == null) {
             return false;
         }
-
         entityManager.remove(taskEntity);
         return true;
     }
@@ -84,7 +77,6 @@ public class TasksRepository{
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         countQuery.select(criteriaBuilder.count(countQuery.from(TaskEntity.class)));
-
         Long result = entityManager.createQuery(countQuery).getSingleResult();
         return result;
     }
@@ -101,7 +93,6 @@ public class TasksRepository{
         typedQuery.setFirstResult((pageNumber - 1) * pageSize);
         typedQuery.setMaxResults(pageSize);
 
-
         List<TaskEntity> taskEntities = typedQuery.getResultList();
 
         for (TaskEntity taskEntity: taskEntities) {
@@ -112,7 +103,7 @@ public class TasksRepository{
         return result;
     }
 
-    public List<TaskDto> tasksFor(final int implementer) {
+    public List<TaskDto> tasksFor(final String implementer) {
         List<TaskDto> result = new ArrayList<>();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
@@ -132,7 +123,7 @@ public class TasksRepository{
         return result;
     }
 
-    public List<TaskDto> tasksFrom(final int author) {
+    public List<TaskDto> tasksFrom(final String author) {
         List<TaskDto> result = new ArrayList<>();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
@@ -172,7 +163,7 @@ public class TasksRepository{
         return result;
     }
 
-    public List<TaskDto> filter(final int project, final int author, final int implementer) {
+    public List<TaskDto> filter(final int project, final String author, final String implementer) {
         List<TaskDto> result = new ArrayList<>();
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
@@ -183,10 +174,10 @@ public class TasksRepository{
         if (project > 0) {
             predicateList.add(cb.equal(from.get("project"),project));
         }
-        if (author > 0) {
+        if (!StringUtils.isEmpty(author) && this.checkEmail(author)) {
             predicateList.add(cb.equal(from.get("author"),author));
         }
-        if (implementer > 0) {
+        if (!StringUtils.isEmpty(implementer) && this.checkEmail(implementer)) {
             predicateList.add(cb.equal(from.get("implementer"),implementer));
         }
         Predicate[] restrictions = new Predicate[predicateList.size()];
@@ -200,5 +191,13 @@ public class TasksRepository{
             result.add(taskDto);
         }
         return result;
+    }
+
+    private boolean checkEmail(final String email) {
+        EmailValidator emailValidator = new EmailValidator();
+        if (!emailValidator.isValid(email, null)) {
+            return false;
+        }
+        return true;
     }
 }

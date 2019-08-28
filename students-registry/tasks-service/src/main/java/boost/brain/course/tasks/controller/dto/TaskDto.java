@@ -6,8 +6,8 @@ import lombok.Data;
 public class TaskDto {
     private long id;
     private int project;
-    private int author;
-    private int implementer;
+    private String author;
+    private String implementer;
     private String name;
     private String text;
     private long createDate;

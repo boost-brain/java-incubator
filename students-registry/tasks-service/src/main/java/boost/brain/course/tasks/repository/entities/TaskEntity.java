@@ -14,8 +14,8 @@ public class TaskEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private int project;
-    private int author;
-    private int implementer;
+    private String author;
+    private String implementer;
     private String name;
     private String text;
     private long createDate;

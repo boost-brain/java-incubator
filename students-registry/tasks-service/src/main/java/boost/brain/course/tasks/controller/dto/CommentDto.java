@@ -6,7 +6,7 @@ import lombok.Data;
 public class CommentDto {
     private long id;
     private long taskId;
-    private int author;
+    private String author;
     private String text;
     private long createDate;
     private long updateDate;

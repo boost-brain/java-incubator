@@ -3,10 +3,12 @@ package boost.brain.course.tasks.repository;
 import boost.brain.course.tasks.controller.dto.CommentDto;
 import boost.brain.course.tasks.repository.entities.CommentEntity;
 import boost.brain.course.tasks.repository.entities.TaskEntity;
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -19,12 +21,12 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class CommentRepository {
+public class CommentsRepository {
 
     private final EntityManager entityManager;
 
     @Autowired
-    public CommentRepository(EntityManager entityManager) {
+    public CommentsRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -103,7 +105,7 @@ public class CommentRepository {
         return result;
     }
 
-    public List<CommentDto> filter(final long taskId, final int author) {
+    public List<CommentDto> filter(final long taskId, final String author) {
         List<CommentDto> result = new ArrayList<>();
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
@@ -114,7 +116,7 @@ public class CommentRepository {
         if (taskId > 0) {
             predicateList.add(cb.equal(from.get("taskId"),taskId));
         }
-        if (author > 0) {
+        if (!StringUtils.isEmpty(author) && this.checkEmail(author)) {
             predicateList.add(cb.equal(from.get("author"),author));
         }
         Predicate[] restrictions = new Predicate[predicateList.size()];
@@ -129,5 +131,13 @@ public class CommentRepository {
             result.add(commentDto);
         }
         return result;
+    }
+
+    private boolean checkEmail(final String email) {
+        EmailValidator emailValidator = new EmailValidator();
+        if (!emailValidator.isValid(email, null)) {
+            return false;
+        }
+        return true;
     }
 }

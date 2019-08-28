@@ -10,7 +10,7 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private int author;
+    private String author;
     private String text;
     private long createDate;
     private long updateDate;

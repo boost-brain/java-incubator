@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@Slf4j
+@Log
 @Controller
 @CrossOrigin(origins = "*")
 public class ProjectController {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
     @Autowired
     ProjectRepository projectRepository;
 
@@ -43,20 +42,20 @@ public class ProjectController {
     @ResponseBody
     @GetMapping(value="/findById")
     public ProjectDTO findById(@RequestBody ProjectDTO id) throws NoSuchElementException{
-        LOGGER.debug("inside findById(id) method; id:"+id.getProjectId());
-        LOGGER.debug("found: "+projectRepository.findById(projectMapper.toProject(id).getProjectId()));
+        log.info("inside findById(id) method; id:"+id.getProjectId());
+        log.info("found: "+projectRepository.findById(projectMapper.toProject(id).getProjectId()));
         //System.out.println(id.getProjectId());
        //Project project = projectRepository.findById(id.getProjectId()).get();
        // System.out.println(projectRepository.findById(projectMapper.toProject(id).getProjectId()));
         ProjectDTO project = projectMapper.toProjectDto(projectRepository.findById(projectMapper.toProject(id).getProjectId()).get());
-        LOGGER.debug("project: "+project.toString());
+        log.info("project: "+project.toString());
        // System.out.println(project.toString());
         return project;
     }
     @ResponseBody
     @GetMapping(value="/countProjects")
     public int countProjects(){
-        LOGGER.debug("method: countProjects(); count: "+projectRepository.countAllBy());
+        log.info("method: countProjects(); count: "+projectRepository.countAllBy());
         //System.out.println("count: "+projectRepository.countAllBy());
         return projectRepository.countAllBy();
     }
@@ -84,11 +83,11 @@ public class ProjectController {
     @ResponseBody
     @PostMapping(value="/update")
     public ProjectDTO update(@RequestBody ProjectDTO project){
-        LOGGER.debug("method: update");
-        LOGGER.debug("Before:"+projectRepository.findById(projectMapper.toProject(project).getProjectId()).get().toString());
-        LOGGER.debug("After:"+project.toString());
+        log.info("method: update");
+        log.info("Before:"+projectRepository.findById(projectMapper.toProject(project).getProjectId()).get().toString());
+        log.info("After:"+project.toString());
         projectRepository.update(project.getProjectUrl(),project.getDescription(),project.getProjectName(),project.getProjectId());
-        LOGGER.debug("Success");
+        log.info("Success");
         return project;
     }
     @ResponseBody

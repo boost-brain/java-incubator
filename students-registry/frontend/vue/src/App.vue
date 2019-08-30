@@ -36,7 +36,7 @@
                 links: [
                     {title: 'Home', icon: 'home', url: '/'},
                     {title: 'Проекты', icon: 'list', url: '/projects'},
-                    {title: 'Список', icon: 'table', url: '/table'},
+                    {title: 'Студенты', icon: 'supervised_user_circle', url: '/users'},
                     {title: 'Создать', icon: 'create', url: '/new'}
                 ]
             }

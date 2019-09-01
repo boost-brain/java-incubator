@@ -1,10 +1,10 @@
-package boost.brain.course;
+package boost.brain.course.auth;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class AuthService
 {
     public static void main( String[] args )
     {

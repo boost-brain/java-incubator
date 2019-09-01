@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import {mapMutations} from 'vuex'
+    // import {mapMutations} from 'vuex'
 
     export default {
         name: 'App',
@@ -42,21 +42,22 @@
             }
         },
         methods: {
-            loadPoints () {
-                console.log("loadPoints()")
-                this.$store.resource = this.$resource('http://localhost:8080/all')
-                this.$store.resource.get().then(response => response.json())
-                    .then(points => {
-                        for (var value of points) {
-                            this.addPointMutation(value)
-                        }
-                    })
-            },
-            ...mapMutations(['addPointMutation', 'updatePointMutation', 'removePointsMutation'])
+            // loadProjects () {
+            //     console.log("loadProjects()")
+            //     this.$store.resource = this.$resource('http://localhost:8080/all')
+            //     this.$store.resource.get().then(response => response.json())
+            //         .then(projects => {
+            //             for (var value of getProjects) {
+            //                 this.addProjectMutation(value)
+            //             }
+            //         })
+            // },
+            // // ...mapMutations(['addPointMutation', 'updatePointMutation', 'removePointsMutation'])
+            // ...mapMutations(['addProjectMutation', 'updateProjectMutation', 'removeProjectMutation'])
         },
         created () {
-            console.log("created()")
-            this.loadPoints()
+            console.log("created App")
+         //   this.loadProjects()
         }
     };
 </script>

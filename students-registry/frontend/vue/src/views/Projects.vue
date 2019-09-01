@@ -29,11 +29,32 @@
 </template>
 
 <script>
+
+    import {mapMutations} from 'vuex'
+    import projectApi from '../api/projects'
+
     export default {
+        methods: {
+            next () {
+                console.log("next()")
+                projectApi.get()
+                    .then(response => {
+                        this.setProjects(response.body)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+            ...mapMutations(['addProjectMutation', 'setProjects']),
+        },
         computed: {
             projects () {
-                return this.$store.getters.points
+                return this.$store.getters.projects
             }
-        }
+        },
+        created () {
+            console.log("load projects ()")
+            this.next ()
+        },
     }
 </script>

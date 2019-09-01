@@ -5,32 +5,32 @@
                 <v-card v-show="isNull">
                     <v-card-text>
                         <v-text-field
-                                v-model="point.projectId"
+                                v-model="project.projectId"
                                 label="id"
                                 readonly
                         ></v-text-field>
                         <v-text-field
-                                v-model="point.description"
+                                v-model="project.description"
                                 label="Адрес"
                                 readonly
                         ></v-text-field>
                         <v-text-field
-                                v-model="point.projectName"
+                                v-model="project.projectName"
                                 label="Название"
                                 readonly
                         ></v-text-field>
                         <v-text-field
-                                v-model="point.projectUrl"
+                                v-model="project.projectUrl"
                                 label="Адрес"
                                 readonly
                         ></v-text-field>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <addEditPointModal :point="point"></addEditPointModal>
+                        <addEditProjectModal :project="project"></addEditProjectModal>
                         <v-btn
                                 class="success ml-1"
-                                @click="removePoint"
+                                @click="removeProject"
                         >
                             Удалить
                         </v-btn>
@@ -42,30 +42,30 @@
 </template>
 
 <script>
-    import EditPointModal from './EditPointModal'
+    import EditProjectModal from './EditProjectModal'
     import { mapActions } from 'vuex'
 
     export default {
-        name: "point",
+        name: "project",
         props: ['projectId'],
         computed: {
-            point () {
+            project () {
                 const id = this.projectId
-                return this.$store.getters.pointById(id)
+                return this.$store.getters.projectById(id)
             }
         },
         components:{
-            addEditPointModal: EditPointModal
+            addEditProjectModal: EditProjectModal
         },
         methods: {
-            ...mapActions(['removePointAction']),
-            removePoint () {
-                console.log("removePoint()")
-                this.removePointAction(this.point)
+            ...mapActions(['removeProjectAction']),
+            removeProject () {
+                console.log("removeProject()")
+                this.removeProjectAction(this.project)
                 this.$router.push('/Projects')
             },
             isNull () {
-                return this.point !== null
+                return this.project !== null
             }
         }
     }

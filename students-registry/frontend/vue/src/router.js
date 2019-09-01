@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Projects from './views/Cards.vue'
+import Projects from './views/Projects'
 import Users from './views/Users'
+import NewUser from './components/NewUser'
 
-import Point from './components/Point.vue'
+// import Project from './components/Project.vue'
 
 Vue.use(Router)
 
@@ -26,10 +27,15 @@ export default new Router({
             component: Users
         },
         {
-            path: '/point/:id',
+            path: '/project/:id',
             props: true,
-            name: 'point',
-            component: Point
+            name: 'project',
+            component: Projects
+        },
+        {
+            path: '/new',
+            name: 'newUser',
+            component: NewUser
         },
     ]
 })

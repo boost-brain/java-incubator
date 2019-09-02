@@ -40,6 +40,7 @@ public class CredentialsRepository {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             credentialsEntity.setPasswordHash(messageDigest.digest(credentials.getPassword().getBytes()));
+            entityManager.persist(credentialsEntity);
             return true;
         } catch (NoSuchAlgorithmException e) {
             return false;
@@ -71,19 +72,19 @@ public class CredentialsRepository {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             credentialsEntity.setPasswordHash(messageDigest.digest(credentials.getPassword().getBytes()));
+            entityManager.merge(credentialsEntity);
             return true;
         } catch (NoSuchAlgorithmException e) {
             return false;
         }
     }
 
-    public boolean delete(Credentials credentials) {
-        if (credentials == null ||
-                StringUtils.isEmpty(credentials.getLogin())) {
+    public boolean delete(String login) {
+        if (StringUtils.isEmpty(login)) {
             return false;
         }
 
-        CredentialsEntity credentialsEntity = entityManager.find(CredentialsEntity.class, credentials.getLogin());
+        CredentialsEntity credentialsEntity = entityManager.find(CredentialsEntity.class, login);
         if (credentialsEntity == null) {
             return false;
         }

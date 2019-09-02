@@ -22,7 +22,7 @@ public class LoginController {
     @PostMapping(path = Constants.LOGIN_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Session login(Credentials credentials){
+    public Session login(@RequestBody Credentials credentials){
         return sessionsRepository.startSession(credentials);
     }
 

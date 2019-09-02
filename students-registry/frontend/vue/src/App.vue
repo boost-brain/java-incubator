@@ -27,6 +27,7 @@
 
 <script>
     // import {mapMutations} from 'vuex'
+    import { USER_REQUEST } from './store/actions/user'
 
     export default {
         name: 'App',
@@ -58,6 +59,9 @@
         created () {
             console.log("created App")
          //   this.loadProjects()
+            if (this.$store.getters.isAuthenticated) {
+                this.$store.dispatch(USER_REQUEST)
+            }
         }
     };
 </script>

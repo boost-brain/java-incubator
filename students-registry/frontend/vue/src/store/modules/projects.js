@@ -1,4 +1,4 @@
-import projectApi from '../api/projects'
+import projectApi from '../../api/projects'
 
 export default {
     state: {

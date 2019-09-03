@@ -33,18 +33,14 @@
         name: 'login',
         data () {
             return {
-                login: 'dogo',
-                password: 'dogy',
+                login: '',
+                password: '',
             }
         },
         methods: {
             ...mapActions(['AUTH_REQUEST']),
             doLogin: function () {
-                // const { username, password } = this
                 console.log("login: " + this.login + " " + this.password)
-                // this.$store.dispatch(AUTH_REQUEST, { username, password }).then(() => {
-                //     this.$router.push('/')
-                // })
                 const user = {
                     login: this.login,
                     password: this.password,
@@ -55,7 +51,7 @@
             }
         },
         created () {
-            this.doLogin()
+            // this.doLogin()
         }
     }
 </script>

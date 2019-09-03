@@ -52,11 +52,11 @@ export default {
         projects (state) {
             return state.projects
         },
-        // projectById (state) {
-        //     return projectId => {
-        //         return state.projects.find(project => project.id == projectId)
-        //     }
-        // }
+        projectById (state) {
+            return projectId => {
+                return state.projects.find(project => project.id == projectId)
+            }
+        }
     },
     actions: {
 

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Projects from './views/Projects'
+import Project from './components/Project'
 import Users from './views/Users'
 import NewUser from './components/NewUser'
 import Login from './components/Login'
@@ -21,6 +22,8 @@ const ifNotAuthenticated = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
     console.log("ifAuthenticated")
+    console.log(store.getters.isAuthenticated)
+    console.log(store.getters.getToken)
     if (store.getters.isAuthenticated) {
         next()
         return
@@ -35,8 +38,8 @@ export default new Router({
         {
             path: '/',
             name: 'base',
-            component: Projects
-            //sbeforeEnter: ifAuthenticated
+            component: Projects,
+            beforeEnter: ifAuthenticated
         },
         {
             path: '/projects',
@@ -54,7 +57,7 @@ export default new Router({
             path: '/project/:id',
             props: true,
             name: 'project',
-            component: Projects,
+            component: Project,
             beforeEnter: ifAuthenticated
         },
         {

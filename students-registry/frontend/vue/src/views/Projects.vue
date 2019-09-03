@@ -19,7 +19,7 @@
                     <v-card-actions>
                         <v-btn
                                 class="info"
-                                :to="'/point/' + item.projectId"
+                                :to="'/project/' + item.projectId"
                         > Открыть </v-btn>
                     </v-card-actions>
                 </v-card>

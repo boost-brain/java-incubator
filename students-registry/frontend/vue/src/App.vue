@@ -26,8 +26,10 @@
 </template>
 
 <script>
-    // import {mapMutations} from 'vuex'
-    import { USER_REQUEST } from './store/actions/user'
+    import {mapMutations} from 'vuex'
+    // import { USER_REQUEST } from './store/actions/user'
+    // import { AUTH_REQUEST } from './store/actions/auth'
+    // import { AUTH_LOGOUT } from './store/actions/auth'
 
     export default {
         name: 'App',
@@ -55,13 +57,25 @@
             // },
             // // ...mapMutations(['addPointMutation', 'updatePointMutation', 'removePointsMutation'])
             // ...mapMutations(['addProjectMutation', 'updateProjectMutation', 'removeProjectMutation'])
+            ...mapMutations(['AUTH_LOGOUT'])
         },
         created () {
-            console.log("created App")
-         //   this.loadProjects()
-            if (this.$store.getters.isAuthenticated) {
-                this.$store.dispatch(USER_REQUEST)
-            }
+            //console.log("remove token")
+            // commit(AUTH_LOGOUT, state) //4delete
+            // localStorage.removeItem('user-token')
+           // this.AUTH_LOGOUT()
+
+
+         // //   this.loadProjects()
+         //    if (this.$store.getters.isAuthenticated) {
+         //        console.log("login: " + this.login + " " + this.password)
+         //        const user = {
+         //            login: this.login,
+         //            password: this.password,
+         //        }
+         //        console.log(user)
+         //        this.AUTH_REQUEST(user, "user")
+         //    }
         }
     };
 </script>

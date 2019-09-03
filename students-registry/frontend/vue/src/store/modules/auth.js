@@ -1,8 +1,6 @@
-/* eslint-disable promise/param-names */
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_REQUEST, AUTH_SUCCESS} from '../actions/auth'
 // import { USER_REQUEST } from '../actions/user'
 import apiCall from '../../api/api'
-// import userApi from "../../api/users";
 
 const state = {
     token: localStorage.getItem('user-token') || '',
@@ -10,8 +8,9 @@ const state = {
     hasLoadedOnce: false }
 
 const getters = {
-    isAuthenticated: () => false, // state => !!state.token,
+    isAuthenticated: state => !!state.token,
     authStatus: state => state.status,
+    getToken: state => state.token
 }
 
 const actions = {
@@ -21,8 +20,8 @@ const actions = {
         const resp = await result.json()
         console.log(resp)
         if(resp.sessionId != null){
-            localStorage.setItem('user-token', resp.sessionId)
-            console.log(resp.sessionId)
+            localStorage.setItem('user-token', resp)//.sessionId)
+            console.log(resp)
             commit(AUTH_SUCCESS, state)
         }else{
             console.log("AUTH FAILED")
@@ -34,7 +33,7 @@ const actions = {
     //   return new Promise((resolve, reject) => {
     //     console.log("AUTH_REQUEST")
     //     commit(AUTH_REQUEST)
-    //     apiCall({url: 'auth', data: user, method: 'POST'})
+    //     apiCall({url: 'login', data: user, method: 'POST'})
     //     .then(resp => {
     //       localStorage.setItem('user-token', resp.token)
     //       // Here set the header of your ajax library to the token value.

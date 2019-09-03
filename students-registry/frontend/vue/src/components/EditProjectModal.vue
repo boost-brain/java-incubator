@@ -68,7 +68,7 @@
             }
         },
         methods: {
-            ...mapActions(['updatePointAction']),
+            ...mapActions(['updateProjectAction']),
             onCancel () {
                 this.editedID = this.project.projectId
                 this.editedDescription = this.project.description
@@ -78,7 +78,7 @@
             },
             onSave () {
                 if (this.editedID !== '' && this.editedURL !== '' && this.editedDescription !== '') {
-                    this.updatePointAction({
+                    this.updateProjectAction({
                         projectId: this.editedID,
                         description: this.editedDescription,
                         projectUrl: this.editedURL,

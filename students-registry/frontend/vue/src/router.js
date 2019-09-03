@@ -11,6 +11,7 @@ import store from './store'
 Vue.use(Router)
 
 const ifNotAuthenticated = (to, from, next) => {
+    console.log("ifNotAuthenticated")
     if (!store.getters.isAuthenticated) {
         next()
         return
@@ -19,10 +20,12 @@ const ifNotAuthenticated = (to, from, next) => {
 }
 
 const ifAuthenticated = (to, from, next) => {
+    console.log("ifAuthenticated")
     if (store.getters.isAuthenticated) {
         next()
         return
     }
+    console.log("next to login page")
     next('/login')
 }
 
@@ -32,8 +35,8 @@ export default new Router({
         {
             path: '/',
             name: 'base',
-            component: Projects,
-            beforeEnter: ifAuthenticated
+            component: Projects
+            //sbeforeEnter: ifAuthenticated
         },
         {
             path: '/projects',

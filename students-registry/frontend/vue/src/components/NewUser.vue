@@ -71,7 +71,7 @@
             }
         },
         methods: {
-            ...mapActions(['addAction', 'updateUserAction']),
+            ...mapActions(['addUserAction', 'updateUserAction']),
             save() {
                 console.log("save()")
                 if (this.$refs.form.validate()) {
@@ -83,7 +83,7 @@
                         name: this.name,
                         update_date: this.update_date
                     }
-                    this.addAction(user, "user")
+                    this.addUserAction(user, "user")
                     this.$router.push('/users')
                 }
             }

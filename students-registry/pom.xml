@@ -75,6 +75,7 @@
         <module>example-service</module>
         <module>tasks-service</module>
         <module>common-types</module>
+        <module>common-auth</module>
         <module>projects-service</module>
     <module>test-util</module>
   </modules>

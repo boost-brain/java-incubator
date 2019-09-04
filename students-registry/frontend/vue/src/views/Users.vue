@@ -42,15 +42,16 @@
                 // array: [],
                 item: 1,
                 pagination: {
-                    page: 1,
-                    total: 5,
-                    perPage: 0,
+                    page: 2,
+                    total: 4,
+                    perPage: 20,
                     visible: 7
                 }
             }
         },
         methods: {
             next (page) {
+                console.log("next()")
                 userApi.get(page)
                     .then(response => {
                         this.setUsers(response.body)
@@ -58,18 +59,6 @@
                     .catch(error => {
                         console.log(error)
                     })
-            },
-            loadUsers (page) {
-                console.log("loadUsers()")
-                userApi.get(page)
-                    .then(response => {
-                        this.setUsers(response.body)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-                this.getUserCount()
-                this.pagination.total = ~~(this.$store.getters.getUserCount/2) + 1
             },
             ...mapMutations(['addUserMutation', 'updateUserMutation', 'removeUserMutation', 'emptyUsers', 'setUsers']),
             ...mapActions(['getUserCount']),
@@ -80,9 +69,10 @@
             }
         },
         created () {
+            this.getUserCount()
             this.emptyUsers()
-            this.loadUsers(1)
-
+            this.pagination.total = ~~(this.$store.getters.getUserCount/2) + 1
+            this.next(1)
         }
     }
 </script>

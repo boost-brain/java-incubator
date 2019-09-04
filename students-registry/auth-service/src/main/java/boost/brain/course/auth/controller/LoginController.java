@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = Constants.LOGIN_CONTROLLER_PREFIX)
 public class LoginController {
     private final SessionsRepository sessionsRepository;

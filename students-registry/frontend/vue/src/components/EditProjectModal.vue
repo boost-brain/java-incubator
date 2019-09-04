@@ -9,7 +9,7 @@
         <v-layout row>
           <v-flex xs12>
             <v-card-title>
-              <h3 class="text--primary">Проект №{{this.point.projectId}}</h3>
+              <h3 class="text--primary">Проект №{{this.project.projectId}}</h3>
             </v-card-title>
           </v-flex>
         </v-layout>
@@ -57,28 +57,28 @@
     import {mapActions} from 'vuex'
 
     export default {
-        props: ['point'],
+        props: ['project'],
         data () {
             return {
                 modal: false,
-                editedID: this.point['projectId'],
-                editedDescription: this.point.description,
-                editedURL: this.point.projectUrl,
-                editedName: this.point.projectName
+                editedID: this.project['projectId'],
+                editedDescription: this.project.description,
+                editedURL: this.project.projectUrl,
+                editedName: this.project.projectName
             }
         },
         methods: {
-            ...mapActions(['updatePointAction']),
+            ...mapActions(['updateProjectAction']),
             onCancel () {
-                this.editedID = this.point.projectId
-                this.editedDescription = this.point.description
-                this.editedURL = this.point.projectUrl
-                this.editedName = this.point.projectName
+                this.editedID = this.project.projectId
+                this.editedDescription = this.project.description
+                this.editedURL = this.project.projectUrl
+                this.editedName = this.project.projectName
                 this.modal = false
             },
             onSave () {
                 if (this.editedID !== '' && this.editedURL !== '' && this.editedDescription !== '') {
-                    this.updatePointAction({
+                    this.updateProjectAction({
                         projectId: this.editedID,
                         description: this.editedDescription,
                         projectUrl: this.editedURL,

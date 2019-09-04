@@ -1,5 +1,4 @@
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_REQUEST, AUTH_SUCCESS} from '../actions/auth'
-// import { USER_REQUEST } from '../actions/user'
 import apiCall from '../../api/api'
 
 const state = {
@@ -15,50 +14,32 @@ const getters = {
 
 const actions = {
     async AUTH_REQUEST({commit, state}, user) {
-        console.log("AUTH_REQUEST run")
-        const result = await apiCall.login(user)
-        const resp = await result.json()
-        console.log(resp)
-        if(resp.sessionId != null){
-            localStorage.setItem('user-token', resp)//.sessionId)
+        try {
+            console.log("AUTH_REQUEST action run")
+            const result = await apiCall.login(user)
+            console.log("called")
+            const resp = await result.json()
             console.log(resp)
-            commit(AUTH_SUCCESS, state)
-        }else{
-            console.log("AUTH FAILED")
-            commit(AUTH_ERROR, state)
-            localStorage.removeItem('user-token')
+            if (resp.sessionId != null) {
+                console.log("session is not null")
+                localStorage.setItem('user-token', resp)
+                commit(AUTH_SUCCESS, resp)
+            } else {
+                console.log("AUTH FAILED")
+                commit(AUTH_ERROR, state)
+                localStorage.removeItem('user-token')
+            }
+        }catch(err){
+            console.log(err)
         }
     },
-    // [AUTH_REQUEST]: ({commit, dispatch}, user) => {
-    //   return new Promise((resolve, reject) => {
-    //     console.log("AUTH_REQUEST")
-    //     commit(AUTH_REQUEST)
-    //     apiCall({url: 'login', data: user, method: 'POST'})
-    //     .then(resp => {
-    //       localStorage.setItem('user-token', resp.token)
-    //       // Here set the header of your ajax library to the token value.
-    //       // example with axios
-    //       // axios.defaults.headers.common['Authorization'] = resp.token
-    //       commit(AUTH_SUCCESS, resp)
-    //       dispatch(USER_REQUEST)
-    //       resolve(resp)
-    //     })
-    //     .catch(err => {
-    //       commit(AUTH_ERROR, err)
-    //       localStorage.removeItem('user-token')
-    //       reject(err)
-    //     })
-    //   })
-    // },
-    // // [AUTH_LOGOUT]: ({commit, dispatch}) => {
-    // [AUTH_LOGOUT]: ({commit}) => {
-    //   // return new Promise((resolve, reject) => {
-    //   return new Promise((resolve) => {
-    //     commit(AUTH_LOGOUT)
-    //     localStorage.removeItem('user-token')
-    //     resolve()
-    //   })
-    // }
+    [AUTH_LOGOUT]: ({commit}) => {
+        return new Promise((resolve) => {
+            commit(AUTH_LOGOUT)
+            localStorage.removeItem('user-token')
+            resolve()
+        })
+    }
 }
 
 const mutations = {
@@ -68,9 +49,11 @@ const mutations = {
     },
     [AUTH_SUCCESS]: (state, resp) => {
         console.log("AUTH_SUCCESS mutation")
+        console.log(resp)
         state.status = 'success'
-        state.token = resp.token
+        state.token = resp
         state.hasLoadedOnce = true
+        console.log("AUTH_SUCCESS mutation OK")
     },
     [AUTH_ERROR]: (state) => {
         console.log("AUTH_ERROR mutation")

@@ -27,9 +27,6 @@
 
 <script>
     import {mapMutations} from 'vuex'
-    // import { USER_REQUEST } from './store/actions/user'
-    // import { AUTH_REQUEST } from './store/actions/auth'
-    // import { AUTH_LOGOUT } from './store/actions/auth'
 
     export default {
         name: 'App',
@@ -40,42 +37,13 @@
                     {title: 'Home', icon: 'home', url: '/'},
                     {title: 'Проекты', icon: 'list', url: '/projects'},
                     {title: 'Студенты', icon: 'supervised_user_circle', url: '/users'},
-                    {title: 'Создать', icon: 'create', url: '/new'}
+                    {title: 'Создать', icon: 'create', url: '/new'},
+                    {title: 'Выход', icon: 'logout', url: '/logout'}
                 ]
             }
         },
         methods: {
-            // loadProjects () {
-            //     console.log("loadProjects()")
-            //     this.$store.resource = this.$resource('http://localhost:8080/all')
-            //     this.$store.resource.get().then(response => response.json())
-            //         .then(projects => {
-            //             for (var value of getProjects) {
-            //                 this.addProjectMutation(value)
-            //             }
-            //         })
-            // },
-            // // ...mapMutations(['addPointMutation', 'updatePointMutation', 'removePointsMutation'])
-            // ...mapMutations(['addProjectMutation', 'updateProjectMutation', 'removeProjectMutation'])
             ...mapMutations(['AUTH_LOGOUT'])
-        },
-        created () {
-            //console.log("remove token")
-            // commit(AUTH_LOGOUT, state) //4delete
-            // localStorage.removeItem('user-token')
-           // this.AUTH_LOGOUT()
-
-
-         // //   this.loadProjects()
-         //    if (this.$store.getters.isAuthenticated) {
-         //        console.log("login: " + this.login + " " + this.password)
-         //        const user = {
-         //            login: this.login,
-         //            password: this.password,
-         //        }
-         //        console.log(user)
-         //        this.AUTH_REQUEST(user, "user")
-         //    }
         }
     };
 </script>

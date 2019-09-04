@@ -46,7 +46,6 @@ export default {
         setUserCount(state, payload){
             console.log('setUserCount mutation')
             state.userCount = payload
-            console.log(state.userCount)
         }
     },
     actions: {
@@ -64,7 +63,6 @@ export default {
             const result = await userApi.add(user)
             const data = await result.json()
             const index = state.users.findIndex(item => item['id'] === data['@id'])
-            console.log(index)
             if (index > -1) {
                 commit('updateUserMutation', data)
             } else {
@@ -87,7 +85,6 @@ export default {
             console.log('getUserCount action')
             const result = await userApi.count()
             const count = await result.json()
-            console.log(count)
             commit('setUserCount', count)
         },
     },

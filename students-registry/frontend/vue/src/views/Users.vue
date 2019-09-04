@@ -71,9 +71,7 @@
         created () {
             this.getUserCount()
             this.emptyUsers()
-            console.log(this.$store.getters.getUserCount)
             this.pagination.total = ~~(this.$store.getters.getUserCount/2) + 1
-            console.log(this.pagination.total)
             this.next(1)
         }
     }

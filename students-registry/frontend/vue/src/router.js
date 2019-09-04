@@ -6,13 +6,11 @@ import Users from './views/Users'
 import NewUser from './components/NewUser'
 import Login from './components/Login'
 import store from './store'
-
-// import Project from './components/Project.vue'
+import {AUTH_LOGOUT} from './store/actions/auth'
 
 Vue.use(Router)
 
 const ifNotAuthenticated = (to, from, next) => {
-    console.log("ifNotAuthenticated")
     if (!store.getters.isAuthenticated) {
         next()
         return
@@ -21,15 +19,19 @@ const ifNotAuthenticated = (to, from, next) => {
 }
 
 const ifAuthenticated = (to, from, next) => {
-    console.log("ifAuthenticated")
-    console.log(store.getters.isAuthenticated)
     console.log(store.getters.getToken)
     if (store.getters.isAuthenticated) {
         next()
         return
     }
-    console.log("next to login page")
     next('/login')
+}
+
+const logout = (to, from, next) => {
+    console.log("logout")
+    store.dispatch(AUTH_LOGOUT)
+    next()
+    return
 }
 
 export default new Router({
@@ -71,6 +73,12 @@ export default new Router({
             name: 'Login',
             component: Login,
             beforeEnter: ifNotAuthenticated,
+        },
+        {
+            path: '/logout',
+            name: 'Logout',
+            component: Login,
+            beforeEnter: logout,
         },
     ]
 })

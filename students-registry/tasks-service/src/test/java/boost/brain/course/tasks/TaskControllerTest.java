@@ -1,58 +1,112 @@
 package boost.brain.course.tasks;
 
+import boost.brain.course.tasks.controller.TasksController;
 import boost.brain.course.tasks.controller.dto.TaskDto;
-import org.junit.Before;
+import boost.brain.course.tasks.repository.TasksRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static boost.brain.course.tasks.Constants.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
+//import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@RunWith(SpringRunner.class)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class TaskControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
 
-    private static final String LOCAL_HOST = "http://localhost:8081";
+//    @LocalServerPort
+//    private int port;
 
-    public static final String URL_CREATE = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.CREATE_PREFIX;
-    public static final String URL_READ = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.READ_PREFIX;
-    public static final String URL_UPDATE = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.UPDATE_PREFIX;
-    public static final String URL_DELETE = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.DELETE_PREFIX;
-    public static final String URL_COUNT = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.COUNT_PREFIX;
-    public static final String URL_PAGE = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.PAGE_PREFIX;
-    public static final String URL_FOR = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.FOR_PREFIX;
-    public static final String URL_FROM = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.FROM_PREFIX;
-    public static final String URL_IN = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.IN_PREFIX;
-    public static final String URL_FILTER = LOCAL_HOST + Constants.TASKS_CONTROLLER_PREFIX + Constants.FILTER_PREFIX;
+    @Autowired
+    private ObjectMapper mapper;
 
-    private TaskDto taskDto = new TaskDto();
-    HttpHeaders header = new HttpHeaders();
+    @Autowired
+    private TasksRepository tasksRepository;
 
+    @Autowired
+    private TasksController tasksController;
 
-    @Before
-    public void initHeader() {
-        header.setContentType(MediaType.APPLICATION_JSON_UTF8);
+//    @Autowired
+//    private TestRestTemplate restTemplate;
+
+    private ResultActions mockMvcResult;
+    private RestTemplate restTemplate = new RestTemplate();
+
+    private static final String LOCAL_HOST = "http://localhost:";
+    private static final String URL_CREATE = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + CREATE_PREFIX;
+    private static final String URL_READ = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.READ_PREFIX;
+    private static final String URL_UPDATE = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.UPDATE_PREFIX;
+    private static final String URL_DELETE = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.DELETE_PREFIX;
+    private static final String URL_PAGE = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.PAGE_PREFIX;
+    private static final String URL_FOR = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.FOR_PREFIX;
+    private static final String URL_FROM = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.FROM_PREFIX;
+    private static final String URL_IN = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.IN_PREFIX;
+    private static final String URL_FILTER = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.FILTER_PREFIX;
+
+    private TaskDto taskDtoInstance;
+    private TaskDto taskDtoResult;
+
+    private HttpHeaders header = new HttpHeaders();
+
+    private void initInstanceTaskDto() {
+        taskDtoInstance = new TaskDto();
+        taskDtoInstance.setProject(1);
+        taskDtoInstance.setAuthor("boost.brain@gmail.com");
+        taskDtoInstance.setImplementer("chernov_serg@mail.ru");
+        taskDtoInstance.setName("java-incubator");
+        taskDtoInstance.setText("Утилита тестирования сервиса управления заданиями");
     }
 
-    private void initTaskDto() {
-        taskDto.setProject(1);
-        taskDto.setAuthor("boost.brain@gmail.com");
-        taskDto.setImplementer("chernov_serg@mail.ru");
-        taskDto.setName("java-incubator");
-        taskDto.setText("Утилита тестирования сервиса управления заданиями");
+    private String asJsonString(final Object object) {
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
-    private TaskDto createTask() {
-        initTaskDto();
-        HttpEntity<TaskDto> requestBody = new HttpEntity<>(taskDto, header);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<TaskDto> result = restTemplate.postForEntity(URL_CREATE, requestBody, TaskDto.class);
-        return result.getBody();
+    private TaskDto saveInstanceTaskToDB() throws Exception {
+        if (taskDtoInstance == null) {
+            return null;
+        }
+
+        mockMvcResult = mockMvc.perform(post(TASKS_CONTROLLER_PREFIX + CREATE_PREFIX)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(asJsonString(taskDtoInstance)));
+
+        String contentResult = mockMvcResult.andReturn().getResponse().getContentAsString();
+        if (contentResult.isEmpty()) {
+            taskDtoResult = null;
+        } else {
+            taskDtoResult = mapper.readValue(contentResult, TaskDto.class);
+        }
+        return taskDtoResult;
     }
 
     private Map<String, String> getDataToMap(TaskDto taskDto) {
@@ -68,47 +122,110 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void createTestWithGoodObject() {
-        initTaskDto();
-        HttpEntity<TaskDto> requestBody = new HttpEntity<>(taskDto, header);
-        RestTemplate restTemplate = new RestTemplate();
-
-        ResponseEntity<TaskDto> result = restTemplate.postForEntity(URL_CREATE, requestBody, TaskDto.class);
-
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertNotNull(result.getBody());
-        assertEquals(getDataToMap(taskDto), getDataToMap(result.getBody()));
+    public void test() {
+        assertThat(tasksController).isNotNull();
     }
 
     @Test
-    public void createTestWithBadObject() {
-        initTaskDto();
-        taskDto.setProject(0); //bad value: id must be greater than 0
-        HttpEntity<TaskDto> requestBody = new HttpEntity<>(taskDto, header);
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            ResponseEntity<TaskDto> result = restTemplate.postForEntity(URL_CREATE, requestBody, TaskDto.class);
-        } catch (RestClientException e) {
-            e.printStackTrace();
-            assertEquals(HttpStatus.NOT_FOUND.value(),
-                    ((HttpClientErrorException) e).getStatusCode().value());
-        }
+    public void createGoodObject() throws Exception {
+        initInstanceTaskDto();
+
+        String author = "testAuthor@mail.ru";
+        taskDtoInstance.setAuthor(author);
+        saveInstanceTaskToDB();
+
+        assertThat(mockMvcResult.andReturn().getResolvedException()).isNull();
+        mockMvcResult
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.project", is(taskDtoInstance.getProject())))
+                .andExpect(jsonPath("$.author", is(author)))
+                .andExpect(jsonPath("$.implementer", is(taskDtoInstance.getImplementer())))
+                .andExpect(jsonPath("$.name", is(taskDtoInstance.getName())))
+                .andExpect(jsonPath("$.text", is(taskDtoInstance.getText())))
+                .andExpect(jsonPath("$.createDate").isNotEmpty())
+                .andExpect(jsonPath("$.updateDate").isNotEmpty());
     }
 
     @Test
-    public void count() {
-        createTask();
-        RestTemplate restTemplate = new RestTemplate();
-        Long count = restTemplate.getForObject(URL_COUNT, Long.class);
+    public void createWithBadProjectId() throws Exception {
+        initInstanceTaskDto();
+        taskDtoInstance.setProject(0);
+        saveInstanceTaskToDB();
+        assertThat(mockMvcResult.andReturn().getResolvedException()).isNotNull();
+    }
+
+    @Test
+    public void createWithBadAuthor() throws Exception {
+        initInstanceTaskDto();
+        String author = "BadAuthor";
+        taskDtoInstance.setAuthor(author);
+        saveInstanceTaskToDB();
+        assertThat(mockMvcResult.andReturn().getResolvedException()).isNotNull();
+    }
+
+    @Test
+    public void createWithEmptyAuthor() throws Exception {
+        initInstanceTaskDto();
+        String author = "";
+        taskDtoInstance.setAuthor(author);
+        saveInstanceTaskToDB();
+        assertThat(mockMvcResult.andReturn().getResolvedException()).isNotNull();
+    }
+
+    @Test
+    public void createWithBadImplementer() throws Exception {
+        initInstanceTaskDto();
+        String implementer = "BadImplementer";
+        taskDtoInstance.setImplementer(implementer);
+        saveInstanceTaskToDB();
+        assertThat(mockMvcResult.andReturn().getResolvedException()).isNotNull();
+    }
+
+    @Test
+    public void createWithEmptyImplementer() throws Exception {
+        initInstanceTaskDto();
+        String implementer = "";
+        taskDtoInstance.setImplementer(implementer);
+        saveInstanceTaskToDB();
+        assertThat(mockMvcResult.andReturn().getResolvedException()).isNotNull();
+    }
+
+    @Test
+    public void createWithEmptyName() throws Exception {
+        initInstanceTaskDto();
+        String name = "";
+        taskDtoInstance.setName(name);
+        saveInstanceTaskToDB();
+        assertThat(mockMvcResult.andReturn().getResolvedException()).isNotNull();
+    }
+
+    @Test
+    public void createWithEmptyText() throws Exception {
+        initInstanceTaskDto();
+        String text = "";
+        taskDtoInstance.setText(text);
+        saveInstanceTaskToDB();
+        assertThat(mockMvcResult.andReturn().getResolvedException()).isNotNull();
+    }
+
+    @Test
+    public void count() throws Exception {
+        initInstanceTaskDto();
+        saveInstanceTaskToDB();
+        saveInstanceTaskToDB();
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + COUNT_PREFIX));
+        Long count = Long.parseLong(mockMvcResult.andReturn().getResponse().getContentAsString());
         assertNotNull(count);
         assertTrue(count > 0);
     }
 
     @Test
-    public void createStressTest() throws InterruptedException {
-        initTaskDto();
-        HttpEntity<TaskDto> requestBody = new HttpEntity<>(taskDto, header);
-        RestTemplate restTemplate = new RestTemplate();
+    public void createStressTest() {
+        initInstanceTaskDto();
+        HttpEntity<TaskDto> requestBody = new HttpEntity<>(taskDtoInstance, header);
+//        RestTemplate restTemplate = new RestTemplate();
 
         System.out.println(new Date(System.currentTimeMillis()));
         long start = System.currentTimeMillis();
@@ -125,31 +242,38 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void readTest() {
-        TaskDto createdTask = createTask();
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<TaskDto> resRead = restTemplate.getForEntity(URL_READ + "/" + createdTask.getId(), TaskDto.class);
-        TaskDto readedTask = resRead.getBody();
-        assertEquals(createdTask, readedTask);
+    public void readTest() throws Exception {
+        initInstanceTaskDto();
+        saveInstanceTaskToDB();
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + READ_PREFIX + "/" + taskDtoResult.getId()));
+        mockMvcResult.andDo(print())
+                .andExpect(status().isOk());
+        TaskDto taskDtoResultRead = mapper.readValue(mockMvcResult.andReturn().getResponse().getContentAsString(), TaskDto.class);
+        mockMvcResult.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is((Integer.parseInt(String.valueOf(taskDtoResultRead.getId()))))));
     }
 
     @Test
-    public void updateTest() {
-        TaskDto createdTask = createTask();
+    public void updateTest() throws Exception {
+        TaskDto createdTask = saveInstanceTaskToDB();
         createdTask.setName("NEW PROJECT");
-        RestTemplate restTemplate = new RestTemplate();
-//        TaskDto updated = restTemplate.patchForObject(URL_UPDATE, createdTask, TaskDto.class); //Invalid HTTP method: PATCH; nested exception is java.net.ProtocolException
+//        RestTemplate restTemplate = new RestTemplate();
+        TaskDto updated = restTemplate.patchForObject(URL_UPDATE, createdTask, TaskDto.class); //Invalid HTTP method: PATCH; nested exception is java.net.ProtocolException
 //        assertEquals(createdTask, updated);
 
     }
 
     @Test
-    public void deleteTest() {
-        TaskDto created = createTask();
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<TaskDto> find = restTemplate.getForEntity(URL_READ + "/" + created.getId(), TaskDto.class);
-        restTemplate.delete(URL_DELETE + "/" + created.getId());
-//        find = restTemplate. getForEntity(URL_READ + "/" + created.getId(), TaskDto.class); //org.springframework.web.client.HttpClientErrorException$NotFound: 404 null
-        assertTrue(find.getStatusCode() != HttpStatus.OK);
+    public void deleteTest() throws Exception {
+        initInstanceTaskDto();
+        saveInstanceTaskToDB();
+        mockMvc.perform(delete(TASKS_CONTROLLER_PREFIX + DELETE_PREFIX + "/" + taskDtoResult.getId()))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + READ_PREFIX + "/" + taskDtoResult.getId()))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(delete(TASKS_CONTROLLER_PREFIX + DELETE_PREFIX + "/0"))
+                .andExpect(status().isNotFound());
     }
 }

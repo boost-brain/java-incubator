@@ -1,0 +1,5 @@
+zuul:
+  routes:
+    example:
+      path: /api/example/**
+      url:  http://${EXAMPLE_HOST:example}:${EXAMPLE_POST:8080}/api/example

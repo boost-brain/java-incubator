@@ -36,27 +36,14 @@
                 links: [
                     {title: 'Home', icon: 'home', url: '/'},
                     {title: 'Проекты', icon: 'list', url: '/projects'},
-                    {title: 'Список', icon: 'table', url: '/table'},
-                    {title: 'Создать', icon: 'create', url: '/new'}
+                    {title: 'Студенты', icon: 'supervised_user_circle', url: '/users'},
+                    {title: 'Создать', icon: 'create', url: '/new'},
+                    {title: 'Выход', icon: 'logout', url: '/logout'}
                 ]
             }
         },
         methods: {
-            loadPoints () {
-                console.log("loadPoints()")
-                this.$store.resource = this.$resource('http://localhost:8080/all')
-                this.$store.resource.get().then(response => response.json())
-                    .then(points => {
-                        for (var value of points) {
-                            this.addPointMutation(value)
-                        }
-                    })
-            },
-            ...mapMutations(['addPointMutation', 'updatePointMutation', 'removePointsMutation'])
-        },
-        created () {
-            console.log("created()")
-            this.loadPoints()
+            ...mapMutations(['AUTH_LOGOUT'])
         }
     };
 </script>

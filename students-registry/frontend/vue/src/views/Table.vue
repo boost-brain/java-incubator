@@ -123,7 +123,7 @@
                 return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
             },
             myPoints () {
-                return this.$store.getters.points
+                return this.$store.getters.projects
             }
         },
         methods:{

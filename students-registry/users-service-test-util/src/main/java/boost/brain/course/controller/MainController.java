@@ -47,7 +47,6 @@ public class MainController {
             } catch (IOException e) {
                 log.severe(e.getLocalizedMessage());
                 log.severe("Something go wrong! repeat");
-                continue;
             }
 
 
@@ -60,7 +59,7 @@ public class MainController {
         String url = "";
         String sOperation = "";
         String sCount = "";
-        Long count = 0L;
+        Long count;
 
         String[] args = line.split(" ");
 
@@ -111,10 +110,10 @@ public class MainController {
     private void executeUpdate(String url, Long count) {
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(4);
-        boolean done = false;
-        done = pool.invoke(new UpdateSpam(url, count, restTemplate));
+        pool.invoke(new UpdateSpam(url, count, restTemplate));
 
         while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
         }
 
         long stopTime = System.currentTimeMillis();
@@ -125,10 +124,10 @@ public class MainController {
     private void executeRead(String url, Long count) {
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(4);
-        boolean done = false;
-        done = pool.invoke(new ReadSpam(url, count, restTemplate));
+        pool.invoke(new ReadSpam(url, count, restTemplate));
 
         while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
         }
 
         long stopTime = System.currentTimeMillis();
@@ -140,10 +139,10 @@ public class MainController {
     private void executeDelete(String url, Long count) {
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(4);
-        boolean done = false;
-        done = pool.invoke(new DeleteSpam(url, count, restTemplate));
+        pool.invoke(new DeleteSpam(url, count, restTemplate));
 
         while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
         }
 
         long stopTime = System.currentTimeMillis();
@@ -154,10 +153,10 @@ public class MainController {
     private void executePage(String url, Long count) {
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(4);
-        boolean done = false;
-        done = pool.invoke(new PageSpam(url, count, restTemplate));
+        pool.invoke(new PageSpam(url, count, restTemplate));
 
         while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
         }
 
         long stopTime = System.currentTimeMillis();
@@ -168,10 +167,10 @@ public class MainController {
     private void executeCount(String url, Long count) {
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(4);
-        boolean done = false;
-        done = pool.invoke(new CountSpam(url, count, restTemplate));
+        pool.invoke(new CountSpam(url, count, restTemplate));
 
         while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
         }
 
         long stopTime = System.currentTimeMillis();
@@ -182,10 +181,10 @@ public class MainController {
     private void executeCreate(String url, Long count) {
         long startTime = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(4);
-        boolean done = false;
-        done = pool.invoke(new CreateSpam(url, count, restTemplate));
+        pool.invoke(new CreateSpam(url, count, restTemplate));
 
         while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
         }
         long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
@@ -201,7 +200,7 @@ public class MainController {
     }
 
     private Long getCount(String sCount) {
-        Long count;
+        long count;
         if (!sCount.isEmpty()) {
             try {
                 count = Long.parseLong(sCount);

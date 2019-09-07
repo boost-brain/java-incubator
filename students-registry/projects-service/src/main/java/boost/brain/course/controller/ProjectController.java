@@ -1,9 +1,14 @@
 package boost.brain.course.controller;
 
+import boost.brain.course.controller.exceptions.NotFoundException;
 import boost.brain.course.model.Project;
 import boost.brain.course.model.ProjectDTO;
 import boost.brain.course.model.ProjectMapper;
 import boost.brain.course.repository.ProjectRepository;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-
+@Log
 @Controller
 @CrossOrigin(origins = "*")
 public class ProjectController {
@@ -29,64 +34,65 @@ public class ProjectController {
     ProjectMapper projectMapper=new ProjectMapper();
 
     @ResponseBody
-    @RequestMapping(value = "/createProject")
+    @PostMapping(value = "/createProject")
     public ProjectDTO createProject(@RequestBody ProjectDTO project){
         projectRepository.save(projectMapper.toProject(project));
         return project;
     }
     @ResponseBody
-    @RequestMapping(value="/findById",method = RequestMethod.GET)
+    @GetMapping(value="/findById")
     public ProjectDTO findById(@RequestBody ProjectDTO id) throws NoSuchElementException{
-        System.out.println(id.getProjectId());
+        log.info("inside findById(id) method; id:"+id.getProjectId());
+        log.info("found: "+projectRepository.findById(projectMapper.toProject(id).getProjectId()));
+        //System.out.println(id.getProjectId());
        //Project project = projectRepository.findById(id.getProjectId()).get();
-        System.out.println(projectRepository.findById(projectMapper.toProject(id).getProjectId()));
+       // System.out.println(projectRepository.findById(projectMapper.toProject(id).getProjectId()));
         ProjectDTO project = projectMapper.toProjectDto(projectRepository.findById(projectMapper.toProject(id).getProjectId()).get());
-        System.out.println(project.toString());
+        log.info("project: "+project.toString());
+       // System.out.println(project.toString());
         return project;
     }
     @ResponseBody
-    @RequestMapping(value="/countProjects", method = RequestMethod.GET)
+    @GetMapping(value="/countProjects")
     public int countProjects(){
-        System.out.println("count: "+projectRepository.countAllBy());
+        log.info("method: countProjects(); count: "+projectRepository.countAllBy());
+        //System.out.println("count: "+projectRepository.countAllBy());
         return projectRepository.countAllBy();
     }
     @ResponseBody
-    @RequestMapping(value="/deleteById", method = RequestMethod.DELETE)
+    @DeleteMapping(value="/deleteById")
     public  String deleteById(@RequestBody ProjectDTO project){
         String result ="deleting project with id: "+project.getProjectId();
         projectRepository.deleteProjectByProjectId(projectMapper.toProject(project).getProjectId());
         return result;
     }
-
     @ResponseBody
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id") Project project) {
         projectRepository.delete(project);
     }
-
     @ResponseBody
-    @RequestMapping(value="/watch", method = RequestMethod.GET)
-    public Page<ProjectDTO> watch(){
-        Pageable firstPageWithTwoElements = PageRequest.of(0,2);
-        Page<ProjectDTO> page=projectMapper.toProjectDtoPage(projectRepository.findAll(firstPageWithTwoElements));
-        System.out.println(page);
-        return projectMapper.toProjectDtoPage(projectRepository.findAll(firstPageWithTwoElements));
+    @GetMapping(value="/watch/{page}/{size}")
+    public Page<ProjectDTO> watch(@PathVariable int page, @PathVariable int size){
+        Pageable firstPageWithTwoElements = PageRequest.of(page,size);
+        if(page<0||size <1)throw new NotFoundException();
+        Page<ProjectDTO> result=projectMapper.toProjectDtoPage(projectRepository.findAll(firstPageWithTwoElements));
+        if (result == null) throw  new NotFoundException();
+        return result;
     }
     @ResponseBody
-    @RequestMapping(value="/update",method = RequestMethod.POST)
+    @PostMapping(value="/update")
     public ProjectDTO update(@RequestBody ProjectDTO project){
-        System.out.println("Updating project");
-        System.out.println("Before:"+projectRepository.findById(projectMapper.toProject(project).getProjectId()).get().toString());
-        System.out.println("After:"+project.toString());
+        log.info("method: update");
+        log.info("Before:"+projectRepository.findById(projectMapper.toProject(project).getProjectId()).get().toString());
+        log.info("After:"+project.toString());
         projectRepository.update(project.getProjectUrl(),project.getDescription(),project.getProjectName(),project.getProjectId());
-        System.out.println("Success");
+        log.info("Success");
         return project;
     }
-
     @ResponseBody
     @GetMapping("/all")
     public List<Project> list() {
         return projectRepository.findAll();
     }
-
 }

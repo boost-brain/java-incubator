@@ -1,13 +1,23 @@
 package boost.brain.course;
 
+import boost.brain.course.email.SendEmail;
+import org.apache.commons.codec.digest.DigestUtils;
+
+import javax.mail.MessagingException;
+import java.io.IOException;
+
 /**
- * Hello world!
- *
+ * Read javadoc in SendEmail class
  */
+
 public class App 
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+    public static void main( String[] args ) throws IOException, MessagingException {
+
+        String s = "igor";
+
+        System.out.println(DigestUtils.md5Hex(s));
+        System.out.println(DigestUtils.md5Hex(s));
+
     }
 }

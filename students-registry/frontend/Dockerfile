@@ -1,7 +1,7 @@
 FROM openjdk:8-jdk-alpine
 
-COPY target/*.jar frontend-0.0.1-SNAPSHOT.jar
+COPY target/*.jar frontend.jar
 
-ENTRYPOINT ["java","-jar","/frontend-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/frontend.jar"]
 
-EXPOSE 8080
+EXPOSE 80 80

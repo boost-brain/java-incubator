@@ -1,5 +1,19 @@
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:api-getway}
+
 zuul:
   routes:
-    example:
-      path: /api/example/**
-      url:  http://${EXAMPLE_HOST:example}:${EXAMPLE_POST:8080}/api/example
+    tasks-service:
+      path: /api/tasks-service/**
+      url:  http://${TASKS_SERVICE_HOST:localhost}:${TASKS_SERVICE_PORT:8081}/api
+    users-service:
+        path: /api/users-service/**
+        url:  http://${USERS_SERVICE_HOST:localhost}:${TASKS_SERVICE_PORT:8082}/api
+    auth-service:
+      path: /api/auth-service/**
+      url:  http://${USERS_SERVICE_HOST:localhost}:${TASKS_SERVICE_PORT:8083}/api
+
+auth-service-url: ${AUTH_SERVICE_URL:http://localhost:8080/api/auth-service/login}
+server:
+  port: 8080

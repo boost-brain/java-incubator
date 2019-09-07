@@ -10,29 +10,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/login"})
+@WebFilter(urlPatterns = {"/secured/*"})
 @Log
-public class LoginFilter implements Filter {
+public class SecurityFilter implements Filter {
 
     private AuthLoginBean  authLoginBean;
 
     @Inject
-    public LoginFilter(@Named("authLoginBean") AuthLoginBean authLoginBean) {
+    public SecurityFilter(@Named("authLoginBean")AuthLoginBean authLoginBean) {
         this.authLoginBean = authLoginBean;
     }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        log.info("Init login filter");
+        log.info("Init security filter");
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.info("DO LOGIN FILTER");
-        if (authLoginBean.checkSession()) {
+        log.info("DO SECURITY FILTER");
+        if (!authLoginBean.checkSession()) {
             HttpServletRequest request = (HttpServletRequest)  servletRequest;
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            response.sendRedirect(request.getContextPath() + "/secured");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
@@ -40,6 +40,6 @@ public class LoginFilter implements Filter {
 
     @Override
     public void destroy() {
-        log.info("Destroy login filter");
+        log.info("Destroy security filter");
     }
 }

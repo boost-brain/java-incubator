@@ -2,11 +2,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  application:
+    name: ${SPRING_APPLICATION_NAME:auth-service}
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: ${DB_LOGIN:postgres}
-    password: ${DB_PASSWORD:123}
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:students}
+    username: ${DB_LOGIN:auth_user}
+    password: ${DB_PASSWORD:12345}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:auth_db}
 server:
-  port: ${SERVER_PORT:8084}
+  port: ${SERVER_PORT:8083}

@@ -10,7 +10,8 @@ spring:
     username: ${DB_LOGIN:tasks_user}
     password: ${DB_PASSWORD:12345}
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:tasks_db}
+
 server:
   port: ${SERVER_PORT:8081}
 
-auth-service-url: ${AUTH_SERVICE_URL:http://localhost:8083/api/login/check/}
+auth-service-url: ${AUTH_SERVICE_URL:http://localhost:8080/api/auth-service/login/check/}

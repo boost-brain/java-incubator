@@ -2,77 +2,47 @@ package boost.brain.course.tasks;
 
 import boost.brain.course.tasks.controller.TasksController;
 import boost.brain.course.tasks.controller.dto.TaskDto;
-import boost.brain.course.tasks.repository.TasksRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 import static boost.brain.course.tasks.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.*;
-//import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 @RunWith(SpringRunner.class)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TaskControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-//    @LocalServerPort
-//    private int port;
-
     @Autowired
     private ObjectMapper mapper;
 
     @Autowired
-    private TasksRepository tasksRepository;
-
-    @Autowired
     private TasksController tasksController;
 
-//    @Autowired
-//    private TestRestTemplate restTemplate;
-
     private ResultActions mockMvcResult;
-    private RestTemplate restTemplate = new RestTemplate();
-
-    private static final String LOCAL_HOST = "http://localhost:";
-    private static final String URL_CREATE = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + CREATE_PREFIX;
-    private static final String URL_READ = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.READ_PREFIX;
-    private static final String URL_UPDATE = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.UPDATE_PREFIX;
-    private static final String URL_DELETE = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.DELETE_PREFIX;
-    private static final String URL_PAGE = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.PAGE_PREFIX;
-    private static final String URL_FOR = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.FOR_PREFIX;
-    private static final String URL_FROM = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.FROM_PREFIX;
-    private static final String URL_IN = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.IN_PREFIX;
-    private static final String URL_FILTER = LOCAL_HOST + TASKS_CONTROLLER_PREFIX + Constants.FILTER_PREFIX;
 
     private TaskDto taskDtoInstance;
     private TaskDto taskDtoResult;
-
-    private HttpHeaders header = new HttpHeaders();
 
     private void initInstanceTaskDto() {
         taskDtoInstance = new TaskDto();
@@ -91,9 +61,9 @@ public class TaskControllerTest {
         }
     }
 
-    private TaskDto saveInstanceTaskToDB() throws Exception {
+    private void saveInstanceTaskToDB() throws Exception {
         if (taskDtoInstance == null) {
-            return null;
+            return;
         }
 
         mockMvcResult = mockMvc.perform(post(TASKS_CONTROLLER_PREFIX + CREATE_PREFIX)
@@ -106,19 +76,6 @@ public class TaskControllerTest {
         } else {
             taskDtoResult = mapper.readValue(contentResult, TaskDto.class);
         }
-        return taskDtoResult;
-    }
-
-    private Map<String, String> getDataToMap(TaskDto taskDto) {
-        Map<String, String> result = new HashMap<>();
-        if (taskDto == null) return null;
-
-        result.put("project", String.valueOf(taskDto.getProject()));
-        result.put("author", taskDto.getAuthor());
-        result.put("implementer", taskDto.getImplementer());
-        result.put("name", taskDto.getName());
-        result.put("text", taskDto.getText());
-        return result;
     }
 
     @Test
@@ -222,26 +179,6 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void createStressTest() {
-        initInstanceTaskDto();
-        HttpEntity<TaskDto> requestBody = new HttpEntity<>(taskDtoInstance, header);
-//        RestTemplate restTemplate = new RestTemplate();
-
-        System.out.println(new Date(System.currentTimeMillis()));
-        long start = System.currentTimeMillis();
-        long stop = System.currentTimeMillis() + 1000;
-        int cntRecord = 0;
-        while (System.currentTimeMillis() < stop) {
-            ResponseEntity<TaskDto> result = restTemplate.postForEntity(URL_CREATE, requestBody, TaskDto.class);
-            cntRecord++;
-        }
-        System.out.println("Время начала теста: " + new Date(start));
-        System.out.println("Время окончания теста: " + new Date(stop));
-        System.out.println("Записано " + cntRecord + " записей в БД.");
-
-    }
-
-    @Test
     public void readTest() throws Exception {
         initInstanceTaskDto();
         saveInstanceTaskToDB();
@@ -255,11 +192,21 @@ public class TaskControllerTest {
 
     @Test
     public void updateTest() throws Exception {
-        TaskDto createdTask = saveInstanceTaskToDB();
-        createdTask.setName("NEW PROJECT");
-//        RestTemplate restTemplate = new RestTemplate();
-        TaskDto updated = restTemplate.patchForObject(URL_UPDATE, createdTask, TaskDto.class); //Invalid HTTP method: PATCH; nested exception is java.net.ProtocolException
-//        assertEquals(createdTask, updated);
+        initInstanceTaskDto();
+        saveInstanceTaskToDB();
+
+        taskDtoResult.setName("NEW PROJECT");
+        mockMvcResult = mockMvc.perform(patch(TASKS_CONTROLLER_PREFIX + UPDATE_PREFIX)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(asJsonString(taskDtoResult)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + READ_PREFIX + "/" + taskDtoResult.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.project", is(taskDtoResult.getProject())));
 
     }
 
@@ -268,6 +215,7 @@ public class TaskControllerTest {
         initInstanceTaskDto();
         saveInstanceTaskToDB();
         mockMvc.perform(delete(TASKS_CONTROLLER_PREFIX + DELETE_PREFIX + "/" + taskDtoResult.getId()))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + READ_PREFIX + "/" + taskDtoResult.getId()))
@@ -276,4 +224,114 @@ public class TaskControllerTest {
         mockMvc.perform(delete(TASKS_CONTROLLER_PREFIX + DELETE_PREFIX + "/0"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void pageTest() throws Exception {
+        initInstanceTaskDto();
+        for (int i = 0; i < 20; i++) {
+            saveInstanceTaskToDB();
+        }
+
+        int page = 2;
+        int size = 5;
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + PAGE_PREFIX + "/" + page + "/" + size ))
+                .andDo(print()).andExpect(status().isOk());
+        String listTaskAsString = mockMvcResult.andReturn().getResponse().getContentAsString();
+        List<TaskDto> tasks = Arrays.asList(mapper.readValue(listTaskAsString, TaskDto[].class));
+        for (TaskDto task : tasks) {
+            System.out.println(task);
+        }
+
+        page = 0;
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + PAGE_PREFIX + "/" + page + "/" + size ))
+                .andDo(print()).andExpect(status().isNotFound());
+
+        page = 1;
+        size = 0;
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + PAGE_PREFIX + "/" + page + "/" + size ))
+                .andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void taskForTest() throws Exception {
+        initInstanceTaskDto();
+        String implementer = "cher@mail.ru";
+        taskDtoInstance.setImplementer(implementer);
+        for (int i = 0; i < 3; i++) {
+            saveInstanceTaskToDB();
+        }
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + FOR_PREFIX + "/" + implementer))
+                .andDo(print()).andExpect(status().isOk());
+        List<TaskDto> tasks = Arrays.asList(mapper.readValue(mockMvcResult.andReturn().getResponse().getContentAsString(), TaskDto[].class));
+        assertThat(tasks.size()).isGreaterThanOrEqualTo(3);
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + FOR_PREFIX + "/" + "qwe"))
+                .andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void tasksFromTest() throws Exception {
+        initInstanceTaskDto();
+        String author = "boostbrain@gmail.com";
+        taskDtoInstance.setAuthor(author);
+        for (int i = 0; i < 3; i++) {
+            saveInstanceTaskToDB();
+        }
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + FROM_PREFIX + "/" + author))
+                .andDo(print()).andExpect(status().isOk());
+        List<TaskDto> tasks = Arrays.asList(mapper.readValue(mockMvcResult.andReturn().getResponse().getContentAsString(), TaskDto[].class));
+        assertThat(tasks.size()).isGreaterThanOrEqualTo(3);
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + FROM_PREFIX + "/" + "qwe"))
+                .andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void taskInTest() throws Exception {
+        initInstanceTaskDto();
+        int project = 777;
+        taskDtoInstance.setProject(project);
+        for (int i = 0; i < 7; i++) {
+            saveInstanceTaskToDB();
+        }
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + IN_PREFIX + "/" + project))
+                .andDo(print()).andExpect(status().isOk());
+        List<TaskDto> tasks = Arrays.asList(mapper.readValue(mockMvcResult.andReturn().getResponse().getContentAsString(), TaskDto[].class));
+        assertThat(tasks.size()).isGreaterThanOrEqualTo(7);
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + IN_PREFIX + "/987654321"))
+                .andDo(print()).andExpect(status().isNotFound());
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + IN_PREFIX + "/-222"))
+                .andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void filterTest() throws Exception {
+        initInstanceTaskDto();
+        int project = 111222;
+        String author = "qwe@qwe.com";
+        String implementer = "asd@asd.com";
+        taskDtoInstance.setProject(project);
+        taskDtoInstance.setAuthor(author);
+        taskDtoInstance.setImplementer(implementer);
+        for (int i = 0; i < 3; i++) {
+            saveInstanceTaskToDB();
+        }
+
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + FILTER_PREFIX)
+                                            .param("project", Integer.toString(project))
+                                            .param("author", author)
+                                            .param("implementer", implementer)
+                                        );
+//                .andDo(print()).andExpect(status().isOk());
+        List<TaskDto> tasks = Arrays.asList(mapper.readValue(mockMvcResult.andReturn().getResponse().getContentAsString(), TaskDto[].class));
+        assertThat(tasks.size()).isGreaterThanOrEqualTo(3);
+
+
+    }
+
 }

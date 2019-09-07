@@ -23,8 +23,9 @@ public class CredentialsController {
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public boolean create(@RequestBody Credentials credentials){
-        return credentialsRepository.create(credentials);
+    public Credentials create(@RequestBody Credentials credentials){
+        Credentials result =  credentialsRepository.create(credentials);
+        return result;
     }
 
     @PatchMapping(path = Constants.UPDATE_PREFIX,

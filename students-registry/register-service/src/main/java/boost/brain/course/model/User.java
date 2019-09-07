@@ -7,8 +7,11 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 
-    //private Long id;
-    private String name;
     private String email;
+    private String gitHabId;
+    private String name;
     private int hours;
+    private long createDate;
+    private long updateDate;
+    private String password;
 }

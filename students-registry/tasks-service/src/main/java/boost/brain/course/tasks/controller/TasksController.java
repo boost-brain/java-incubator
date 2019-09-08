@@ -110,7 +110,7 @@ public class TasksController {
             throw new NotFoundException();
         }
         List<TaskDto> result = tasksRepository.getPage(page,size);
-        if (result == null || result.isEmpty()) {
+        if (result == null) {
             throw new NotFoundException();
         }
         return result;
@@ -123,7 +123,7 @@ public class TasksController {
             throw new NotFoundException();
         }
         List<TaskDto> result = tasksRepository.tasksFor(implementer);
-        if (result == null || result.isEmpty()) {
+        if (result == null) {
             throw new NotFoundException();
         }
         return result;
@@ -136,7 +136,7 @@ public class TasksController {
             throw new NotFoundException();
         }
         List<TaskDto> result = tasksRepository.tasksFrom(author);
-        if (result == null || result.isEmpty()) {
+        if (result == null) {
             throw new NotFoundException();
         }
         return result;
@@ -149,7 +149,7 @@ public class TasksController {
             throw new NotFoundException();
         }
         List<TaskDto> result = tasksRepository.tasksIn(project);
-        if (result == null || result.isEmpty()) {
+        if (result == null) {
             throw new NotFoundException();
         }
         return result;
@@ -161,7 +161,7 @@ public class TasksController {
                                  @RequestParam(required = false, defaultValue = "") String author,
                                  @RequestParam(required = false, defaultValue = "") String implementer) {
         List<TaskDto> result = tasksRepository.filter(project, author, implementer);
-        if (result == null || result.isEmpty()) {
+        if (result == null) {
             throw new NotFoundException();
         }
         return result;

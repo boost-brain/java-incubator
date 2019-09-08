@@ -68,7 +68,8 @@ public class TaskControllerTest {
 
         mockMvcResult = mockMvc.perform(post(TASKS_CONTROLLER_PREFIX + CREATE_PREFIX)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(asJsonString(taskDtoInstance)));
+                .content(asJsonString(taskDtoInstance))
+        );
 
         String contentResult = mockMvcResult.andReturn().getResponse().getContentAsString();
         if (contentResult.isEmpty()) {
@@ -302,8 +303,8 @@ public class TaskControllerTest {
         List<TaskDto> tasks = Arrays.asList(mapper.readValue(mockMvcResult.andReturn().getResponse().getContentAsString(), TaskDto[].class));
         assertThat(tasks.size()).isGreaterThanOrEqualTo(7);
 
-        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + IN_PREFIX + "/987654321"))
-                .andDo(print()).andExpect(status().isNotFound());
+        mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + IN_PREFIX + "/987654321"))
+                .andDo(print()).andExpect(jsonPath("$").isEmpty());
 
         mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + IN_PREFIX + "/-222"))
                 .andDo(print()).andExpect(status().isNotFound());
@@ -327,10 +328,13 @@ public class TaskControllerTest {
                                             .param("author", author)
                                             .param("implementer", implementer)
                                         );
-//                .andDo(print()).andExpect(status().isOk());
         List<TaskDto> tasks = Arrays.asList(mapper.readValue(mockMvcResult.andReturn().getResponse().getContentAsString(), TaskDto[].class));
         assertThat(tasks.size()).isGreaterThanOrEqualTo(3);
 
+        mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + FILTER_PREFIX)
+                .param("project", "999555111"))
+                .andDo(print())
+                .andExpect(jsonPath("$").isEmpty());
 
     }
 

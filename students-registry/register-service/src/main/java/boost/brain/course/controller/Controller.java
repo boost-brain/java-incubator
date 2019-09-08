@@ -52,14 +52,14 @@ public class Controller {
     public User createUser(@RequestBody User user){
 
         /** auth-Service */
-        if (createCredentials(user.getEmail(), user.getPassword()) == null) {
+        if (!createCredentials(user.getEmail(), user.getPassword())) {
             throw new CreateCredentialsException();
         }
         /** user-Service */
         return userService.createUser(user);
     }
 
-    public Credentials createCredentials(String login, String password){
+    public boolean createCredentials(String login, String password){
 
         Credentials credentials = new Credentials();
         credentials.setLogin(login);

@@ -20,9 +20,12 @@ public class AuthService {
 
     private RestTemplate template = new RestTemplate();
 
-    public Credentials createCredentials(Credentials credentials){
+    public boolean createCredentials(Credentials credentials){
         String url = this.host + ":" + this.port + this.path + "/create";
-        Credentials result = template.postForObject(url, credentials, Credentials.class);
-        return result;
+        String result = template.postForObject(url, credentials, String.class);
+        if (result.compareTo("true") == 0)
+            return true;
+        else
+            return false;
     }
 }

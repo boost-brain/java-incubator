@@ -22,16 +22,16 @@ public class CredentialsRepository {
         this.entityManager = entityManager;
     }
 
-    public Credentials create(Credentials credentials) {
+    public boolean create(Credentials credentials) {
         if (credentials == null ||
                 StringUtils.isEmpty(credentials.getLogin()) ||
                 StringUtils.isEmpty(credentials.getPassword())) {
-            return null;
+            return false;
         }
 
         CredentialsEntity credentialsEntity = entityManager.find(CredentialsEntity.class, credentials.getLogin());
         if (credentialsEntity != null) {
-            return null;
+            return false;
         }
 
         credentialsEntity = new CredentialsEntity();
@@ -45,9 +45,9 @@ public class CredentialsRepository {
             result.setLogin(credentialsEntity.getUserId());
             result.setPassword(credentialsEntity.getPasswordHash().toString());
             //BeanUtils.copyProperties(credentialsEntity, result);
-            return result;
+            return true;
         } catch (NoSuchAlgorithmException e) {
-            return null;
+            return false;
         }
     }
 

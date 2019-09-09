@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FilterConfig {
 
-    @Value("${auth-service-url}")
+    @Value("${auth-login-check-url}")
     private String authUrl;
 
     @Bean

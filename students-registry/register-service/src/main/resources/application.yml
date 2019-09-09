@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  application:
+    name: ${SPRING_APPLICATION_NAME:register-service}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_LOGIN:postgres}
+    password: ${DB_PASSWORD:123}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:register_db}
+server:
+  port: ${SERVER_PORT:8086}
+url:
+  host: http://localhost
+  port:
+    user: 8082
+    auth: 8084
+  path:
+    user: /api/users
+    auth: /api/credentials

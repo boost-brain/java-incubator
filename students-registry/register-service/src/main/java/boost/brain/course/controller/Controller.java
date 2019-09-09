@@ -1,19 +1,24 @@
 package boost.brain.course.controller;
 
+import boost.brain.course.Constants;
+import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.email.SendEmail;
 import boost.brain.course.entity.EmailEntity;
-import boost.brain.course.model.Account;
-import boost.brain.course.service.accountArkasandr.AccountService;
-import boost.brain.course.service.register.RegisterService;
+import boost.brain.course.exceptions.CreateCredentialsException;
 import boost.brain.course.model.User;
+import boost.brain.course.service.auth.AuthService;
+import boost.brain.course.service.register.RegisterService;
 import boost.brain.course.service.usersMichaelKotor.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin(origins = "*")
+@RequestMapping(Constants.REGISTER_PREFIX)
 public class Controller {
 
     @Autowired
@@ -21,7 +26,8 @@ public class Controller {
     @Autowired
     UserService userService;
     @Autowired
-    AccountService accountService;
+    AuthService authService;
+
 
     @GetMapping(value = "/")
     public String registrationForm(){
@@ -40,27 +46,25 @@ public class Controller {
         registerService.updateConfirmed(emailEntity);
     }
 
-    @PostMapping(value = "/createUser")
-    public User createUser(@RequestParam String name,
-                           @RequestParam String email,
-                           @RequestParam int hours){
+    @PostMapping(path = Constants.CREATE_PREFIX,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public User createUser(@RequestBody User user){
 
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setHours(hours);
-
+        /** auth-Service */
+        if (!createCredentials(user.getEmail(), user.getPassword())) {
+            throw new CreateCredentialsException();
+        }
+        /** user-Service */
         return userService.createUser(user);
     }
 
-    @PostMapping(value = "/createAccount")
-    public Account createAccount(@RequestParam String email,
-                                 @RequestParam String password){
+    public boolean createCredentials(String login, String password){
 
-        Account account = new Account();
-        account.setEmail(email);
-        account.setPassword(password);
+        Credentials credentials = new Credentials();
+        credentials.setLogin(login);
+        credentials.setPassword(password);
 
-        return accountService.createAccount(account);
+        return authService.createCredentials(credentials);
     }
 }

@@ -2,6 +2,7 @@ package boost.brain.course.auth.repository;
 
 import boost.brain.course.auth.repository.entity.CredentialsEntity;
 import boost.brain.course.common.auth.Credentials;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 @Repository
 @Transactional
@@ -41,6 +41,10 @@ public class CredentialsRepository {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             credentialsEntity.setPasswordHash(messageDigest.digest(credentials.getPassword().getBytes()));
             entityManager.persist(credentialsEntity);
+            Credentials result = new Credentials();
+            result.setLogin(credentialsEntity.getUserId());
+            result.setPassword(credentialsEntity.getPasswordHash().toString());
+            //BeanUtils.copyProperties(credentialsEntity, result);
             return true;
         } catch (NoSuchAlgorithmException e) {
             return false;

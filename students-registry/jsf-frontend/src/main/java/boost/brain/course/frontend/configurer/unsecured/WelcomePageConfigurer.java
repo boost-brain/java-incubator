@@ -1,4 +1,4 @@
-package boost.brain.course.frontend;
+package boost.brain.course.frontend.configurer.unsecured;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

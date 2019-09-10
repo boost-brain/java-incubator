@@ -1,6 +1,4 @@
-package boost.brain.course.frontend.auth.view;
-
-
+package boost.brain.course.frontend.auth.view.unsecured;
 
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.frontend.auth.bean.AuthLoginBean;
@@ -10,7 +8,6 @@ import lombok.extern.java.Log;
 import org.primefaces.PrimeFaces;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.annotation.RequestScope;
-
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
@@ -32,8 +29,7 @@ public class UserLoginView {
     final private AuthLoginBean authLoginBean;
 
     @Inject
-    public UserLoginView(@Named("httpSessionBean") HttpSessionBean httpSessionBean,
-                         @Named("authLoginBean")  AuthLoginBean authLoginBean) {
+    public UserLoginView(HttpSessionBean httpSessionBean, AuthLoginBean authLoginBean) {
         this.httpSessionBean = httpSessionBean;
         this.authLoginBean = authLoginBean;
     }
@@ -47,7 +43,6 @@ public class UserLoginView {
         Credentials credentials = new Credentials();
         credentials.setLogin(username);
         credentials.setPassword(password);
-        this.setPassword("");
         authLoginBean.doLogin(credentials);
         if (httpSessionBean.getSession() == null
                 || StringUtils.isEmpty(httpSessionBean.getSession().getSessionId())) {
@@ -58,18 +53,27 @@ public class UserLoginView {
     }
 
     private void errorMessage() {
-        FacesMessage message =
-                new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Invalid credentials");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Invalid credentials");
         boolean loggedIn = false;
         FacesContext.getCurrentInstance().addMessage(null, message);
         PrimeFaces.current().ajax().addCallbackParam("loggedIn", loggedIn);
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
     }
 
     private void confirmed() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Welcome", "");
+        boolean loggedIn = true;
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        PrimeFaces.current().ajax().addCallbackParam("loggedIn", loggedIn);
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        String path = httpSessionBean.getPath();
         try {
-            ec.redirect("/secured/main");
+            if (StringUtils.isEmpty(path)) {
+
+                ec.redirect("secured/main");
+            } else {
+                httpSessionBean.setPath("");
+                ec.redirect(path);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

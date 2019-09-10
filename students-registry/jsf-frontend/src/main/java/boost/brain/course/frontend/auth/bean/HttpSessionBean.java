@@ -8,8 +8,9 @@ import javax.inject.Named;
 
 @Data
 @SessionScope
-@Named("httpSessionBean")
+@Named
 public class HttpSessionBean {
 
     private Session session;
+    private String path;
 }

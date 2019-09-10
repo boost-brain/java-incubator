@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @Data
-@Named("authLoginBean")
+@Named
 @Log
 public class AuthLoginBean {
 
@@ -23,14 +23,13 @@ public class AuthLoginBean {
     final private HttpSessionBean httpSessionBean;
 
     @Inject
-    public AuthLoginBean(@Value("${auth-login-url}")String authUrl,
-                         @Named("httpSessionBean") HttpSessionBean httpSessionBean) {
+    public AuthLoginBean(@Value("${auth-login-url}")String authUrl, HttpSessionBean httpSessionBean) {
         this.authUrl = authUrl;
         this.httpSessionBean = httpSessionBean;
     }
 
     public void doLogin(final Credentials credentials) {
-        log.info("DO LOGIN authLoginBean");
+        log.info("Do login");
         if(credentials == null) {
             return;
         }
@@ -39,16 +38,14 @@ public class AuthLoginBean {
             restTemplateBuilder.additionalMessageConverters(new MappingJackson2HttpMessageConverter());
             RestTemplate restTemplate = restTemplateBuilder.build();
             HttpEntity<Credentials> credentialsRequest = new HttpEntity<>(credentials);
-
             Session session = restTemplate.postForObject(authUrl +"/login", credentialsRequest, Session.class);
-
             if (session == null || StringUtils.isEmpty(session.getSessionId())) {
                 log.severe("The session not found!");
             } else {
                 httpSessionBean.setSession(session);
             }
         } catch (Exception e) {
-            log.severe("AuthLoginBean throws Exception!");
+            log.severe("AuthLoginBean.doLogin throws Exception!");
             e.printStackTrace();
         }
     }
@@ -71,7 +68,7 @@ public class AuthLoginBean {
                 log.severe("The sessionId is invalid!");
             }
         } catch (Exception e) {
-            log.severe("AuthLoginBean throws the exception!");
+            log.severe("AuthLoginBean.checkSession throws the exception!");
             e.printStackTrace();
         }
         return result;
@@ -95,7 +92,7 @@ public class AuthLoginBean {
                 log.severe("The sessionId is invalid!");
             }
         } catch (Exception e) {
-            log.severe("AuthLoginBean throws the exception!");
+            log.severe("AuthLoginBean.logout throws the exception!");
             e.printStackTrace();
         }
         return result;

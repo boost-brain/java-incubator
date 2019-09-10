@@ -18,7 +18,7 @@ public class LoginFilter implements Filter {
     private AuthLoginBean authLoginBean;
 
     @Inject
-    public LoginFilter(@Named("authLoginBean") AuthLoginBean authLoginBean) {
+    public LoginFilter(AuthLoginBean authLoginBean) {
         this.authLoginBean = authLoginBean;
     }
 

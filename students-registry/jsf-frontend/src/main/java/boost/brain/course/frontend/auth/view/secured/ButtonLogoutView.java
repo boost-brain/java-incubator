@@ -23,8 +23,7 @@ public class ButtonLogoutView {
     final private AuthLoginBean authLoginBean;
 
     @Inject
-    public ButtonLogoutView(@Named("httpSessionBean")HttpSessionBean httpSessionBean,
-                            @Named("authLoginBean")AuthLoginBean authLoginBean) {
+    public ButtonLogoutView(HttpSessionBean httpSessionBean, AuthLoginBean authLoginBean) {
         this.httpSessionBean = httpSessionBean;
         this.authLoginBean = authLoginBean;
     }

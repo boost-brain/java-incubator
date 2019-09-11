@@ -12,15 +12,15 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: ${DB_LOGIN:postgres}
-    password: ${DB_PASSWORD:123}
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:register_db}
+    password: ${DB_PASSWORD:postgres}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:students}
 server:
-  port: ${SERVER_PORT:8086}
+  port: ${SERVER_PORT:8080}
 url:
   host: http://localhost
   port:
-    user: 8082
-    auth: 8084
+    user: 8080
+    auth: 8080
   path:
     user: /api/users
     auth: /api/credentials

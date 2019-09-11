@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:8-jdk-alpine
 
 ADD target/example-service.jar /app/
 WORKDIR /app

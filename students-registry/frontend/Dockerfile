@@ -1,7 +1,8 @@
 FROM openjdk:8-jdk-alpine
 
-COPY target/*.jar frontend.jar
+ADD target/frontend.jar /app/
+WORKDIR /app
 
 ENTRYPOINT ["java","-jar","/frontend.jar"]
 
-EXPOSE 80 80
+EXPOSE 8080 8080

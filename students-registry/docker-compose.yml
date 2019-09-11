@@ -1,0 +1,59 @@
+version: '2'
+
+services:
+  jsf-frontend:
+    image: jsf-frontend:latest
+    depends_on:
+      - users-service
+      - register-service
+      - auth-service
+      - projects-service
+      - tasks-service
+    environment:
+      AUTH_LOGIN_CHECK_URL: auth-service:8080/api/login
+    ports:
+      - 8080:8080
+
+  auth-service:
+    image: auth-service:latest
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+
+  projects-service:
+    image: projects-service:latest
+    environment:
+      DB_HOST: postgres
+
+  register-service:
+    image: register-service:latest
+    depends_on:
+      - auth-service
+      - users-service
+    environment:
+      DB_HOST: postgres
+
+  tasks-service:
+    image: tasks-service:latest
+    environment:
+      DB_HOST: postgres
+
+  users-service:
+    image: users-service:latest
+    environment:
+      DB_HOST: postgres
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+    volumes:
+      - database_data:/var/lib/postgresql/10/main
+
+volumes:
+  database_data:
+    driver: local

@@ -6,13 +6,13 @@ zuul:
   routes:
     tasks-service:
       path: /api/tasks-service/**
-      url:  http://${TASKS_SERVICE_HOST:localhost}:${TASKS_SERVICE_PORT:8081}/api
+      url:  http://${TASKS_SERVICE_HOST:localhost}:${TASKS_SERVICE_PORT:8080}/api
     users-service:
         path: /api/users-service/**
-        url:  http://${USERS_SERVICE_HOST:localhost}:${USERS_SERVICE_PORT:8082}/api
+        url:  http://${USERS_SERVICE_HOST:localhost}:${USERS_SERVICE_PORT:8080}/api
 
 api-getway-url: http://${API_GETWAY_HOST:localhost}:${API_GETWAY_PORT:8080}
-auth-login-url: http://${AUTH_LOGIN_CHECK_URL:localhost:8083/api/login}
+auth-login-url: http://${AUTH_LOGIN_CHECK_URL:localhost:8080/api/login}
 
 server:
   port: ${SERVER_PORT:8080}

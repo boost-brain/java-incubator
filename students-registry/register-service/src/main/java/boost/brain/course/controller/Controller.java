@@ -4,6 +4,7 @@ import boost.brain.course.Constants;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.email.SendEmail;
 import boost.brain.course.entity.EmailEntity;
+import boost.brain.course.exceptions.AddEmailException;
 import boost.brain.course.exceptions.CreateCredentialsException;
 import boost.brain.course.model.User;
 import boost.brain.course.service.auth.AuthService;
@@ -39,7 +40,6 @@ public class Controller {
         SendEmail.sendEmail(entity);
         return registerService.addUserEmail(entity);
     }
-
     @GetMapping (value = "/verification_token/{token}")
     public void verificationToken(@PathVariable("token") String token, EmailEntity emailEntity){
         registerService.confirmation(emailEntity, token);
@@ -50,6 +50,20 @@ public class Controller {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public User createUser(@RequestBody User user){
+
+        /** addEmail in database */
+        EmailEntity emailEntity = new EmailEntity();
+        emailEntity.setEmail(user.getEmail());
+        try {
+            if ( addEmail(emailEntity) != null) {
+                throw new AddEmailException();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
 
         /** auth-Service */
         if (!createCredentials(user.getEmail(), user.getPassword())) {

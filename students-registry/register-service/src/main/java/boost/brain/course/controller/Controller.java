@@ -53,23 +53,23 @@ public class Controller {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public UserDto createUser(@RequestBody User user){
 
-//        /** addEmail in database */
-//        EmailEntity emailEntity = new EmailEntity();
-//        emailEntity.setEmail(user.getEmail());
-//        try {
-//            if ( addEmail(emailEntity) != null) {
-//                throw new AddEmailException();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (MessagingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        /** auth-Service */
-//        if (!createCredentials(user.getEmail(), user.getPassword())) {
-//            throw new CreateCredentialsException();
-//        }
+        /** addEmail in database */
+        EmailEntity emailEntity = new EmailEntity();
+        emailEntity.setEmail(user.getEmail());
+        try {
+            if ( addEmail(emailEntity) != null) {
+                throw new AddEmailException();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        /** auth-Service */
+        if (!createCredentials(user.getEmail(), user.getPassword())) {
+            throw new CreateCredentialsException();
+        }
         /** user-Service */
         UserDto commonUser = new UserDto();
         BeanUtils.copyProperties(user, commonUser);

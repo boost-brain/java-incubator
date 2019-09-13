@@ -2,6 +2,7 @@ package boost.brain.course.controller;
 
 import boost.brain.course.Constants;
 import boost.brain.course.common.auth.Credentials;
+import boost.brain.course.common.auth.UserDto;
 import boost.brain.course.email.SendEmail;
 import boost.brain.course.entity.EmailEntity;
 import boost.brain.course.exceptions.AddEmailException;
@@ -10,6 +11,7 @@ import boost.brain.course.model.User;
 import boost.brain.course.service.auth.AuthService;
 import boost.brain.course.service.register.RegisterService;
 import boost.brain.course.service.usersMichaelKotor.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -49,28 +51,29 @@ public class Controller {
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public User createUser(@RequestBody User user){
+    public UserDto createUser(@RequestBody User user){
 
-        /** addEmail in database */
-        EmailEntity emailEntity = new EmailEntity();
-        emailEntity.setEmail(user.getEmail());
-        try {
-            if ( addEmail(emailEntity) != null) {
-                throw new AddEmailException();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
-
-        /** auth-Service */
-        if (!createCredentials(user.getEmail(), user.getPassword())) {
-            throw new CreateCredentialsException();
-        }
+//        /** addEmail in database */
+//        EmailEntity emailEntity = new EmailEntity();
+//        emailEntity.setEmail(user.getEmail());
+//        try {
+//            if ( addEmail(emailEntity) != null) {
+//                throw new AddEmailException();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        /** auth-Service */
+//        if (!createCredentials(user.getEmail(), user.getPassword())) {
+//            throw new CreateCredentialsException();
+//        }
         /** user-Service */
-        return userService.createUser(user);
+        UserDto commonUser = new UserDto();
+        BeanUtils.copyProperties(user, commonUser);
+        return userService.createUser(commonUser);
     }
 
     public boolean createCredentials(String login, String password){

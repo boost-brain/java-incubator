@@ -1,7 +1,9 @@
 package boost.brain.course.users.controller;
 
+import boost.brain.course.common.auth.UserDto;
 import boost.brain.course.users.Constants;
-import boost.brain.course.users.controller.dto.UserDto;
+//import boost.brain.course.users.controller.dto.UserDto;
+
 import boost.brain.course.users.controller.exceptions.NotFoundException;
 import boost.brain.course.users.repository.UsersRepository;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;

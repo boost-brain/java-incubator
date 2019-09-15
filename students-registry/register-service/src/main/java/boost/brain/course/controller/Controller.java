@@ -57,7 +57,7 @@ public class Controller {
         EmailEntity emailEntity = new EmailEntity();
         emailEntity.setEmail(user.getEmail());
         try {
-            if ( addEmail(emailEntity) != null) {
+            if ( addEmail(emailEntity) == null) {
                 throw new AddEmailException();
             }
         } catch (IOException e) {

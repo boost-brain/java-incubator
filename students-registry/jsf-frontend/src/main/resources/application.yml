@@ -13,6 +13,7 @@ zuul:
 
 api-getway-url: http://${API_GETWAY_HOST:localhost}:${API_GETWAY_PORT:8080}
 auth-login-url: http://${AUTH_LOGIN_CHECK_URL:localhost:8080/api/login}
+register-service-url: http://${REGISTER_SERVICE_URL:http://localhost:8080/api/register}
 
 server:
   port: ${SERVER_PORT:8080}

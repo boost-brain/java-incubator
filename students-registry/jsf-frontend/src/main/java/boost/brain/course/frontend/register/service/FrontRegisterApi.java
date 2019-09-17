@@ -11,22 +11,14 @@ import javax.inject.Named;
 @Service
 public class FrontRegisterApi {
 
-    @Value("${url.host}")
-    private String host;
-
-    @Value("${url.port.register}")
-    private String port;
-
-    @Value("${url.path.register}")
-    private String path;
-
+    @Value("${register-service-url}")
+    private String url;
     private RestTemplate template = new RestTemplate();
 
     public User addAccount(String name, String email, String password, String gitHubId, int hours){
-        String url = this.host + ":" + this.port + this.path + "/create";
+        String createUrl = url + "/create";
 
         User user = new User(name, email, password, gitHubId, hours);
-        User result = template.postForObject(url, user, User.class);
-        return result;
+        return template.postForObject(createUrl, user, User.class);
     }
 }

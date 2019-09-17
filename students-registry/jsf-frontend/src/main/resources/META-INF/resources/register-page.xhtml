@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a="http://java.sun.com/jsf/composite"
+      xml:lang="en" lang="en"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>Title</title>
+</h:head>
+<h:body>
+   <h3>Please fill the form below:</h3>
+
+   <h:form>
+       <br ><h:inputText id="name" value="#{user.name}" p:placeholder="Your name:"/></br>
+       <br><h:inputText id="email" value="#{user.email}" p:placeholder="Your email:"/></br>
+       <br><h:inputText id="password" value="#{user.password}" p:placeholder="Your password:"/></br>
+       <br><h:inputText id="gitHubId" value="#{user.gitHubId}" p:placeholder="GitHub Id:"/></br>
+       <br><h:inputText id="hours" value="#{user.hours}" p:placeholder="Hours of learning per week:"/></br>
+
+       <h:commandButton value="Sign up" action="#{frontRegisterApi.addAccount(user.name, user.email, user.password, user.gitHubId, user.hours)}"/>
+
+   </h:form>
+
+</h:body>
+</html>

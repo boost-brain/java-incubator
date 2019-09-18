@@ -1,4 +1,4 @@
-package boost.brain.course.users.controller.dto;
+package boost.brain.course.common.auth;
 
 import lombok.Data;
 
@@ -11,5 +11,4 @@ public class UserDto {
     private int hours;
     private long createDate;
     private long updateDate;
-
 }

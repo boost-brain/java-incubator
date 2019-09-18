@@ -1,6 +1,7 @@
 package boost.brain.course.users.repository;
 
-import boost.brain.course.users.controller.dto.UserDto;
+//import boost.brain.course.users.controller.dto.UserDto;
+import boost.brain.course.common.auth.UserDto;
 import boost.brain.course.users.repository.entities.UserEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -29,4 +29,6 @@ public interface ProjectRepository extends PagingAndSortingRepository<Project,In
 
     List<Project> findAll();
 
+    List<Project> findAllByProjectIdIn(List<Integer> list);
+
 }

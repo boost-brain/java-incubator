@@ -30,6 +30,8 @@ public class ButtonLogoutView {
 
     public void buttonAction() {
         if (authLoginBean.logout()) {
+            httpSessionBean.setLogin("");
+            httpSessionBean.setPath("");
             httpSessionBean.setSession(new Session());
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
             try {

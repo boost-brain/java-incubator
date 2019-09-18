@@ -111,6 +111,21 @@ public class UsersController {
         return result;
     }
 
+    @PostMapping(path = Constants.USERS_FOR_EMAILS_PREFIX,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<UserDto> usersForEmails(@RequestBody List<String> emails) {
+        if (emails == null || emails.isEmpty()) {
+            throw new NotFoundException();
+        }
+        List<UserDto> result = usersRepository.usersForEmails(emails);
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
+    }
+
+
     private boolean checkEmail(final String email) {
         EmailValidator emailValidator = new EmailValidator();
         if (!emailValidator.isValid(email, null)) {

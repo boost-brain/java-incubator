@@ -98,7 +98,7 @@ public class ProjectController {
 
     @ResponseBody
     @PostMapping("/projects-for-ids")
-    public List<ProjectDTO> usersForEmails(@RequestBody List<Integer> ids) {
+    public List<ProjectDTO> projectsForIds(@RequestBody List<Integer> ids) {
         if (ids == null || ids.isEmpty()) {
             throw new NotFoundException();
         }

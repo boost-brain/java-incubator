@@ -43,6 +43,7 @@ public class AuthLoginBean {
                 log.severe("The session not found!");
             } else {
                 httpSessionBean.setSession(session);
+                httpSessionBean.setLogin(credentials.getLogin());
             }
         } catch (Exception e) {
             log.severe("AuthLoginBean.doLogin throws Exception!");

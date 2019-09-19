@@ -95,4 +95,17 @@ public class ProjectController {
     public List<Project> list() {
         return projectRepository.findAll();
     }
+
+    @ResponseBody
+    @PostMapping("/projects-for-ids")
+    public List<ProjectDTO> projectsForIds(@RequestBody List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) {
+            throw new NotFoundException();
+        }
+        List<ProjectDTO> result =  projectMapper.toProjectDtos(projectRepository.findAllByProjectIdIn(ids));
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
+    }
 }

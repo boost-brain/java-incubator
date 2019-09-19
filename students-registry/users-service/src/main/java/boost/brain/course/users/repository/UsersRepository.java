@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,25 @@ public class UsersRepository {
         tq.setMaxResults(pageSize);
 
         List<UserEntity> userEntities = tq.getResultList();
+
+        for (UserEntity userEntity: userEntities) {
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(userEntity, userDto);
+            result.add(userDto);
+        }
+        return result;
+    }
+
+    public List<UserDto> usersForEmails(final List<String> emails) {
+        List<UserDto> result = new ArrayList<>();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
+        Root<UserEntity> from = cq.from(UserEntity.class);
+
+        Predicate where = from.get("email").in(emails);
+        CriteriaQuery<UserEntity> select = cq.select(from).where(where);
+        TypedQuery<UserEntity> typedQuery = entityManager.createQuery(select);
+        List<UserEntity> userEntities = typedQuery.getResultList();
 
         for (UserEntity userEntity: userEntities) {
             UserDto userDto = new UserDto();

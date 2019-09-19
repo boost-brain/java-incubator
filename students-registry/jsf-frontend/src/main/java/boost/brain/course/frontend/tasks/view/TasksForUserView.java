@@ -32,6 +32,8 @@ import java.util.Set;
 @Log
 public class TasksForUserView {
 
+    final long UPDATE_INTERVAL = 10 * 1000;
+
     final private HttpSessionBean httpSessionBean;
     private List<Task> tasks;
     @Value("${tasks-service-tasks-url}")
@@ -51,6 +53,7 @@ public class TasksForUserView {
         log.info("Init TasksForUserView");
         tasks = new ArrayList<>();
         tasks.addAll(this.getListTasks());
+        this.clearCaches();
         this.updateCacheUsers(this.checkCacheUsers(this.getEmails(tasks)));
         this.updateCacheProjects(this.checkCacheProjects(this.getProjectsIds(tasks)));
     }
@@ -198,5 +201,14 @@ public class TasksForUserView {
             log.severe("TasksForUserView.updateCacheProjects throws exception!");
             e.printStackTrace();
         }
+    }
+
+    private void clearCaches() {
+        long currentDate = System.currentTimeMillis();
+        long lastUpdateDate = httpSessionBean.getLastUpdateDate();
+        if ((currentDate - lastUpdateDate) < UPDATE_INTERVAL) return;
+        httpSessionBean.getCacheUsers().clear();
+        httpSessionBean.getCacheProjects().clear();
+        httpSessionBean.setLastUpdateDate(currentDate);
     }
 }

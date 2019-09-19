@@ -18,6 +18,7 @@ public class HttpSessionBean {
     private Session session;
     private String login;
     private String path;
+    private long lastUpdateDate;
 
     private Map<Integer, Project> cacheProjects = new HashMap<>();
     private Map<String, User> cacheUsers = new HashMap<>();

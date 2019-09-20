@@ -11,16 +11,16 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String gitHubId;
+    private String gitHabId;
     private int hours;
 
     public User(){}
 
-    public User(String name, String email, String password, String gitHubId, int hours) {
+    public User(String name, String email, String password, String gitHabId, int hours) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.gitHubId = gitHubId;
+        this.gitHabId = gitHabId;
         this.hours = hours;
     }
 }

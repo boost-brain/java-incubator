@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RegisterServiceApp {
+public class RegisterService {
     public static void main(String[] args) {
-        SpringApplication.run(RegisterServiceApp.class, args);
+        SpringApplication.run(RegisterService.class, args);
     }
 }

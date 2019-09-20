@@ -21,6 +21,9 @@ url:
   port:
     user: 8080
     auth: 8080
+    jsf-frontend: 8080
+    register: 8080
   path:
     user: /api/users
     auth: /api/credentials
+    register: /api/register

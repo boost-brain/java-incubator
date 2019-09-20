@@ -1,29 +1,49 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:a="http://java.sun.com/jsf/composite"
-      xml:lang="en" lang="en"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+<html xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Title</title>
+    <title>Регистрация нового пользователя</title>
+    <style>
+        body{
+            background-color: #949494;
+            background-image: url(https://www.barraques.cat/pngfile/big/19-191062_metallic-wallpaper-for-desktop-black-silver-background-hd.jpg);
+            background-attachment: fixed;
+        }
+        .text{
+            font-family: Tahoma;
+            color: #ced100;
+            float: right;
+            margin-right: 20px;
+        }
+        h2{
+            margin-top: 8%;
+            text-align: center;
+            color:#efff42;
+        }
+    </style>
 </h:head>
 <h:body>
-   <h3>Please fill the form below:</h3>
+    <h2>Для регистрации заполните форму:</h2>
 
-   <h:form>
-       <br ><h:inputText id="name" value="#{user.name}" p:placeholder="Your name:"/></br>
-       <br><h:inputText id="email" value="#{user.email}" p:placeholder="Your email:"/></br>
-       <br><h:inputText id="password" value="#{user.password}" p:placeholder="Your password:"/></br>
-       <br><h:inputText id="gitHubId" value="#{user.gitHubId}" p:placeholder="GitHub Id:"/></br>
-       <br><h:inputText id="hours" value="#{user.hours}" p:placeholder="Hours of learning per week:"/></br>
+    <h:form>
+       <h:panelGrid columns="2" width="500" cellpadding="5" style="margin-top: 4%; margin-left: auto; margin-right: auto">
+           <h:outputText styleClass="text" value="Имя: "/>
+           <p:inputText id="name" value="#{user.name}" t:placeholder="Forrest Gump"/>
+           <h:outputText styleClass="text" value="Емейл: "/>
+           <p:inputText required="" id="email" value="#{user.email}" t:placeholder="bubba_gump@gmail.com"/>
+           <h:outputText styleClass="text" value="Пароль: "/>
+           <p:password id="password" value="#{user.password}" t:placeholder="runForrestRun"/>
+           <h:outputText styleClass="text" value="GitHub ID: "/>
+           <p:inputText id="gitHubId" value="#{user.gitHabId}" t:placeholder="ForrestGump"/>
+           <h:outputText styleClass="text" value="Могу учиться часов в неделю: "/>
+           <p:inputText value="#{user.hours}" t:placeholder="Целое число"/>
+       </h:panelGrid>
+           <p:commandButton  value="Зарегистрироваться" action="#{frontRegisterApi.addAccount(user.name,
+                                                user.email, user.password, user.gitHabId, user.hours)}"
+                                                style="width:250px; margin: 20px 40%;"/>
 
-       <h:commandButton value="Sign up" action="#{frontRegisterApi.addAccount(user.name, user.email, user.password, user.gitHubId, user.hours)}"/>
-
-   </h:form>
-
+    </h:form>
 </h:body>
 </html>

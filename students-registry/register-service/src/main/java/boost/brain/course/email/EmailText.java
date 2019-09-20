@@ -6,7 +6,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class EmailText {
 
     private static String host = "http://localhost";
-    private static String port = "8081";
+    private static String port = "8080";
     private static String path = "/api/register";
 
 

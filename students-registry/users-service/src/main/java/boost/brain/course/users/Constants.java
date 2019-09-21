@@ -14,4 +14,5 @@ public interface Constants {
     String PAGE_PREFIX = "/page";
     String FILTER_PREFIX = "/filter";
 
+    String USERS_FOR_EMAILS_PREFIX = "/users-for-emails";
 }

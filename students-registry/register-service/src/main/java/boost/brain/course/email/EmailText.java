@@ -5,6 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 public class EmailText {
 
+    //FIXME Change host and port
     private static String host = "http://localhost";
     private static String port = "8080";
     private static String path = "/api/register";

@@ -1,6 +1,7 @@
 package boost.brain.course.service.users;
 
 import boost.brain.course.common.auth.UserDto;
+import boost.brain.course.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ public class UserService {
 
     private RestTemplate template = new RestTemplate();
 
-    public UserDto createUser(UserDto user){
+    public User createUser(User user){
         String url = this.host + ":" + this.port + this.path + "/create";
-        UserDto result = template.postForObject(url, user, UserDto.class);
+        User result = template.postForObject(url, user, User.class);
         return result;
     }
 }

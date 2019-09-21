@@ -1,0 +1,49 @@
+<html xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Регистрация нового пользователя</title>
+    <style>
+        body{
+            background-color: #949494;
+            background-image: url(https://www.barraques.cat/pngfile/big/19-191062_metallic-wallpaper-for-desktop-black-silver-background-hd.jpg);
+            background-attachment: fixed;
+        }
+        .text{
+            font-family: Tahoma;
+            color: #ced100;
+            float: right;
+            margin-right: 20px;
+        }
+        h2{
+            margin-top: 8%;
+            text-align: center;
+            color:#efff42;
+        }
+    </style>
+</h:head>
+<h:body>
+    <h2>Для регистрации заполните форму:</h2>
+
+    <h:form>
+       <h:panelGrid columns="2" width="500" cellpadding="5" style="margin-top: 4%; margin-left: auto; margin-right: auto">
+           <h:outputText styleClass="text" value="Имя: "/>
+           <p:inputText id="name" value="#{user.name}" t:placeholder="Forrest Gump"/>
+           <h:outputText styleClass="text" value="Емейл: "/>
+           <p:inputText required="" id="email" value="#{user.email}" t:placeholder="bubba_gump@gmail.com"/>
+           <h:outputText styleClass="text" value="Пароль: "/>
+           <p:password id="password" value="#{user.password}" t:placeholder="runForrestRun"/>
+           <h:outputText styleClass="text" value="GitHub ID: "/>
+           <p:inputText id="gitHubId" value="#{user.gitHabId}" t:placeholder="ForrestGump"/>
+           <h:outputText styleClass="text" value="Могу учиться часов в неделю: "/>
+           <p:inputText value="#{user.hours}" t:placeholder="Целое число"/>
+       </h:panelGrid>
+           <p:commandButton  value="Зарегистрироваться" action="#{frontRegisterApi.addAccount(user.name,
+                                                user.email, user.password, user.gitHabId, user.hours)}"
+                                                style="width:250px; margin: 20px 40%;"/>
+
+    </h:form>
+</h:body>
+</html>

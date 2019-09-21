@@ -1,6 +1,6 @@
 package boost.brain.course.frontend.users.view;
 
-import boost.brain.course.frontend.users.model.User;
+import boost.brain.course.common.auth.UserDto;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,7 +20,7 @@ public class UserService {
     private String userUrl;
 
 
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         RestTemplate restTemplate = new RestTemplate();
 
         log.info(userUrl);
@@ -30,17 +30,12 @@ public class UserService {
         log.info("Count " + c);
 
         if (c != null && c != 0 && c >= 0) {
-            ResponseEntity<List<User>> responseEntity = restTemplate.exchange(userUrl + "/page/1/" + c.toString(),
+            ResponseEntity<List<UserDto>> responseEntity = restTemplate.exchange(userUrl + "/page/1/" + c.toString(),
                     HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<User>>() {
+                    new ParameterizedTypeReference<List<UserDto>>() {
                     });
 
-            List<User> los= responseEntity.getBody();
-            for (User u: los)
-                 {
-                     log.info("" + u);
-            }
             return responseEntity.getBody();
 
         }

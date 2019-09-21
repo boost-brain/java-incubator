@@ -1,6 +1,6 @@
 package boost.brain.course.frontend.users.beans;
 
-import boost.brain.course.frontend.users.model.User;
+import boost.brain.course.common.auth.UserDto;
 import boost.brain.course.frontend.users.view.UserService;
 import lombok.Data;
 import lombok.extern.java.Log;
@@ -18,7 +18,7 @@ import java.util.List;
 @Named
 public class UserBean implements Serializable {
 
-    private List<User> users;
+    private List<UserDto> users;
 
     private UserService userService;
 

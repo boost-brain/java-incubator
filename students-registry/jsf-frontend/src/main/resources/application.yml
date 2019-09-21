@@ -31,3 +31,7 @@ url:
     register: 8081
   path:
     register: /api/register
+
+jsf:
+  primefaces:
+    theme: bootstrap

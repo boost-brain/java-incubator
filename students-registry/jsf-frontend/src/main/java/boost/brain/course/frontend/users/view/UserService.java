@@ -25,12 +25,12 @@ public class UserService {
 
         log.info(userUrl);
 
-        Long c = restTemplate.getForObject(userUrl + "/count", Long.class);
+        Long usersRowCount = restTemplate.getForObject(userUrl + "/count", Long.class);
 
-        log.info("Count " + c);
+        log.info("Count " + usersRowCount);
 
-        if (c != null && c != 0 && c >= 0) {
-            ResponseEntity<List<UserDto>> responseEntity = restTemplate.exchange(userUrl + "/page/1/" + c.toString(),
+        if (usersRowCount != null && usersRowCount != 0 && usersRowCount >= 0) {
+            ResponseEntity<List<UserDto>> responseEntity = restTemplate.exchange(userUrl + "/page/1/" + usersRowCount.toString(),
                     HttpMethod.GET,
                     null,
                     new ParameterizedTypeReference<List<UserDto>>() {

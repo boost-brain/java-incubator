@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Boost Brain</title>
-</head>
-<body>
-    <h1>ui-frontend-service</h1>
-    <a href="/secured/main">Boost Brain Students Registry</a>
-</body>
-</html>
+<ui:composition xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="WEB-INF/common_template.xhtml">
+    <ui:define name="page_title">Главная страницы</ui:define>
+
+    <ui:define name="page_body">
+        <p:panel header="Boost Brain Java Incubator">
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Вход в личный кабинет" url="/secured/main"/>
+                    <p:menuitem value="Регистрация" url="register-page.xhtml"/>
+                </p:menubar>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

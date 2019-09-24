@@ -3,13 +3,13 @@ package boost.brain.course.controller;
 import boost.brain.course.Constants;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.UserDto;
-import boost.brain.course.email.SendEmail;
 import boost.brain.course.entity.EmailEntity;
 import boost.brain.course.exceptions.AddEmailException;
 import boost.brain.course.exceptions.CreateCredentialsException;
 import boost.brain.course.model.User;
 import boost.brain.course.service.auth.AuthService;
 import boost.brain.course.service.register.RegisterService;
+import boost.brain.course.service.register.RegisterServiceImpl;
 import boost.brain.course.service.users.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +45,11 @@ public class Controller {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public UserDto createUser(@RequestBody User user){
 
-        /** addEmail in database */
+        /** addEmail in register database */
         EmailEntity emailEntity = new EmailEntity();
         emailEntity.setEmail(user.getEmail());
+        emailEntity.setName(user.getName());
+
         try {
             if ( addEmail(emailEntity) == null) {
                 throw new AddEmailException();
@@ -62,6 +64,7 @@ public class Controller {
         if (!createCredentials(user.getEmail(), user.getPassword())) {
             throw new CreateCredentialsException();
         }
+
         /** user-Service */
         UserDto commonUser = new UserDto();
         BeanUtils.copyProperties(user, commonUser);
@@ -80,7 +83,6 @@ public class Controller {
     }
 
     public EmailEntity addEmail(EmailEntity entity) throws IOException, MessagingException {
-        SendEmail.sendEmail(entity);
         return registerService.addUserEmail(entity);
     }
 

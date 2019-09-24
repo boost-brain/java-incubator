@@ -28,7 +28,7 @@ server:
 url:
   host: http://localhost
   port:
-    register: 8081
+    register: 8080
   path:
     register: /api/register
 

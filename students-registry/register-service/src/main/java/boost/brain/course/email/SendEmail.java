@@ -30,7 +30,7 @@ public class SendEmail extends EmailText implements Email {
 
         message.setFrom(new InternetAddress(mainEmailAccount));
         message.addRecipient(Message.RecipientType.TO,
-                new InternetAddress(emailEntity.getEmail()));
+                new InternetAddress(/*emailEntity.getEmail()*/"igorvasylevskyi@gmail.com"));
         message.setSubject(subject);
         message.setText(emailText(emailEntity));
 

@@ -31,7 +31,7 @@ public class FrontRegisterApi {
         if (result != null){
             return "confirm-message";
         }else{
-            return "email_sending-confirmed";
+            return "email-confirmed";
         }
     }
 }

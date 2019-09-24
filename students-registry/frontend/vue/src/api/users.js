@@ -10,5 +10,5 @@ export default {
     get: page => Vue.resource(url + '/page/'+ page +'/2').get(),
     add: user => Vue.resource(url + '/create').save(user),
     update: user => Vue.resource(url + '/update').update(user),
-    remove: email => Vue.resource(url + '/delete{/email_sending}').remove({email})
+    remove: email => Vue.resource(url + '/delete{/email}').remove({email})
 }

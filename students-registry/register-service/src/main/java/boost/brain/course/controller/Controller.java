@@ -77,7 +77,7 @@ public class Controller {
         registerService.confirmation(emailEntity, token);
         registerService.updateConfirmed(emailEntity);
 
-        String redirectUrl = host + ":" + port + "/email_sending-confirmed.xhtml";
+        String redirectUrl = host + ":" + port + "/email-confirmed.xhtml";
         response.setHeader("Location", redirectUrl);
         response.setStatus(302);
     }

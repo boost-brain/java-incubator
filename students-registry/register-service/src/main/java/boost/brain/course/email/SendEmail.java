@@ -1,4 +1,4 @@
-package boost.brain.course.email_sending;
+package boost.brain.course.email;
 
 import boost.brain.course.entity.EmailEntity;
 
@@ -22,7 +22,7 @@ public class SendEmail extends EmailText implements Email {
     public static void sendEmail(EmailEntity emailEntity) throws IOException, MessagingException {
 
         final Properties properties = new Properties();
-        properties.load(boost.brain.course.email_sending.SendEmail.class.getClassLoader()
+        properties.load(boost.brain.course.email.SendEmail.class.getClassLoader()
                 .getResourceAsStream("mail.properties"));
 
         Session mailSession = Session.getDefaultInstance(properties);

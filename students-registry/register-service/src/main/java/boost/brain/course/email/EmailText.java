@@ -1,4 +1,4 @@
-package boost.brain.course.email_sending;
+package boost.brain.course.email;
 
 import boost.brain.course.entity.EmailEntity;
 import org.apache.commons.codec.digest.DigestUtils;

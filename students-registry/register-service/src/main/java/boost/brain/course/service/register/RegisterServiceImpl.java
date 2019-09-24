@@ -1,6 +1,6 @@
 package boost.brain.course.service.register;
 
-import boost.brain.course.email_sending.SendEmail;
+import boost.brain.course.email.SendEmail;
 import boost.brain.course.entity.EmailEntity;
 import boost.brain.course.exceptions.EmailOrNameExistException;
 import boost.brain.course.repository.EmailRepository;

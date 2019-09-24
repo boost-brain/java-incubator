@@ -1,9 +1,9 @@
 package boost.brain.course.frontend.tasks.view;
 
+import boost.brain.course.common.auth.UserDto;
 import boost.brain.course.frontend.auth.bean.HttpSessionBean;
 import boost.brain.course.frontend.tasks.model.Project;
 import boost.brain.course.frontend.tasks.model.Task;
-import boost.brain.course.frontend.tasks.model.User;
 import lombok.Data;
 import lombok.extern.java.Log;
 import org.apache.commons.lang.StringUtils;
@@ -47,7 +47,7 @@ public class TaskCreateView {
     private String taskAuthor;
     private String message;
 
-    private List<User> users;
+    private List<UserDto> users;
     private List<Project> projects;
 
     @Inject
@@ -82,7 +82,7 @@ public class TaskCreateView {
         log.info("Do TaskCreateView.completeImplementer");
         List<String> filteredUsers = new ArrayList<>();
         if (users == null || users.isEmpty()) return filteredUsers;
-        for (User user : users) {
+        for (UserDto user : users) {
             if (user.getGitHabId().toLowerCase().contains(query)) {
                 filteredUsers.add(user.getEmail());
             }
@@ -103,7 +103,7 @@ public class TaskCreateView {
     }
 
     public String emailToGitHubId(final String email) {
-        for (User user : users) {
+        for (UserDto user : users) {
             if (email.equals(user.getEmail())) {
                 return user.getGitHabId();
             }
@@ -120,17 +120,17 @@ public class TaskCreateView {
         return id;
     }
 
-    private List<User> getListUsers() {
+    private List<UserDto> getListUsers() {
         log.info("Do TaskCreateView.getListUsers");
-        List<User> result = new ArrayList<>();
+        List<UserDto> result = new ArrayList<>();
         try {
-            ResponseEntity<List<User>> response = restTemplate.exchange(
+            ResponseEntity<List<UserDto>> response = restTemplate.exchange(
                     usersUrl + "/users-all",
                     HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<User>>() {
+                    new ParameterizedTypeReference<List<UserDto>>() {
                     });
-            List<User> responseList = response.getBody();
+            List<UserDto> responseList = response.getBody();
             if (responseList != null && !responseList.isEmpty()) {
                 result.addAll(responseList);
             }

@@ -31,4 +31,6 @@ public interface ProjectRepository extends PagingAndSortingRepository<Project,In
 
     List<Project> findAllByProjectIdIn(List<Integer> list);
 
+    boolean existsByProjectId(int projectId);
+
 }

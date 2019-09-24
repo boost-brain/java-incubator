@@ -1,15 +1,13 @@
 package boost.brain.course.frontend.tasks.view;
 
+import boost.brain.course.common.auth.UserDto;
 import boost.brain.course.frontend.auth.bean.HttpSessionBean;
-
 import boost.brain.course.frontend.tasks.model.Project;
 import boost.brain.course.frontend.tasks.model.Task;
-import boost.brain.course.frontend.tasks.model.User;
 import lombok.Data;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -164,13 +162,13 @@ public class TasksForUserView {
             RestTemplate restTemplate = restTemplateBuilder.build();
             HttpEntity<Set<String>> request = new HttpEntity<>(emails);
 
-            ResponseEntity<List<User>> response = restTemplate.exchange(
+            ResponseEntity<List<UserDto>> response = restTemplate.exchange(
                     usersUrl + "/users-for-emails",
                     HttpMethod.POST,
                     request,
-                    new ParameterizedTypeReference<List<User>>(){});
-            List<User> users = response.getBody();
-            for (User user: users) {
+                    new ParameterizedTypeReference<List<UserDto>>(){});
+            List<UserDto> users = response.getBody();
+            for (UserDto user: users) {
                 httpSessionBean.getCacheUsers().put(user.getEmail(),user);
             }
         } catch (Exception e) {

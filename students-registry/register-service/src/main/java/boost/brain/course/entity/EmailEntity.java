@@ -1,6 +1,7 @@
 package boost.brain.course.entity;
 
 import lombok.Data;
+import org.mapstruct.Named;
 
 import javax.persistence.*;
 

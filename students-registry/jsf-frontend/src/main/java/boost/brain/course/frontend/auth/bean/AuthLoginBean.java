@@ -39,6 +39,8 @@ public class AuthLoginBean {
             RestTemplate restTemplate = restTemplateBuilder.build();
             HttpEntity<Credentials> credentialsRequest = new HttpEntity<>(credentials);
             Session session = restTemplate.postForObject(authUrl +"/login", credentialsRequest, Session.class);
+            log.info("Session " + session);
+
             if (session == null || StringUtils.isEmpty(session.getSessionId())) {
                 log.severe("The session not found!");
             } else {

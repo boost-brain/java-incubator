@@ -10,5 +10,6 @@ public class TasksPageConfigurer implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/secured/tasks").setViewName("tasks.xhtml");
         registry.addViewController("/secured/tasks/for-user").setViewName("for-user.xhtml");
+        registry.addViewController("/secured/tasks/create").setViewName("create.xhtml");
     }
 }

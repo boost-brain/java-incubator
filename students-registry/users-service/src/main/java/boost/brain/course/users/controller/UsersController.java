@@ -127,6 +127,24 @@ public class UsersController {
         return result;
     }
 
+    @GetMapping(path = Constants.USERS_ALL_PREFIX,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<UserDto> allUsers() {
+        List<UserDto> result = usersRepository.allUsers();
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
+    }
+
+    @GetMapping(path = Constants.CHECK_IF_EXISTS_PREFIX + "/{email}")
+    public boolean checkIfExists(@PathVariable String email) {
+        if (StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+            throw new NotFoundException();
+        }
+        return usersRepository.checkIfExists(email);
+    }
+
 
     private boolean checkEmail(final String email) {
         EmailValidator emailValidator = new EmailValidator();

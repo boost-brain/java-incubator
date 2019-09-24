@@ -15,4 +15,6 @@ public interface Constants {
     String FILTER_PREFIX = "/filter";
 
     String USERS_FOR_EMAILS_PREFIX = "/users-for-emails";
+    String USERS_ALL_PREFIX = "/users-all";
+    String CHECK_IF_EXISTS_PREFIX = "/check-if-exists";
 }

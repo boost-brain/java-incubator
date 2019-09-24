@@ -1,4 +1,4 @@
-package boost.brain.course.email;
+package boost.brain.course.email_sending;
 
 public interface Email {
     //FIXME Change mainEmailAccount and mainEmailPassword to your account and password

@@ -34,7 +34,7 @@ export default {
         },
         removeUserMutation(state, user) {
             console.log("removeUserMutation")
-            const deletionIndex = state.users.findIndex(item => item['email'] === user['@email'])
+            const deletionIndex = state.users.findIndex(item => item['email'] === user['@email_sending'])
 
             if (deletionIndex > -1) {
                 state.users = [

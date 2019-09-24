@@ -28,6 +28,10 @@ public class FrontRegisterApi {
         User user = new User(name, email, password, gitHabId, hours);
         User result = template.postForObject(url, user, User.class);
 
-        return "confirm-message";
+        if (result != null){
+            return "confirm-message";
+        }else{
+            return "email_sending-confirmed";
+        }
     }
 }

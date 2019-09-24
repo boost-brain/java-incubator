@@ -2,6 +2,8 @@ package boost.brain.course.frontend.register.model;
 
 import lombok.Data;
 
+import javax.annotation.ManagedBean;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 @Named

@@ -58,7 +58,7 @@ public class UsersRepository {
         if (userEntity == null) {
             return false;
         }
-        BeanUtils.copyProperties(userDto, userEntity, "createDate", "email");
+        BeanUtils.copyProperties(userDto, userEntity, "createDate", "email_sending");
         entityManager.merge(userEntity);
         return true;
     }
@@ -108,7 +108,7 @@ public class UsersRepository {
         CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
         Root<UserEntity> from = cq.from(UserEntity.class);
 
-        Predicate where = from.get("email").in(emails);
+        Predicate where = from.get("email_sending").in(emails);
         CriteriaQuery<UserEntity> select = cq.select(from).where(where);
         TypedQuery<UserEntity> typedQuery = entityManager.createQuery(select);
         List<UserEntity> userEntities = typedQuery.getResultList();

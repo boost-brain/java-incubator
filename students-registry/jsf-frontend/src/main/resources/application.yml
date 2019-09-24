@@ -23,7 +23,7 @@ register-service-url: http://${REGISTER_SERVICE_URL:http://localhost:8080/api/re
 
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8080}
 
 url:
   host: http://localhost

@@ -10,7 +10,7 @@ services:
       - projects-service
       - tasks-service
     environment:
-      AUTH_LOGIN_CHECK_URL: http://auth-service:8080/api/login
+      AUTH_SERV_LOGIN_URL: http://auth-service:8080/api/login
       REGISTER_SERVICE_URL: http://register-service:8080/api/register
     ports:
       - 8080:8080

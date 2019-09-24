@@ -16,11 +16,11 @@
         <ui:include src = "/secured/logout.xhtml" />
     </ui:insert>
     <h:form>
-        <p:dataTable var="task" value="#{tasksForUserView.tasks}" rows="3"
+        <p:dataTable var="task" value="#{tasksForUserView.tasks}" rows="5"
                      paginator="true"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="1,2,3,4,5,10,20,50,100">
-            <p:column style="width:available"  headerText="Id" sortBy="#{task.id}">
+                     rowsPerPageTemplate="5,10,20,50,100">
+            <p:column style="width:auto; max-width: 50px; min-width: 10px"  headerText="Id" sortBy="#{task.id}">
                 <h:outputText value="#{task.id}" />
             </p:column>
             <p:column headerText="Author" sortBy="#{task.author}">

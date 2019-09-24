@@ -7,6 +7,7 @@ import boost.brain.course.model.ProjectMapper;
 import boost.brain.course.repository.ProjectRepository;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -90,6 +92,7 @@ public class ProjectController {
         log.info("Success");
         return project;
     }
+
     @ResponseBody
     @GetMapping("/all")
     public List<Project> list() {
@@ -108,4 +111,24 @@ public class ProjectController {
         }
         return result;
     }
+
+    @ResponseBody
+    @GetMapping("/projects-all")
+    public List<ProjectDTO> allProject() {
+        List<ProjectDTO> result =  projectMapper.toProjectDtos(projectRepository.findAll());
+        if (result == null) {
+            throw new NotFoundException();
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @GetMapping("/check-if-exists/{projectId}")
+    public boolean checkIfExists(@PathVariable int projectId) {
+        if (projectId < 1) {
+            throw new NotFoundException();
+        }
+        return projectRepository.existsByProjectId(projectId);
+    }
+
 }

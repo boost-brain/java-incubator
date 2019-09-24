@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -119,5 +120,31 @@ public class UsersRepository {
             result.add(userDto);
         }
         return result;
+    }
+
+    public List<UserDto> allUsers() {
+        List<UserDto> result = new ArrayList<>();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
+        Root<UserEntity> from = cq.from(UserEntity.class);
+
+        CriteriaQuery<UserEntity> select = cq.select(from);
+        TypedQuery<UserEntity> typedQuery = entityManager.createQuery(select);
+        List<UserEntity> userEntities = typedQuery.getResultList();
+
+        for (UserEntity userEntity: userEntities) {
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(userEntity, userDto);
+            result.add(userDto);
+        }
+        return result;
+    }
+
+    public boolean checkIfExists(final String email) {
+        if (StringUtils.isEmpty(email)) {
+            return false;
+        }
+        UserEntity userEntity = entityManager.find(UserEntity.class, email);
+        return userEntity != null;
     }
 }

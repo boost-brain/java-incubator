@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xml:lang="en" lang="en">
+<h:head>
+    <title>Create new task</title>
+</h:head>
+<h:body>
+    <ui:insert name = "header" >
+        <ui:include src = "/secured/logout.xhtml" />
+    </ui:insert>
+<h2>Create new task</h2>
+    <p:outputLabel  id="message" value="#{taskCreateView.message}"/>
+    <br/><br/>
+    <h:form>
+        <p:panelGrid columns="2" cellpadding="5" style="width: 100%">
+            <p:outputLabel value="Name:" for="taskName" style="width: 12ch"/>
+            <p:inputText id="taskName" value="#{taskCreateView.taskName}" size="100"/>
+
+            <p:outputLabel value="Project:" for="taskProject" />
+            <p:autoComplete dropdown="true" id="taskProject" value="#{taskCreateView.taskProject}" completeMethod="#{taskCreateView.completeProject}"
+                            var="project" itemLabel="#{taskCreateView.projectIdToName(project)}" itemValue="#{project}" forceSelection="true" />
+
+            <p:outputLabel value="Implementer:" for="taskImplementer" />
+            <p:autoComplete dropdown="true" id="taskImplementer" value="#{taskCreateView.taskImplementer}" completeMethod="#{taskCreateView.completeImplementer}"
+                             var="implementer" itemLabel="#{taskCreateView.emailToGitHubId(implementer)}" itemValue="#{implementer}" forceSelection="true" />
+        </p:panelGrid>
+            <p:textEditor widgetVar="taskText" value="#{taskCreateView.taskText}" height="200" style="margin-bottom:10px"/>
+
+        <p:commandButton value="Create" action="#{taskCreateView.createButton}" icon="pi pi-check" ajax="true" update="message"/>
+
+    </h:form>
+
+</h:body>
+</html>

@@ -1,6 +1,24 @@
 version: '2'
 
 services:
+
+  proxy:
+    image: proxy:latest
+    depends_on:
+      - auth-service
+      - projects-service
+      - register-service
+      - tasks-service
+      - users-service
+#    environment:
+#      - AUTH_SERV_LOGIN_URL=auth-service:8081
+#      - TASKS_SERV_TASKS_URL=tasks-service:8080
+#      - USERS_SERV_URL=users-service:8080
+#      - REGISTER_SERV_URL=register-service:8080
+#      - PROJECTS_SERV_URL=projects-service:8080
+    ports:
+      - 9000:9000
+
   jsf-frontend:
     image: jsf-frontend:latest
     depends_on:
@@ -14,6 +32,16 @@ services:
       REGISTER_SERVICE_URL: http://register-service:8080/api/register
     ports:
       - 8080:8080
+
+#  frontend:
+#    image: frontend:latest
+#    environment:
+#      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
+#      - TASKS_SERV_TASKS_URL=tasks-service:8080/api/tasks
+#      - USERS_SERV_URL=users-service:8080/api/users
+#      - PROJECTS_SERV_URL=projects-service:8080
+#    ports:
+#      - 80:8080
 
   auth-service:
     image: auth-service:latest
@@ -46,12 +74,14 @@ services:
       DB_HOST: postgres
 
   postgres:
-    image: postgres:latest
+    image: postgres:9.5
     restart: always
     ports:
-      - 5432:5432
+      - 5431:5432
     environment:
-      POSTGRES_PASSWORD: 'postgres'
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=students
+      - POSTGRES_PASSWORD=postgres
     volumes:
       - database_data:/var/lib/postgresql/10/main
 

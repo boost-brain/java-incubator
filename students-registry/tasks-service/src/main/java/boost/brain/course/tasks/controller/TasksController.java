@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(Constants.TASKS_CONTROLLER_PREFIX)
 public class TasksController {
 

@@ -10,14 +10,18 @@ services:
       - register-service
       - tasks-service
       - users-service
-#    environment:
-#      - AUTH_SERV_LOGIN_URL=auth-service:8081
-#      - TASKS_SERV_TASKS_URL=tasks-service:8080
-#      - USERS_SERV_URL=users-service:8080
-#      - REGISTER_SERV_URL=register-service:8080
-#      - PROJECTS_SERV_URL=projects-service:8080
+    environment:
+      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
+      - TASKS_SERV_TASKS_URL=tasks-service:8080/api/tasks
+      - USERS_SERV_URL=users-service:8080/api/users
+      - PROJECTS_SERV_URL=projects-service:8080
     ports:
       - 9000:9000
+
+  #  frontend:
+  #    image: frontend:latest
+  #    ports:
+  #      - 80:8080
 
   jsf-frontend:
     image: jsf-frontend:latest
@@ -28,20 +32,12 @@ services:
       - projects-service
       - tasks-service
     environment:
-      AUTH_SERV_LOGIN_URL: http://auth-service:8080/api/login
-      REGISTER_SERVICE_URL: http://register-service:8080/api/register
+      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
+      - TASKS_SERV_TASKS_URL=tasks-service:8080/api/tasks
+      - USERS_SERV_URL=users-service:8080/api/users
+      - PROJECTS_SERV_URL=projects-service:8080
     ports:
       - 8080:8080
-
-#  frontend:
-#    image: frontend:latest
-#    environment:
-#      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
-#      - TASKS_SERV_TASKS_URL=tasks-service:8080/api/tasks
-#      - USERS_SERV_URL=users-service:8080/api/users
-#      - PROJECTS_SERV_URL=projects-service:8080
-#    ports:
-#      - 80:8080
 
   auth-service:
     image: auth-service:latest
@@ -49,11 +45,15 @@ services:
       - postgres
     environment:
       DB_HOST: postgres
+    ports:
+      - 8081:8080
 
   projects-service:
     image: projects-service:latest
     environment:
       DB_HOST: postgres
+    ports:
+      - 8083:8080
 
   register-service:
     image: register-service:latest
@@ -66,12 +66,17 @@ services:
   tasks-service:
     image: tasks-service:latest
     environment:
-      DB_HOST: postgres
+      - AUTH_SERV_LOGIN_CHECK_URL=auth-service:8080/api/login/check/
+      - DB_HOST=postgres
+    ports:
+      - 8084:8080
 
   users-service:
     image: users-service:latest
     environment:
       DB_HOST: postgres
+    ports:
+      - 8082:8080
 
   postgres:
     image: postgres:9.5

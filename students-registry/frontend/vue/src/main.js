@@ -12,6 +12,12 @@ Vue.use(VueResource)
 
 Vue.config.productionTip = false
 
+// Vue.http.interceptors.push(request => {
+//     request.headers.set('sessionId2', 'RAND TOKEN ' + Math.random())
+//     console.log(request)
+// })
+
+
 new Vue({
     router,
     store,

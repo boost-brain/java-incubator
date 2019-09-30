@@ -3,7 +3,7 @@ import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
 
-const url = 'http://localhost:8082/api/users';
+const url = 'http://localhost:9000/api/users';
 
 export default {
     count: () => Vue.resource(url + '/count').get(),

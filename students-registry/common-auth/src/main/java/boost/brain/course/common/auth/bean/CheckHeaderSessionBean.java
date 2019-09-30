@@ -33,7 +33,7 @@ public class CheckHeaderSessionBean implements CheckHeaderSession {
             RestTemplate restTemplate = new RestTemplate();
             Boolean sessionIsActive = restTemplate.getForObject(authUrl + sessionId, Boolean.class);
             if (sessionIsActive == null || !sessionIsActive) {
-                log.severe("The header(sessionId) is invalid!");
+                log.severe("The header(sessionId) is invalid!" + authUrl + sessionId);
                 return;
             }
             filterChain.doFilter(servletRequest,servletResponse);

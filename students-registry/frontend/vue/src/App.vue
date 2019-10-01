@@ -36,6 +36,7 @@
                 links: [
                     {title: 'Home', icon: 'home', url: '/'},
                     {title: 'Проекты', icon: 'list', url: '/projects'},
+                    {title: 'Задачи', icon: 'fa-solid/tasks', url: '/tasks'},
                     {title: 'Студенты', icon: 'supervised_user_circle', url: '/users'},
                     {title: 'Создать', icon: 'create', url: '/new'},
                     {title: 'Выход', icon: 'logout', url: '/logout'}

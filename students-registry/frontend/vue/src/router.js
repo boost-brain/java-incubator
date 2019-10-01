@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Projects from './views/Projects'
 import Project from './components/Project'
 import Users from './views/Users'
+import Tasks from './views/Tasks'
 import NewUser from './components/NewUser'
 import Login from './components/Login'
 import store from './store'
@@ -53,6 +54,12 @@ export default new Router({
             path: '/users',
             name: 'users',
             component: Users,
+            beforeEnter: ifAuthenticated
+        },
+        {
+            path: '/tasks',
+            name: 'tasks',
+            component: Tasks,
             beforeEnter: ifAuthenticated
         },
         {

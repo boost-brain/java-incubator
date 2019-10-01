@@ -1,8 +1,8 @@
 package boost.brain.course.frontend.auth.bean;
 
 import boost.brain.course.common.auth.Session;
-import boost.brain.course.common.auth.UserDto;
-import boost.brain.course.frontend.tasks.model.Project;
+import boost.brain.course.common.projects.ProjectDto;
+import boost.brain.course.common.users.UserDto;
 import lombok.Data;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -20,6 +20,6 @@ public class HttpSessionBean {
     private String path;
     private long lastUpdateDate;
 
-    private Map<Integer, Project> cacheProjects = new HashMap<>();
+    private Map<Integer, ProjectDto> cacheProjects = new HashMap<>();
     private Map<String, UserDto> cacheUsers = new HashMap<>();
 }

@@ -1,7 +1,6 @@
 package boost.brain.course.service.users;
 
-import boost.brain.course.common.auth.UserDto;
-import boost.brain.course.model.User;
+import boost.brain.course.common.users.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

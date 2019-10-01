@@ -29,8 +29,10 @@ url:
   host: http://localhost
   port:
     register: 8080
+    users: 8080
   path:
     register: /api/register
+    users: /api/users
 
 jsf:
   primefaces:

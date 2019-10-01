@@ -25,4 +25,44 @@ public class User {
         this.gitHabId = gitHabId;
         this.hours = hours;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getGitHabId() {
+        return gitHabId;
+    }
+
+    public void setGitHabId(String gitHabId) {
+        this.gitHabId = gitHabId;
+    }
+
+    public int getHours() {
+        return hours;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
 }

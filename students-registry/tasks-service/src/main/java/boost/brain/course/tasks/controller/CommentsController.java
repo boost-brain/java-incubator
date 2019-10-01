@@ -1,7 +1,7 @@
 package boost.brain.course.tasks.controller;
 
 import boost.brain.course.tasks.Constants;
-import boost.brain.course.tasks.controller.dto.CommentDto;
+import boost.brain.course.common.tasks.CommentDto;
 import boost.brain.course.tasks.controller.exceptions.NotFoundException;
 import boost.brain.course.tasks.repository.CommentsRepository;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;

@@ -1,0 +1,5 @@
+Логин GitHub: kardinaldon
+Хочу, чтобы меня называли: Андрей
+Мой стек технологий: Java Core, Rest-Api (Jersey), logging (slf4j/logback), DB ((Posgresql, mysql)/(hibernate, jdbc)), other (ApachePOI, jackson) 
+Хочу участовать в проекте - Любого уровня
+Могу уделять работе над проектом -  8 часов

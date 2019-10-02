@@ -1,7 +1,7 @@
 package boost.brain.course.controller.util;
 
 import boost.brain.course.controller.Constants;
-import boost.brain.course.controller.dto.UserDto;
+import boost.brain.course.common.users.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.java.Log;

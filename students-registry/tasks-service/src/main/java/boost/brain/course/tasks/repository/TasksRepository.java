@@ -1,6 +1,6 @@
 package boost.brain.course.tasks.repository;
 
-import boost.brain.course.tasks.controller.dto.TaskDto;
+import boost.brain.course.common.tasks.TaskDto;
 import boost.brain.course.tasks.repository.entities.TaskEntity;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.BeanUtils;

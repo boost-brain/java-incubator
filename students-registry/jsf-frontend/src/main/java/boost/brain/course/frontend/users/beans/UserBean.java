@@ -1,6 +1,6 @@
 package boost.brain.course.frontend.users.beans;
 
-import boost.brain.course.common.auth.UserDto;
+import boost.brain.course.common.users.UserDto;
 import boost.brain.course.frontend.users.view.UserService;
 import lombok.Data;
 import lombok.extern.java.Log;

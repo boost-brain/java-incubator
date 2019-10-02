@@ -11,3 +11,5 @@ spring:
                 jdbc:
                     lob:
                         non_contextual_creation: true
+server:
+    port: ${SERVER_PORT:8080}

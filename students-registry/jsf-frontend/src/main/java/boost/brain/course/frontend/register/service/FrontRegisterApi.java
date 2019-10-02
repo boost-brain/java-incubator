@@ -1,6 +1,9 @@
 package boost.brain.course.frontend.register.service;
 
-import boost.brain.course.frontend.register.model.User;
+import boost.brain.course.common.register.UserRegDto;
+import boost.brain.course.common.users.UserDto;
+import lombok.Data;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,6 +12,8 @@ import javax.inject.Named;
 
 @Named
 @Service
+@Data
+@Log
 public class FrontRegisterApi {
 
     @Value("${url.host}")
@@ -22,15 +27,22 @@ public class FrontRegisterApi {
 
     private RestTemplate template = new RestTemplate();
 
-    public String addAccount(String name, String email, String password, String gitHabId, int hours){
+    private String name;
+    private String email;
+    private String password;
+    private String gitHabId;
+    private int hours;
+
+    public String addAccount(){
+
         String url = this.host + ":" + this.port + this.path + "/create";
 
-        User user = new User(name, email, password, gitHabId, hours);
-        User result = template.postForObject(url, user, User.class);
+        UserRegDto userRegDto = new UserRegDto(this.email, this.name, this.gitHabId, this.hours, this.password);
 
-        if (result != null){
+        UserDto userDto = template.postForObject(url, userRegDto, UserDto.class);
+        if (userDto != null) {
             return "confirm-message";
-        }else{
+        } else {
             return "email-confirmed";
         }
     }

@@ -1,6 +1,6 @@
 package boost.brain.course.tasks.repository;
 
-import boost.brain.course.tasks.controller.dto.CommentDto;
+import boost.brain.course.common.tasks.CommentDto;
 import boost.brain.course.tasks.repository.entities.CommentEntity;
 import boost.brain.course.tasks.repository.entities.TaskEntity;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;

@@ -1,6 +1,6 @@
-package boost.brain.course.model;
+package boost.brain.course.common.projects;
 
-public class ProjectDTO {
+public class ProjectDto {
 
         private int projectId;
         private String projectUrl;
@@ -35,13 +35,13 @@ public class ProjectDTO {
             this.projectName=projectName;
         }
 
-        public ProjectDTO(String projectName, String projectUrl, String description){
+        public ProjectDto(String projectName, String projectUrl, String description){
             this.projectName=projectName;
             this.description=description;
             this.projectUrl=projectUrl;
         }
 
-        public ProjectDTO(){
+        public ProjectDto(){
 
         }
 
@@ -55,7 +55,7 @@ public class ProjectDTO {
             if (this == otherObject) return true;
             if (otherObject == null) return false;
             if (getClass() != otherObject.getClass()) return false;
-            Project other = (Project)otherObject;
+            ProjectDto other = (ProjectDto)otherObject;
             return (getDescription()==other.getDescription() && getProjectName()==other.getProjectName()
                     &&getProjectId()==other.getProjectId()&&getProjectUrl()==other.getProjectUrl());
         }

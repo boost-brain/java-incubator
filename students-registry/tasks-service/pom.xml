@@ -65,6 +65,17 @@
             <groupId>boost.brain.course</groupId>
             <artifactId>common-types</artifactId>
         </dependency>
+
+        <!-- Embedded Postgres от yandex
+               Для тетсирования сервиса.
+               https://mvnrepository.com/artifact/ru.yandex.qatools.embed/postgresql-embedded -->
+        <dependency>
+            <groupId>ru.yandex.qatools.embed</groupId>
+            <artifactId>postgresql-embedded</artifactId>
+            <version>2.10</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

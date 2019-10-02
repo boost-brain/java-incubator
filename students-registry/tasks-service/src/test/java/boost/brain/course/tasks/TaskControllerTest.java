@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@EmbeddedPostgresTest
 public class TaskControllerTest {
     @Autowired
     private MockMvc mockMvc;

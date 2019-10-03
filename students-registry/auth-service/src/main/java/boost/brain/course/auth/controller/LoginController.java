@@ -5,12 +5,13 @@ import boost.brain.course.auth.Constants;
 import boost.brain.course.auth.repository.SessionsRepository;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*")
+@Log
 @RequestMapping(path = Constants.LOGIN_CONTROLLER_PREFIX)
 public class LoginController {
     private final SessionsRepository sessionsRepository;
@@ -24,6 +25,8 @@ public class LoginController {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Session login(@RequestBody Credentials credentials){
+        log.info("LoginController: login method started");
+        log.info("credentials=" + credentials.toString());
         return sessionsRepository.startSession(credentials);
     }
 

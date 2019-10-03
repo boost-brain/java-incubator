@@ -11,16 +11,10 @@
                             v-model="email"
                     ></v-text-field>
                     <v-text-field
-                            name="create_date"
-                            label="create_date"
+                            name="gitHabId"
+                            label="gitHabId"
                             type="text"
-                            v-model="create_date"
-                    ></v-text-field>
-                    <v-text-field
-                            name="git_hab_id"
-                            label="git_hab_id"
-                            type="text"
-                            v-model="git_hab_id"
+                            v-model="gitHabId"
                     ></v-text-field>
                     <v-text-field
                             name="name"
@@ -28,11 +22,29 @@
                             type="text"
                             v-model="name"
                     ></v-text-field>
+                    <v-text-field
+                            label="Password"
+                            v-model="password"
+                            type="password"
+                            required>
+                    </v-text-field>
+                    <v-text-field
+                            label="Hours"
+                            v-model="hours"
+                            type="text"
+                            required>
+                    </v-text-field>
+                    <v-text-field
+                            name="create_date"
+                            label="create_date"
+                            type="text"
+                            v-model="createDate"
+                    ></v-text-field>
                     <v-textarea
                             name="update_date"
                             label="update_date"
                             type="text"
-                            v-model="update_date"
+                            v-model="updateDate"
                             multi-line
                             required
                             :rules="[v => !!v || 'update_date is required']"
@@ -63,27 +75,29 @@
         data () {
             return {
                 email: '',
-                create_date: '',
-                git_hab_id: '',
-                hours: 0,
+                gitHabId: '',
                 name: '',
-                update_date: ''
+                password: '',
+                hours: 0,
+                createDate: '',
+                updateDate: ''
             }
         },
         methods: {
-            ...mapActions(['addUserAction', 'updateUserAction']),
+            ...mapActions(['registerAction']),
             save() {
-                console.log("save()")
+                console.log("register()")
                 if (this.$refs.form.validate()) {
                     const user = {
                         email: this.email,
-                        create_date: this.create_date,
-                        git_hab_id: this.git_hab_id,
+                        password: this.password,
+                        createDate: this.createDate,
+                        gitHabId: this.gitHabId,
                         hours: this.hours,
                         name: this.name,
-                        update_date: this.update_date
+                        updateDate: this.updateDate
                     }
-                    this.addUserAction(user, "user")
+                    this.registerAction(user, "user")
                     this.$router.push('/users')
                 }
             }

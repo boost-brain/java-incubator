@@ -37,6 +37,7 @@
                             </v-card-text>
                             <v-card-actions>
                                 <div class="flex-grow-1"></div>
+                                <v-btn text href="/new">Register New User</v-btn>
                                 <v-btn color="primary" type="submit" form="login-form">Login</v-btn>
                             </v-card-actions>
                         </v-card>

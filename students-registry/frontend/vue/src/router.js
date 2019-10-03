@@ -73,7 +73,7 @@ export default new Router({
             path: '/new',
             name: 'newUser',
             component: NewUser,
-            beforeEnter: ifAuthenticated
+            beforeEnter: ifNotAuthenticated
         },
         {
             path: '/login',

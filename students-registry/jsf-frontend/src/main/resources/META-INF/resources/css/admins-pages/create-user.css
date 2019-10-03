@@ -14,7 +14,7 @@ body {
     max-height: 500px;
     background-color: transparent;
     box-shadow:
-            inset rgba(255,255,255,.6) 0 .3em .3em,
+            inset rgba(255,255,255,.6) 0 20em .3em,
             inset rgba(0,0,0,.2) 0 -.1em .3em,
             rgba(0,0,0,.4) 0 .1em 1px,
             rgba(0,0,0,.3) 0 .2em 6px;
@@ -27,11 +27,19 @@ body {
     text-shadow: 2px 2px 10px #000;
     float: right;
     margin-right: 20px;
+    border-radius: 5px;
+    width: 222px;
+    height: 30px;
+    font-family: Tahoma;
+    background: yellowgreen;
 }
 
 h2 {
+    border-radius: 5px;
+    background: yellowgreen;
     margin-top: 8%;
     text-align: center;
     color: white;
+    border-style: double;
     text-shadow: 2px 2px 10px #000;
 }

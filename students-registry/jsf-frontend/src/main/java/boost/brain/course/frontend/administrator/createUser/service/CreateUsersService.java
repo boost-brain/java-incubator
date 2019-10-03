@@ -57,12 +57,15 @@ public class CreateUsersService implements Serializable {
         credentials = new Credentials(email, password);
         try {
             restTemplate = new RestTemplate();
-            restTemplate.postForObject(urlAuth, credentials, Credentials.class);
+            restTemplate.postForObject(urlAuth, credentials, Boolean.class);
             resultMessage = "User " + userDto.getName() + " created";
         } catch (HttpStatusCodeException ex) {
             resultMessage = "User " + userDto.getName() + " not created";
             System.out.println(ex.getStatusCode());
             ex.printStackTrace();
         }
+    }
+
+    public CreateUsersService() {
     }
 }

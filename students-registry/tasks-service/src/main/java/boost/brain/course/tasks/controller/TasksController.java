@@ -1,7 +1,7 @@
 package boost.brain.course.tasks.controller;
 
 import boost.brain.course.tasks.Constants;
-import boost.brain.course.tasks.controller.dto.TaskDto;
+import boost.brain.course.common.tasks.TaskDto;
 import boost.brain.course.tasks.controller.exceptions.NotFoundException;
 import boost.brain.course.tasks.repository.TasksRepository;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(Constants.TASKS_CONTROLLER_PREFIX)
 public class TasksController {
 

@@ -45,7 +45,6 @@
         <dependency>
             <groupId>boost.brain.course</groupId>
             <artifactId>common-types</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->

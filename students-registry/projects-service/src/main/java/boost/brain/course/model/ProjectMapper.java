@@ -1,7 +1,7 @@
 package boost.brain.course.model;
 
+import boost.brain.course.common.projects.ProjectDto;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,8 +10,9 @@ import java.util.List;
 @Component
 public class ProjectMapper {
 
-    public ProjectDTO toProjectDto(Project project) {
-        ProjectDTO projectDTO = new ProjectDTO();
+    public ProjectDto toProjectDto(Project project) {
+        if (project == null) return null;
+        ProjectDto projectDTO = new ProjectDto();
         projectDTO.setProjectId(project.getProjectId());
         projectDTO.setDescription(project.getDescription());
         projectDTO.setProjectName(project.getProjectName());
@@ -19,7 +20,8 @@ public class ProjectMapper {
         return projectDTO;
     }
 
-    public Project toProject(ProjectDTO projectDTO) {
+    public Project toProject(ProjectDto projectDTO) {
+        if (projectDTO == null) return null;
         Project project = new Project();
         project.setDescription(projectDTO.getDescription());
         project.setProjectId(projectDTO.getProjectId());
@@ -27,20 +29,22 @@ public class ProjectMapper {
         project.setProjectUrl(projectDTO.getProjectUrl());
         return project;
     }
-    public List<ProjectDTO> toProjectDtos(List<Project> projects) {
-        List<ProjectDTO> projectDTOS = new ArrayList<>();
+    public List<ProjectDto> toProjectDtos(List<Project> projects) {
+        List<ProjectDto> projectDtos = new ArrayList<>();
+        if (projects == null || projects.isEmpty()) return projectDtos;
         for (Project project : projects){
-            ProjectDTO projectDTO = new ProjectDTO();
-            projectDTO.setProjectId(project.getProjectId());
-            projectDTO.setDescription(project.getDescription());
-            projectDTO.setProjectName(project.getProjectName());
-            projectDTO.setProjectUrl(project.getProjectUrl());
-            projectDTOS.add(projectDTO);
+            ProjectDto projectDto = new ProjectDto();
+            projectDto.setProjectId(project.getProjectId());
+            projectDto.setDescription(project.getDescription());
+            projectDto.setProjectName(project.getProjectName());
+            projectDto.setProjectUrl(project.getProjectUrl());
+            projectDtos.add(projectDto);
         }
-        return projectDTOS;
+        return projectDtos;
     }
-    public Page<ProjectDTO> toProjectDtoPage(Page<Project> projects) {
-        Page<ProjectDTO> projectDTOS = projects.map(this::toProjectDto);
-        return projectDTOS;
+    public Page<ProjectDto> toProjectDtoPage(Page<Project> projects) {
+        if (projects == null) return null;
+        Page<ProjectDto> projectDtoPage = projects.map(this::toProjectDto);
+        return projectDtoPage;
     }
 }

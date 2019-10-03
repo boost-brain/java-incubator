@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.IOException;
 
 @SpringBootApplication
-public class Main
+public class ProjectsService
 {
     public static void main( String[] args ) throws IOException {
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(ProjectsService.class, args);
     }
 }

@@ -1,4 +1,4 @@
-package boost.brain.course.common.auth;
+package boost.brain.course.common.users;
 
 import lombok.Data;
 

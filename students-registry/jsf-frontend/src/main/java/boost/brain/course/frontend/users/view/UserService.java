@@ -1,6 +1,6 @@
 package boost.brain.course.frontend.users.view;
 
-import boost.brain.course.common.auth.UserDto;
+import boost.brain.course.common.users.UserDto;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;

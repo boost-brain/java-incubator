@@ -33,23 +33,22 @@
     <h:form>
        <h:panelGrid columns="2" width="500" cellpadding="5" style="margin-top: 4%; margin-left: auto; margin-right: auto">
            <h:outputText styleClass="text" value="Имя: "/>
-           <p:inputText id="name" value="#{user.name}" t:placeholder="Forrest Gump" required="true"/>
+           <p:inputText id="name" value="#{frontRegisterApi.name}" t:placeholder="Forrest Gump" required="true"/>
 
            <h:outputText styleClass="text" value="Емейл: "/>
-           <p:inputText required="" id="email" value="#{user.email}" t:placeholder="bubba_gump@gmail.com"/>
+           <p:inputText required="" id="email" value="#{frontRegisterApi.email}" t:placeholder="bubba_gump@gmail.com"/>
 
            <h:outputText styleClass="text" value="Пароль: "/>
-           <p:password id="password" value="#{user.password}" t:placeholder="runForrestRun"/>
+           <p:password id="password" value="#{frontRegisterApi.password}" t:placeholder="runForrestRun"/>
 
            <h:outputText styleClass="text" value="GitHub ID: "/>
-           <p:inputText id="gitHubId" value="#{user.gitHabId}" t:placeholder="ForrestGump"/>
+           <p:inputText id="gitHubId" value="#{frontRegisterApi.gitHabId}" t:placeholder="ForrestGump"/>
 
            <h:outputText styleClass="text" value="Могу учиться часов в неделю: "/>
-           <p:inputText value="#{user.hours}" t:placeholder="Целое число"/>
+           <p:inputNumber id="hours" value="#{frontRegisterApi.hours}" t:placeholder="Целое число" />
        </h:panelGrid>
 
-        <p:commandButton  value="Зарегистрироваться" action="#{frontRegisterApi.addAccount(user.name,
-                                                user.email, user.password, user.gitHabId, user.hours)}"
+        <p:commandButton  value="Зарегистрироваться" action="#{frontRegisterApi.addAccount()}"
                                                 style="width:250px; margin: 20px 40%;"/>
     </h:form>
 </h:body>

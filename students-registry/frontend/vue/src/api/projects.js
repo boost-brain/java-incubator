@@ -3,7 +3,7 @@ import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
 
-const url = 'http://localhost:8080';
+const url = 'http://localhost:9000/api/projects';
 
 export default {
     get: () => Vue.resource(url + '/all').get(),

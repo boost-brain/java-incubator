@@ -2,53 +2,37 @@
     <v-container>
         <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-                <h1 class="text--secondary mb-3">Новый студент</h1>
+                <h1 class="text--secondary mb-3">Регистрация</h1>
                 <v-form ref="form" validation class="mb-3">
                     <v-text-field
-                            name="email"
+                            name="Email:"
                             label="email"
                             type="text"
                             v-model="email"
                     ></v-text-field>
                     <v-text-field
-                            name="gitHabId"
+                            name="Id на github.com:"
                             label="gitHabId"
                             type="text"
                             v-model="gitHabId"
                     ></v-text-field>
                     <v-text-field
+                            label="Ваше имя:"
                             name="name"
-                            label="name"
                             type="text"
                             v-model="name"
                     ></v-text-field>
                     <v-text-field
-                            label="Password"
+                            label="Сколько часов в день в среднем Вы готовы уделять проекту?"
+                            v-model="hours"
+                            type="text">
+                    </v-text-field>
+                    <v-text-field
+                            label="Задайте пароль:"
                             v-model="password"
                             type="password"
                             required>
                     </v-text-field>
-                    <v-text-field
-                            label="Hours"
-                            v-model="hours"
-                            type="text"
-                            required>
-                    </v-text-field>
-                    <v-text-field
-                            name="create_date"
-                            label="create_date"
-                            type="text"
-                            v-model="createDate"
-                    ></v-text-field>
-                    <v-textarea
-                            name="update_date"
-                            label="update_date"
-                            type="text"
-                            v-model="updateDate"
-                            multi-line
-                            required
-                            :rules="[v => !!v || 'update_date is required']"
-                    ></v-textarea>
                 </v-form>
                 <v-layout row>
                     <v-flex xs12>
@@ -79,8 +63,8 @@
                 name: '',
                 password: '',
                 hours: 0,
-                createDate: '',
-                updateDate: ''
+                createDate: 0,
+                updateDate: 0
             }
         },
         methods: {
@@ -98,7 +82,7 @@
                         updateDate: this.updateDate
                     }
                     this.registerAction(user, "user")
-                    this.$router.push('/users')
+                    this.$router.push('/login')
                 }
             }
         }

@@ -4,10 +4,10 @@ export default {
     mutations: {
         registerMutation: function (state, user) {
             console.log("registerMutation")
-            // state.users = [
-            //     ...state.users,
-            //     user
-            // ]
+            state.users = [
+                ...state.users,
+                user
+            ]
         }
     },
     actions: {

@@ -1,6 +1,6 @@
 package boost.brain.course.controller.util;
 
-import boost.brain.course.controller.dto.UserDto;
+import boost.brain.course.common.users.UserDto;
 import lombok.extern.java.Log;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;

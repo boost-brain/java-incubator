@@ -1,9 +1,9 @@
 package boost.brain.course.frontend.tasks.view;
 
-import boost.brain.course.common.auth.UserDto;
+import boost.brain.course.common.projects.ProjectDto;
+import boost.brain.course.common.tasks.TaskDto;
+import boost.brain.course.common.users.UserDto;
 import boost.brain.course.frontend.auth.bean.HttpSessionBean;
-import boost.brain.course.frontend.tasks.model.Project;
-import boost.brain.course.frontend.tasks.model.Task;
 import lombok.Data;
 import lombok.extern.java.Log;
 import org.apache.commons.lang.StringUtils;
@@ -30,7 +30,7 @@ import java.util.List;
 @Log
 public class TaskCreateView {
     final private HttpSessionBean httpSessionBean;
-    private List<Task> tasks;
+    private List<TaskDto> tasks;
     @Value("${tasks-service-tasks-url}")
     private String tasksUrl;
     @Value("${users-service-url}")
@@ -48,7 +48,7 @@ public class TaskCreateView {
     private String message;
 
     private List<UserDto> users;
-    private List<Project> projects;
+    private List<ProjectDto> projects;
 
     @Inject
     public TaskCreateView(HttpSessionBean httpSessionBean) {
@@ -82,9 +82,9 @@ public class TaskCreateView {
         log.info("Do TaskCreateView.completeImplementer");
         List<String> filteredUsers = new ArrayList<>();
         if (users == null || users.isEmpty()) return filteredUsers;
-        for (UserDto user : users) {
-            if (user.getGitHabId().toLowerCase().contains(query)) {
-                filteredUsers.add(user.getEmail());
+        for (UserDto userDto : users) {
+            if (userDto.getGitHabId().toLowerCase().contains(query)) {
+                filteredUsers.add(userDto.getEmail());
             }
         }
         return filteredUsers;
@@ -94,27 +94,27 @@ public class TaskCreateView {
         log.info("Do TaskCreateView.completeProject");
         List<String> filteredProjects = new ArrayList<>();
         if (projects == null || projects.isEmpty()) return filteredProjects;
-        for (Project project : projects) {
-            if (project.getProjectName().toLowerCase().contains(query)) {
-                filteredProjects.add(String.valueOf(project.getProjectId()));
+        for (ProjectDto projectDto : projects) {
+            if (projectDto.getProjectName().toLowerCase().contains(query)) {
+                filteredProjects.add(String.valueOf(projectDto.getProjectId()));
             }
         }
         return filteredProjects;
     }
 
     public String emailToGitHubId(final String email) {
-        for (UserDto user : users) {
-            if (email.equals(user.getEmail())) {
-                return user.getGitHabId();
+        for (UserDto userDto : users) {
+            if (email.equals(userDto.getEmail())) {
+                return userDto.getGitHabId();
             }
         }
         return email;
     }
 
     public String projectIdToName(final String id) {
-        for (Project project : projects) {
-            if (String.valueOf(project.getProjectId()).equals(id)) {
-                return project.getProjectName();
+        for (ProjectDto projectDto : projects) {
+            if (String.valueOf(projectDto.getProjectId()).equals(id)) {
+                return projectDto.getProjectName();
             }
         }
         return id;
@@ -141,17 +141,17 @@ public class TaskCreateView {
         return result;
     }
 
-    private List<Project> getListProjects() {
+    private List<ProjectDto> getListProjects() {
         log.info("Do TaskCreateView.getListProjects");
-        List<Project> result = new ArrayList<>();
+        List<ProjectDto> result = new ArrayList<>();
         try {
-            ResponseEntity<List<Project>> response = restTemplate.exchange(
+            ResponseEntity<List<ProjectDto>> response = restTemplate.exchange(
                     projectsUrl + "/projects-all",
                     HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<Project>>() {
+                    new ParameterizedTypeReference<List<ProjectDto>>() {
                     });
-            List<Project> responseList = response.getBody();
+            List<ProjectDto> responseList = response.getBody();
             if (responseList != null && !responseList.isEmpty()) {
                 result.addAll(responseList);
             }
@@ -173,15 +173,15 @@ public class TaskCreateView {
         }
 
         try {
-            Task newTask = new Task();
-            newTask.setAuthor(httpSessionBean.getLogin());
-            newTask.setImplementer(taskImplementer);
-            newTask.setName(taskName);
-            newTask.setProject(Integer.valueOf(taskProject));
-            newTask.setText(taskText);
+            TaskDto newTaskDto = new TaskDto();
+            newTaskDto.setAuthor(httpSessionBean.getLogin());
+            newTaskDto.setImplementer(taskImplementer);
+            newTaskDto.setName(taskName);
+            newTaskDto.setProject(Integer.valueOf(taskProject));
+            newTaskDto.setText(taskText);
 
-            HttpEntity<Task> request = new HttpEntity<>(newTask, this.getHeaders());
-            Task taskCreated = restTemplate.postForObject(tasksUrl + "/create", request, Task.class);
+            HttpEntity<TaskDto> request = new HttpEntity<>(newTaskDto, this.getHeaders());
+            TaskDto taskCreated = restTemplate.postForObject(tasksUrl + "/create", request, TaskDto.class);
             if (taskCreated != null) return true;
         } catch (Exception e) {
             log.severe("TaskCreateView.createNewTask throws exception!");

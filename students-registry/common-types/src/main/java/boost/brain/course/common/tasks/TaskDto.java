@@ -1,4 +1,4 @@
-package boost.brain.course.tasks.controller.dto;
+package boost.brain.course.common.tasks;
 
 import lombok.Data;
 

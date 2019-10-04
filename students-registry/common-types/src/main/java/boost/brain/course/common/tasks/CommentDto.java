@@ -1,15 +1,12 @@
-package boost.brain.course.frontend.tasks.model;
+package boost.brain.course.common.tasks;
 
 import lombok.Data;
 
 @Data
-public class Task {
-
+public class CommentDto {
     private long id;
-    private int project;
+    private long taskId;
     private String author;
-    private String implementer;
-    private String name;
     private String text;
     private long createDate;
     private long updateDate;

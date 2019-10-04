@@ -57,6 +57,10 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>boost.brain.course</groupId>
+            <artifactId>common-types</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>projects-service</finalName>
@@ -65,7 +69,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>boost.brain.course.Main</mainClass>
+                    <mainClass>boost.brain.course.ProjectsService</mainClass>
                 </configuration>
             </plugin>
             <plugin>

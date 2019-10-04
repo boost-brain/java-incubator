@@ -2,14 +2,13 @@ package boost.brain.course.controller;
 
 import boost.brain.course.Constants;
 import boost.brain.course.common.auth.Credentials;
-import boost.brain.course.common.auth.UserDto;
+import boost.brain.course.common.register.UserRegDto;
+import boost.brain.course.common.users.UserDto;
 import boost.brain.course.entity.EmailEntity;
 import boost.brain.course.exceptions.AddEmailException;
 import boost.brain.course.exceptions.CreateCredentialsException;
-import boost.brain.course.model.User;
 import boost.brain.course.service.auth.AuthService;
 import boost.brain.course.service.register.RegisterService;
-import boost.brain.course.service.register.RegisterServiceImpl;
 import boost.brain.course.service.users.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
@@ -44,14 +43,14 @@ public class Controller {
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public UserDto createUser(@RequestBody User user){
+    public UserDto createUser(@RequestBody UserRegDto userRegDto){
 
         log.info("createUser started");
 
         /** addEmail in register database */
         EmailEntity emailEntity = new EmailEntity();
-        emailEntity.setEmail(user.getEmail());
-        emailEntity.setName(user.getName());
+        emailEntity.setEmail(userRegDto.getEmail());
+        emailEntity.setName(userRegDto.getName());
 
         log.info("createUser setName"); //4delete
 
@@ -68,7 +67,7 @@ public class Controller {
         log.info("createUser addEmail"); //4delete
 
         /** auth-Service */
-        if (!createCredentials(user.getEmail(), user.getPassword())) {
+        if (!createCredentials(userRegDto.getEmail(), userRegDto.getPassword())) {
             throw new CreateCredentialsException();
         }
 
@@ -80,6 +79,7 @@ public class Controller {
 
         log.info("createUser commonUser"); //4delete
 
+        BeanUtils.copyProperties(userRegDto, commonUser, "password");
         return userService.createUser(commonUser);
     }
 

@@ -1,11 +1,9 @@
-package boost.brain.course.model;
+package boost.brain.course.common.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class UserDto {
 
     private String email;
     private String gitHabId;
@@ -13,5 +11,4 @@ public class User {
     private int hours;
     private long createDate;
     private long updateDate;
-    private String password;
 }

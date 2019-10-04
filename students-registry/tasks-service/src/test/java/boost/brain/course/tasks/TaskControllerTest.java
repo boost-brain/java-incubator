@@ -1,7 +1,7 @@
 package boost.brain.course.tasks;
 
 import boost.brain.course.tasks.controller.TasksController;
-import boost.brain.course.tasks.controller.dto.TaskDto;
+import boost.brain.course.common.tasks.TaskDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@EmbeddedPostgresTest
 public class TaskControllerTest {
     @Autowired
     private MockMvc mockMvc;

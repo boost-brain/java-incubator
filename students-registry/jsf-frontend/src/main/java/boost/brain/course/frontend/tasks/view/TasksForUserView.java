@@ -1,9 +1,9 @@
 package boost.brain.course.frontend.tasks.view;
 
-import boost.brain.course.common.auth.UserDto;
+import boost.brain.course.common.tasks.TaskDto;
+import boost.brain.course.common.users.UserDto;
 import boost.brain.course.frontend.auth.bean.HttpSessionBean;
-import boost.brain.course.frontend.tasks.model.Project;
-import boost.brain.course.frontend.tasks.model.Task;
+import boost.brain.course.common.projects.ProjectDto;
 import lombok.Data;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,7 @@ public class TasksForUserView {
     final long UPDATE_INTERVAL = 10 * 1000;
 
     final private HttpSessionBean httpSessionBean;
-    private List<Task> tasks;
+    private List<TaskDto> tasks;
     @Value("${tasks-service-tasks-url}")
     private String tasksUrl;
     @Value("${users-service-url}")
@@ -70,9 +70,9 @@ public class TasksForUserView {
         return String.valueOf(id);
     }
 
-    private List<Task> getListTasks() {
+    private List<TaskDto> getListTasks() {
         log.info("Do getListTasks");
-        List<Task> result = new ArrayList<>();
+        List<TaskDto> result = new ArrayList<>();
 
         try {
             RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
@@ -80,11 +80,11 @@ public class TasksForUserView {
             RestTemplate restTemplate = restTemplateBuilder.build();
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(this.paramsInPost(), this.getHeaders());
 
-            ResponseEntity<List<Task>> response = restTemplate.exchange(
+            ResponseEntity<List<TaskDto>> response = restTemplate.exchange(
                     tasksUrl + "/filter?" + this.paramsStr(),
                     HttpMethod.GET,
                     request,
-                    new ParameterizedTypeReference<List<Task>>(){});
+                    new ParameterizedTypeReference<List<TaskDto>>(){});
             result = response.getBody();
         } catch (Exception e) {
             log.severe("TasksForUserView.getListTasks throws exception!");
@@ -112,20 +112,20 @@ public class TasksForUserView {
         return headers;
     }
 
-    private Set<String> getEmails(List<Task> tasks) {
+    private Set<String> getEmails(List<TaskDto> tasks) {
         Set<String> result = new HashSet<>();
         if (tasks == null || tasks.isEmpty()) return result;
-        for (Task task: tasks) {
+        for (TaskDto task: tasks) {
             result.add(task.getAuthor());
             result.add(task.getImplementer());
         }
         return result;
     }
 
-    private Set<Integer> getProjectsIds(List<Task> tasks) {
+    private Set<Integer> getProjectsIds(List<TaskDto> tasks) {
         Set<Integer> result = new HashSet<>();
         if (tasks == null || tasks.isEmpty()) return result;
-        for (Task task: tasks) {
+        for (TaskDto task: tasks) {
             result.add(task.getProject());
         }
         return result;
@@ -186,13 +186,13 @@ public class TasksForUserView {
             RestTemplate restTemplate = restTemplateBuilder.build();
             HttpEntity<Set<Integer>> request = new HttpEntity<>(projectsIds);
 
-            ResponseEntity<List<Project>> response = restTemplate.exchange(
+            ResponseEntity<List<ProjectDto>> response = restTemplate.exchange(
                     projectsUrl + "/projects-for-ids",
                     HttpMethod.POST,
                     request,
-                    new ParameterizedTypeReference<List<Project>>(){});
-            List<Project> projects = response.getBody();
-            for (Project project: projects) {
+                    new ParameterizedTypeReference<List<ProjectDto>>(){});
+            List<ProjectDto> projects = response.getBody();
+            for (ProjectDto project: projects) {
                 httpSessionBean.getCacheProjects().put(project.getProjectId(), project);
             }
         } catch (Exception e) {

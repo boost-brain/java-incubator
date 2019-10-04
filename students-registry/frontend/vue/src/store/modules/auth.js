@@ -3,25 +3,29 @@ import apiCall from '../../api/api'
 
 const state = {
     token: localStorage.getItem('user-token') || '',
+    sessionId: '123',
     status: '',
     hasLoadedOnce: false }
 
 const getters = {
     isAuthenticated: state => !!state.token,
     authStatus: state => state.status,
-    getToken: state => state.token
+    getToken: state => state.token,
+    getSessionId: () =>  state.sessionId
 }
 
 const actions = {
     async AUTH_REQUEST({commit, state}, user) {
         try {
-            console.log("AUTH_REQUEST action run")
+            console.log("AUTH_REQUEST action run.")
             const result = await apiCall.login(user)
             console.log("called")
             const resp = await result.json()
             console.log(resp)
             if (resp.sessionId != null) {
-                console.log("session is not null")
+                state.sessionId = resp.sessionId
+                console.log("session is not null ")
+                console.log(state)
                 localStorage.setItem('user-token', resp)
                 commit(AUTH_SUCCESS, resp)
             } else {

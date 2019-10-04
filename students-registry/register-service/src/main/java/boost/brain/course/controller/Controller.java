@@ -75,7 +75,7 @@ public class Controller {
 
         /** user-Service */
         UserDto commonUser = new UserDto();
-        BeanUtils.copyProperties(user, commonUser);
+        BeanUtils.copyProperties(userRegDto, commonUser);
 
         log.info("createUser commonUser"); //4delete
 

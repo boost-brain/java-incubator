@@ -18,10 +18,13 @@ services:
     ports:
       - 9000:9000
 
-  #  frontend:
-  #    image: frontend:latest
-  #    ports:
-  #      - 80:8080
+  frontend:
+    image: frontend:latest
+    depends_on:
+      - proxy
+      - register-service
+    ports:
+      - 80:8080
 
   jsf-frontend:
     image: jsf-frontend:latest
@@ -61,9 +64,9 @@ services:
       - auth-service
       - users-service
     environment:
-#      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
-#      - AUTH_SERV_CRED_URL=register-service:8080/api/credentials
-#      - USERS_SERV_URL=users-service:8080/api/users
+      #      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
+      #      - AUTH_SERV_CRED_URL=register-service:8080/api/credentials
+      #      - USERS_SERV_URL=users-service:8080/api/users
       DB_HOST: postgres
 
   tasks-service:

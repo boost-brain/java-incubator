@@ -41,7 +41,7 @@ export default new Router({
         {
             path: '/',
             name: 'base',
-            component: Projects,
+            component: Users,
             beforeEnter: ifAuthenticated
         },
         {

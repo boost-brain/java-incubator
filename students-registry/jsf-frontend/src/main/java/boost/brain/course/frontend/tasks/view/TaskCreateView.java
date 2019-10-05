@@ -102,7 +102,7 @@ public class TaskCreateView {
         return filteredProjects;
     }
 
-    public String emailToGitHubId(final String email) {
+    public String emailTogitHabId(final String email) {
         for (UserDto userDto : users) {
             if (email.equals(userDto.getEmail())) {
                 return userDto.getGitHabId();

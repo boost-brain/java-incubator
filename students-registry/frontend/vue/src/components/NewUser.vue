@@ -15,13 +15,13 @@
                             v-model="email"
                     ></v-text-field>
                     <v-text-field
-                            name="gitHubId"
+                            name="gitHabId"
                             label="Id на github.com:"
                             type="text"
-                            :class="{'is-invalid': $v.gitHubId.$error}"
-                            @blur="$v.gitHubId.$touch()"
-                            :error-messages="$v.gitHubId.$dirty && !$v.gitHubId.required ? ['Обязательно к заполнению'] : []"
-                            v-model="gitHubId"
+                            :class="{'is-invalid': $v.gitHabId.$error}"
+                            @blur="$v.gitHabId.$touch()"
+                            :error-messages="$v.gitHabId.$dirty && !$v.gitHabId.required ? ['Обязательно к заполнению'] : []"
+                            v-model="gitHabId"
                     ></v-text-field>
                     <v-text-field
                             label="Ваше имя:"
@@ -52,7 +52,7 @@
                             :error-messages="!$v.password.minLength ? ['Минимальная длина пароля 6'] : []"
                             required>
                     </v-text-field>
-<!--                    <pre>{{ $v.password }}</pre>-->
+                    <!--                    <pre>{{ $v.password }}</pre>-->
                 </v-form>
                 <v-layout row>
                     <v-flex xs12>
@@ -63,6 +63,10 @@
                         >
                             Создать
                         </v-btn>
+                        <p></p>
+                        <v-alert  v-if="this.error.error" type="error">
+                            error: {{ this.error }}
+                        </v-alert>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -72,18 +76,19 @@
 
 <script>
 
-    import { mapActions } from 'vuex'
-    import { required, email, numeric, minLength, minValue } from 'vuelidate/lib/validators'
+    import {mapActions} from 'vuex'
+    import {email, minLength, minValue, numeric, required} from 'vuelidate/lib/validators'
 
     export default {
         name: "NewUser",
         data () {
             return {
                 email: '',
-                gitHubId: '',
+                gitHabId: '',
                 name: '',
                 password: '',
                 show: false,
+                error: {},
                 hours: 1,
                 createDate: 0,
                 updateDate: 0
@@ -98,13 +103,20 @@
                         email: this.email,
                         password: this.password,
                         createDate: this.createDate,
-                        gitHubId: this.gitHubId,
+                        gitHabId: this.gitHabId,
                         hours: this.hours,
                         name: this.name,
                         updateDate: this.updateDate
                     }
-                    this.registerAction(user, "user")
-                    this.$router.push('/login')
+                    this.$store.dispatch('registerAction', user)
+                        .then(() => {
+                            console.log("success registration!")
+                            this.$router.push('/login')
+                        })
+                        .catch(err => {
+                            this.error = err.body;
+                            console.log(this.error)
+                        })
                 }
             }
         },
@@ -113,7 +125,7 @@
                 required,
                 email
             },
-            gitHubId: {
+            gitHabId: {
                 required
             },
             name: {

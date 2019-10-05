@@ -3,9 +3,11 @@ import apiCall from '../../api/api'
 
 const state = {
     token: localStorage.getItem('user-token') || '',
-    sessionId: '123',
+    sessionId: localStorage.getItem('sessionId') || '',
     status: '',
-    hasLoadedOnce: false }
+    error: '',
+    hasLoadedOnce: false
+}
 
 const getters = {
     isAuthenticated: state => !!state.token,
@@ -29,6 +31,7 @@ const actions = {
                 localStorage.setItem('user-token', resp)
                 commit(AUTH_SUCCESS, resp)
             } else {
+                state.error = "unauth"
                 console.log("AUTH FAILED")
                 commit(AUTH_ERROR, state)
                 localStorage.removeItem('user-token')

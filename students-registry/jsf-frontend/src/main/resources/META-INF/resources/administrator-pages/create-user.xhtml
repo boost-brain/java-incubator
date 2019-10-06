@@ -2,7 +2,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:t="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <h:outputStylesheet name="css/admins-pages/create-user.css"/>
 
@@ -33,12 +34,16 @@
 
                     <h:outputText styleClass="text" value="Предпологаемое кол-во часов: "/>
                     <p:inputText value="#{createUsersService.hours}" t:placeholder="Целое число"/>
+
+
                 </h:panelGrid>
 
                 <p:commandButton value="Зарегистрировать" action="#{createUsersService.addNewUser(createUsersService.name,
                                                 createUsersService.email, createUsersService.password, createUsersService.gitHabId, createUsersService.hours)}"
                                  style="width:250px; margin: 20px 40%;"/>
+                <h:messages id="messages" showSummary="true" showDetail="true"/>
             </h:form>
+
         </div>
     </div>
 </h:body>

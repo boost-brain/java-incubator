@@ -99,9 +99,9 @@
         <module>tasks-service</module>
         <module>common-types</module>
         <module>common-auth</module>
+        <module>proxy</module>
         <module>projects-service</module>
         <module>jsf-frontend</module>
-
         <module>test-util</module>
         <module>users-service-test-util</module>
     </modules>

@@ -83,7 +83,7 @@ public class TaskCreateView {
         List<String> filteredUsers = new ArrayList<>();
         if (users == null || users.isEmpty()) return filteredUsers;
         for (UserDto userDto : users) {
-            if (userDto.getGitHabId().toLowerCase().contains(query)) {
+            if (userDto.getGitHubId().toLowerCase().contains(query)) {
                 filteredUsers.add(userDto.getEmail());
             }
         }
@@ -102,10 +102,10 @@ public class TaskCreateView {
         return filteredProjects;
     }
 
-    public String emailTogitHabId(final String email) {
+    public String emailToGitHubId(final String email) {
         for (UserDto userDto : users) {
             if (email.equals(userDto.getEmail())) {
-                return userDto.getGitHabId();
+                return userDto.getGitHubId();
             }
         }
         return email;

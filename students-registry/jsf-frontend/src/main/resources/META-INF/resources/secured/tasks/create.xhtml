@@ -28,7 +28,7 @@
 
             <p:outputLabel value="Implementer:" for="taskImplementer" />
             <p:autoComplete dropdown="true" id="taskImplementer" value="#{taskCreateView.taskImplementer}" completeMethod="#{taskCreateView.completeImplementer}"
-                             var="implementer" itemLabel="#{taskCreateView.emailTogitHabId(implementer)}" itemValue="#{implementer}" forceSelection="true" />
+                            var="implementer" itemLabel="#{taskCreateView.emailToGitHubId(implementer)}" itemValue="#{implementer}" forceSelection="true" />
         </p:panelGrid>
             <p:textEditor widgetVar="taskText" value="#{taskCreateView.taskText}" height="200" style="margin-bottom:10px"/>
 

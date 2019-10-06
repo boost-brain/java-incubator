@@ -32,7 +32,7 @@ public class UsersController {
     public UserDto create(@RequestBody UserDto userDto) {
         if (StringUtils.isEmpty(userDto.getEmail()) ||
                 !this.checkEmail(userDto.getEmail()) ||
-                StringUtils.isEmpty(userDto.getGitHabId()) ||
+                StringUtils.isEmpty(userDto.getGitHubId()) ||
                 StringUtils.isEmpty(userDto.getName()) ||
                 (userDto.getHours() < 1)) {
             throw new NotFoundException();
@@ -66,7 +66,7 @@ public class UsersController {
     public String update(@RequestBody UserDto userDto) {
         if (StringUtils.isEmpty(userDto.getEmail()) ||
                 !this.checkEmail(userDto.getEmail()) ||
-                StringUtils.isEmpty(userDto.getGitHabId()) ||
+                StringUtils.isEmpty(userDto.getGitHubId()) ||
                 StringUtils.isEmpty(userDto.getName()) ||
                 (userDto.getHours() < 1)) {
             throw new NotFoundException();

@@ -6,7 +6,7 @@ import lombok.Data;
 public class UserDto {
 
     private String email;
-    private String gitHabId;
+    private String gitHubId;
     private String name;
     private int hours;
     private long createDate;

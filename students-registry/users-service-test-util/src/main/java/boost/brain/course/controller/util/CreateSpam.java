@@ -46,7 +46,7 @@ public class CreateSpam extends RecursiveTask<Boolean> {
         UserDto user = new UserDto();
         String genName = generateName();
         user.setName(genName);
-        user.setGitHabId(genName);
+        user.setGitHubId(genName);
         user.setEmail(genName + "@mail.ru");
         user.setHours(1);
 

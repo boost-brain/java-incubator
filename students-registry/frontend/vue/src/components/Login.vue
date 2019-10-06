@@ -14,7 +14,7 @@
                                     dark
                                     flat
                             >
-                                <v-toolbar-title>Login form</v-toolbar-title>
+                                <v-toolbar-title>Форма входа</v-toolbar-title>
                                 <div class="flex-grow-1"></div>
                             </v-toolbar>
                             <v-card-text>
@@ -37,8 +37,8 @@
                             </v-card-text>
                             <v-card-actions>
                                 <div class="flex-grow-1"></div>
-                                <v-btn text href="/new">Register New User</v-btn>
-                                <v-btn color="primary" type="submit" form="login-form">Login</v-btn>
+                                <router-link to="/new" class="btn btn-link">Регистрация нового студента</router-link>
+                                <v-btn color="primary" type="submit" form="login-form">Вход</v-btn>
                                 <br/>
                             </v-card-actions>
                             <p></p>

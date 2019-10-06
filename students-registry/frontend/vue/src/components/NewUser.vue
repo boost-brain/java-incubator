@@ -15,13 +15,13 @@
                             v-model="email"
                     ></v-text-field>
                     <v-text-field
-                            name="gitHabId"
+                            name="gitHubId"
                             label="Id на github.com:"
                             type="text"
-                            :class="{'is-invalid': $v.gitHabId.$error}"
-                            @blur="$v.gitHabId.$touch()"
-                            :error-messages="$v.gitHabId.$dirty && !$v.gitHabId.required ? ['Обязательно к заполнению'] : []"
-                            v-model="gitHabId"
+                            :class="{'is-invalid': $v.gitHubId.$error}"
+                            @blur="$v.gitHubId.$touch()"
+                            :error-messages="$v.gitHubId.$dirty && !$v.gitHubId.required ? ['Обязательно к заполнению'] : []"
+                            v-model="gitHubId"
                     ></v-text-field>
                     <v-text-field
                             label="Ваше имя:"
@@ -84,7 +84,7 @@
         data () {
             return {
                 email: '',
-                gitHabId: '',
+                gitHubId: '',
                 name: '',
                 password: '',
                 show: false,
@@ -103,7 +103,7 @@
                         email: this.email,
                         password: this.password,
                         createDate: this.createDate,
-                        gitHabId: this.gitHabId,
+                        gitHubId: this.gitHubId,
                         hours: this.hours,
                         name: this.name,
                         updateDate: this.updateDate
@@ -125,7 +125,7 @@
                 required,
                 email
             },
-            gitHabId: {
+            gitHubId: {
                 required
             },
             name: {

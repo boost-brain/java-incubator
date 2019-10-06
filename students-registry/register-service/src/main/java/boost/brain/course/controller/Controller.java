@@ -10,6 +10,7 @@ import boost.brain.course.exceptions.CreateCredentialsException;
 import boost.brain.course.service.auth.AuthService;
 import boost.brain.course.service.register.RegisterService;
 import boost.brain.course.service.users.UserService;
+import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,15 +21,15 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Log
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping(Constants.REGISTER_PREFIX)
 public class Controller {
 
-    @Value("${url.host}")
+    @Value("${url.host.register}")
     private String host;
 
-    @Value("${url.port.jsf-frontend}")
+    @Value("${url.port.register}")
     private String port;
 
     @Autowired
@@ -44,10 +45,14 @@ public class Controller {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public UserDto createUser(@RequestBody UserRegDto userRegDto){
 
+        log.info("createUser started");
+
         /** addEmail in register database */
         EmailEntity emailEntity = new EmailEntity();
         emailEntity.setEmail(userRegDto.getEmail());
         emailEntity.setName(userRegDto.getName());
+
+        log.info("createUser setName"); //4delete
 
         try {
             if ( addEmail(emailEntity) == null) {
@@ -59,13 +64,21 @@ public class Controller {
             e.printStackTrace();
         }
 
+        log.info("createUser addEmail"); //4delete
+
         /** auth-Service */
         if (!createCredentials(userRegDto.getEmail(), userRegDto.getPassword())) {
             throw new CreateCredentialsException();
         }
 
+        log.info("createUser createCredentials"); //4delete
+
         /** user-Service */
         UserDto commonUser = new UserDto();
+        BeanUtils.copyProperties(userRegDto, commonUser);
+
+        log.info("createUser commonUser"); //4delete
+
         BeanUtils.copyProperties(userRegDto, commonUser, "password");
         return userService.createUser(commonUser);
     }

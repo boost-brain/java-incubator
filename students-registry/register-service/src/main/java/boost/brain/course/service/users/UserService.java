@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserService {
 
-    @Value("${url.host}")
+    @Value("${url.host.user}")
     private String host;
 
     @Value("${url.port.user}")

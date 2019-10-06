@@ -8,6 +8,9 @@ zuul:
     auth-service:
       path: /api/auth/**
       url: http://auth-service:8080/api/login
+    auth-credentials:
+      path: /api/credentials/**
+      url: http://auth-service:8080/api/credentials
     projects-service:
       path: /api/projects/**
       url: http://projects-service:8080

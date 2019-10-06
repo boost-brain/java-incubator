@@ -14,7 +14,7 @@
                                     dark
                                     flat
                             >
-                                <v-toolbar-title>Login form</v-toolbar-title>
+                                <v-toolbar-title>Форма входа</v-toolbar-title>
                                 <div class="flex-grow-1"></div>
                             </v-toolbar>
                             <v-card-text>
@@ -37,8 +37,14 @@
                             </v-card-text>
                             <v-card-actions>
                                 <div class="flex-grow-1"></div>
-                                <v-btn color="primary" type="submit" form="login-form">Login</v-btn>
+                                <router-link to="/new" class="btn btn-link">Регистрация нового студента</router-link>
+                                <v-btn color="primary" type="submit" form="login-form">Вход</v-btn>
+                                <br/>
                             </v-card-actions>
+                            <p></p>
+                            <v-alert  v-if="this.error.error" type="warning">
+                                {{ this.error }}
+                            </v-alert>
                         </v-card>
                     </v-col>
                 </v-row>
@@ -46,20 +52,6 @@
         </v-content>
     </v-app>
 </template>
-
-<!--<template>-->
-    <!--<div>-->
-        <!--<v-form class="login" @submit.prevent="doLogin">-->
-            <!--<h1>Вход</h1>-->
-            <!--<label>Пользователь</label>-->
-            <!--<input required v-model="login" type="text" placeholder="Snoopy"/>-->
-            <!--<label>Пароль</label>-->
-            <!--<input required v-model="password" type="password" placeholder="Password"/>-->
-            <!--<hr/>-->
-            <!--<button type="submit">Login</button>-->
-        <!--</v-form>-->
-    <!--</div>-->
-<!--</template>-->
 
 <style>
     .login {
@@ -79,6 +71,7 @@
             return {
                 login: '',
                 password: '',
+                error: {},
             }
         },
         methods: {
@@ -93,7 +86,16 @@
                     console.log(user)
                     this.AUTH_REQUEST(user, "user").then(() => {
                         this.$router.push('/')
-                    }).catch(console.log("err"))
+                        this.error = {
+                            message: "Request is unathorized",
+                            error:  "AUTH_ERROR"
+                        }
+                    })
+                        .catch(err => {
+                            this.error = err.body;
+                            console.log(this.error)
+                        })
+
                 }catch(err){
                     console.log(err)
                 }

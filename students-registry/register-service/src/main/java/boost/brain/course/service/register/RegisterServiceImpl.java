@@ -15,11 +15,11 @@ import java.io.IOException;
 @Service
 public class RegisterServiceImpl implements RegisterService {
 
-    @Value("${url.host}")
-    private String host;
+//    @Value("${url.host}")
+//    private String host;
 
-    @Value("${url.port.jsf-frontend}")
-    private String port;
+//    @Value("${url.port.jsf-frontend}")
+//    private String port;
 
     @Autowired
     EmailRepository emailRepository;
@@ -35,7 +35,7 @@ public class RegisterServiceImpl implements RegisterService {
             throw new EmailOrNameExistException();
         }
 
-        SendEmail.sendEmail(emailEntity);
+//        SendEmail.sendEmail(emailEntity);
         String token = DigestUtils.md5Hex(email);
         emailEntity.setToken(token);
         return emailRepository.saveAndFlush(emailEntity);

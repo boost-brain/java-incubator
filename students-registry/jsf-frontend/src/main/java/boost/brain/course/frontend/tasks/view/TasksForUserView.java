@@ -56,7 +56,7 @@ public class TasksForUserView {
         this.updateCacheProjects(this.checkCacheProjects(this.getProjectsIds(tasks)));
     }
 
-    public String getUserGitHubId(final String email) {
+    public String getUsergitHabId(final String email) {
         if (httpSessionBean.getCacheUsers().containsKey(email)) {
             return httpSessionBean.getCacheUsers().get(email).getGitHabId();
         }

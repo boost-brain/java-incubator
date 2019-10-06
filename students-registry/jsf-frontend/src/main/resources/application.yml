@@ -21,7 +21,6 @@ users-service-url: http://${USERS_SERV_URL:localhost:8080/api/users}
 projects-service-url: http://${PROJECTS_SERV_URL:localhost:8080}
 register-service-url: http://${REGISTER_SERVICE_URL:http://localhost:8080/api/register}
 
-
 server:
   port: ${SERVER_PORT:8080}
 

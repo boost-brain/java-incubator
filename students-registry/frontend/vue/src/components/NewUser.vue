@@ -2,41 +2,57 @@
     <v-container>
         <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-                <h1 class="text--secondary mb-3">Новый студент</h1>
+                <h1 class="text--secondary mb-3">Регистрация</h1>
                 <v-form ref="form" validation class="mb-3">
                     <v-text-field
+                            autocomplete="off"
                             name="email"
-                            label="email"
+                            label="Email:"
                             type="text"
+                            :class="{'is-invalid': $v.email.$error}"
+                            @blur="$v.email.$touch()"
+                            :error-messages="$v.email.$dirty && !$v.email.required ? ['Обязательно к заполнению'] : !$v.email.email ? ['Введите корректный email'] : []"
                             v-model="email"
                     ></v-text-field>
                     <v-text-field
-                            name="create_date"
-                            label="create_date"
+                            name="gitHabId"
+                            label="Id на github.com:"
                             type="text"
-                            v-model="create_date"
+                            :class="{'is-invalid': $v.gitHabId.$error}"
+                            @blur="$v.gitHabId.$touch()"
+                            :error-messages="$v.gitHabId.$dirty && !$v.gitHabId.required ? ['Обязательно к заполнению'] : []"
+                            v-model="gitHabId"
                     ></v-text-field>
                     <v-text-field
-                            name="git_hab_id"
-                            label="git_hab_id"
-                            type="text"
-                            v-model="git_hab_id"
-                    ></v-text-field>
-                    <v-text-field
+                            label="Ваше имя:"
                             name="name"
-                            label="name"
                             type="text"
+                            :class="{'is-invalid': $v.name.$error}"
+                            @blur="$v.name.$touch()"
+                            :error-messages="$v.name.$dirty && !$v.name.required ? ['Обязательно к заполнению'] : []"
                             v-model="name"
                     ></v-text-field>
-                    <v-textarea
-                            name="update_date"
-                            label="update_date"
-                            type="text"
-                            v-model="update_date"
-                            multi-line
-                            required
-                            :rules="[v => !!v || 'update_date is required']"
-                    ></v-textarea>
+                    <v-text-field
+                            name="hours"
+                            label="Сколько часов в день в среднем Вы готовы уделять проекту?"
+                            v-model="hours"
+                            :class="{'is-invalid': $v.hours.$error}"
+                            @blur="$v.hours.$touch()"
+                            :error-messages="$v.hours.$dirty && !$v.hours.required ? ['Обязательно к заполнению'] : !$v.hours.numeric ? ['Введите числовое значение'] : !$v.hours.minValue ? ['Число часов должно быть больше 1'] : []"
+                            type="text">
+                    </v-text-field>
+                    <v-text-field
+                            label="Задайте пароль:"
+                            v-model="password"
+                            :append-icon="show ? 'visibility' : 'visibility_off'"
+                            @click:append="show = !show"
+                            :type="show ? 'text' : 'password'"
+                            :class="{'is-invalid': $v.password.$error}"
+                            @blur="$v.password.$touch()"
+                            :error-messages="!$v.password.minLength ? ['Минимальная длина пароля 6'] : []"
+                            required>
+                    </v-text-field>
+                    <!--                    <pre>{{ $v.password }}</pre>-->
                 </v-form>
                 <v-layout row>
                     <v-flex xs12>
@@ -47,6 +63,10 @@
                         >
                             Создать
                         </v-btn>
+                        <p></p>
+                        <v-alert  v-if="this.error.error" type="error">
+                            error: {{ this.error }}
+                        </v-alert>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -56,36 +76,68 @@
 
 <script>
 
-    import { mapActions } from 'vuex'
+    import {mapActions} from 'vuex'
+    import {email, minLength, minValue, numeric, required} from 'vuelidate/lib/validators'
 
     export default {
         name: "NewUser",
         data () {
             return {
                 email: '',
-                create_date: '',
-                git_hab_id: '',
-                hours: 0,
+                gitHabId: '',
                 name: '',
-                update_date: ''
+                password: '',
+                show: false,
+                error: {},
+                hours: 1,
+                createDate: 0,
+                updateDate: 0
             }
         },
         methods: {
-            ...mapActions(['addUserAction', 'updateUserAction']),
+            ...mapActions(['registerAction']),
             save() {
-                console.log("save()")
+                console.log("register()")
                 if (this.$refs.form.validate()) {
                     const user = {
                         email: this.email,
-                        create_date: this.create_date,
-                        git_hab_id: this.git_hab_id,
+                        password: this.password,
+                        createDate: this.createDate,
+                        gitHabId: this.gitHabId,
                         hours: this.hours,
                         name: this.name,
-                        update_date: this.update_date
+                        updateDate: this.updateDate
                     }
-                    this.addUserAction(user, "user")
-                    this.$router.push('/users')
+                    this.$store.dispatch('registerAction', user)
+                        .then(() => {
+                            console.log("success registration!")
+                            this.$router.push('/login')
+                        })
+                        .catch(err => {
+                            this.error = err.body;
+                            console.log(this.error)
+                        })
                 }
+            }
+        },
+        validations: {
+            email: {
+                required,
+                email
+            },
+            gitHabId: {
+                required
+            },
+            name: {
+                required
+            },
+            hours: {
+                required,
+                numeric,
+                minValue: minValue(1)
+            },
+            password: {
+                minLength: minLength(6)
             }
         }
     }

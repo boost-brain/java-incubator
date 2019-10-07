@@ -31,6 +31,6 @@ url:
   path:
     register: /api/register
 
-jsf:
+joinfaces:
   primefaces:
-    theme: bootstrap
+    theme: cupertino

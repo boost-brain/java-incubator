@@ -19,18 +19,14 @@
 <h:body>
 
 <h:form>
-    <h:outputLink value="javascript:void(0)" onclick="PF('dlg').show();" title="login">
-        <p:graphicImage name="/images/login.png" />Открыть форму аутентификации
-    </h:outputLink>
-
     <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
 
-    <p:dialog header="Login" widgetVar="dlg" resizable="false">
+    <p:dialog header="Вход в систему" widgetVar="dlg" resizable="false" closable="false" visible="true">
         <h:panelGrid columns="2" cellpadding="5">
-            <h:outputLabel for="username" value="Username:" />
+            <h:outputLabel for="username" value="Логин:" />
             <p:inputText id="username" value="#{userLoginView.username}" required="true" label="username" />
 
-            <h:outputLabel for="password" value="Password:" />
+            <h:outputLabel for="password" value="Пароль:" />
             <p:password id="password" value="#{userLoginView.password}" required="true" label="password" />
 
             <f:facet name="footer">

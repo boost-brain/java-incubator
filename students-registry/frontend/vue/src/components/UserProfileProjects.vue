@@ -2,21 +2,21 @@
     <div id="app">
         <v-app id="inspire">
             <v-card
-                    class="mx-auto"
-                    max-width="300"
-                    tile
+                    class="text-start"
+                    min-width="480"
             >
-                <v-list flat>
+                <v-list three-line subheader min-width="480">
                     <v-list-item-group v-model="item" color="primary">
                         <v-list-item
                                 v-for="(item, i) in projects"
                                 :key="i"
+                                three-line
+                                @click="$router.push('/project/' + item.projectId)"
                         >
                             <v-list-item-content>
                                 <v-list-item-title>{{item.description}}</v-list-item-title>
                                 <v-list-item-subtitle v-html="item.projectId"></v-list-item-subtitle>
                                 <v-list-item-subtitle v-html="item.projectName"></v-list-item-subtitle>
-                                <v-list-item-subtitle v-html="item.projectUrl"></v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-item-group>

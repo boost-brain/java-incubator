@@ -34,11 +34,12 @@
             return {
                 drawer: true,
                 links: [
-                    {title: 'Home', icon: 'home', url: '/'},
-                    {title: 'Проекты', icon: 'list', url: '/projects'},
-                    {title: 'Задачи', icon: 'fa-solid/tasks', url: '/tasks'},
-                    {title: 'Студенты', icon: 'supervised_user_circle', url: '/users'},
-                    {title: 'Создать', icon: 'create', url: '/new'},
+                    // {title: 'Home', icon: 'home', url: '/'},
+                    // {title: 'Проекты', icon: 'list', url: '/projects'},
+                    // {title: 'Задачи', icon: 'done_all', url: '/tasks'},
+                    // {title: 'Студенты', icon: 'supervised_user_circle', url: '/users'},
+                    // {title: 'Создать', icon: 'create', url: '/new'},
+                    {title: 'Личный кабинет', icon: 'perm_identity', url: '/profile'},
                     {title: 'Выход', icon: 'logout', url: '/logout'}
                 ]
             }

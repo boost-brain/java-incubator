@@ -49,6 +49,18 @@ export default {
         }
     },
     actions: {
+        async getUserTasks ({commit}, user) {
+            try{
+                commit('setLoading', true)
+                const result = await taskApi.for(user)
+                console.log(result)
+                const data = await result.json()
+                commit('setTasks', data)
+                commit('setLoading', false)
+            } catch(e) {
+                console.log(e); // 30
+            }
+        },
         async loadTasksAction ({commit}) {
             commit('setLoading', true)
             await this.state.resource.get().then(response => response.json())
@@ -92,7 +104,7 @@ export default {
         getTaskCount (state) {
             return state.taskCount
         },
-        tasks (state) {
+        getTasks (state) {
             return state.tasks
         },
     }

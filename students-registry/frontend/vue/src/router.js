@@ -4,6 +4,7 @@ import Projects from './views/Projects'
 import Project from './components/Project'
 import Users from './views/Users'
 import Tasks from './views/Tasks'
+import Profile from './views/Profile'
 import NewUser from './components/NewUser'
 import Login from './components/Login'
 import store from './store'
@@ -86,6 +87,12 @@ export default new Router({
             name: 'Logout',
             component: Login,
             beforeEnter: logout,
+        },
+        {
+            path: '/profile',
+            name: 'Profile',
+            component: Profile,
+            beforeEnter: ifAuthenticated,
         },
     ]
 })

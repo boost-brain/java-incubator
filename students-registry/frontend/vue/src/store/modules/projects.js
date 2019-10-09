@@ -14,6 +14,9 @@ export default {
         createProject (state, payload) {
             state.projects.push(payload)
         },
+        emptyProjects (state){
+            state.projects = []
+        },
         addProjectMutation: function (state, project) {
             console.log("addProjectMutation")
             state.projects = [
@@ -46,10 +49,7 @@ export default {
         },
     },
     getters: {
-        setProjects (state) {
-            return state.projects
-        },
-        projects (state) {
+        getProjects (state) {
             return state.projects
         },
         projectById (state) {
@@ -59,6 +59,28 @@ export default {
         }
     },
     actions: {
+        async getProjectsByIdList ({commit}, Ids) {
+            console.log('getProjectsByIdList run')
+            // var uniqueIds = Array.from(new Set(Ids))
+            var uniqueIds = new Set(Ids)
+            console.log(uniqueIds)
+            commit('setLoading', true)
+
+            const result = await projectApi.get()
+            const data = await result.json()
+            console.log(data)
+
+            const data2 = data.filter(x => uniqueIds.has(x.projectId))
+            const data3 = Array.from(data2)
+            console.log(data3)
+
+            for (var proj of data3) {
+                console.log(proj)
+                commit('addProjectMutation', proj)
+            }
+
+            commit('setLoading', false)
+        },
 
         async loadAction ({commit}) {
             commit('setLoading', true)

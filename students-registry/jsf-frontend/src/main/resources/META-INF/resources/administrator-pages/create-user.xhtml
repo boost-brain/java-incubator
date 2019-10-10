@@ -15,7 +15,6 @@
 <h:body>
     <div id="main-div">
         <h2>Регистрация нового пользователя:</h2>
-        <h3>#{resultMessage}</h3>
         <div id="register-form">
             <h:form>
                 <h:panelGrid columns="2" width="500" cellpadding="5"
@@ -34,16 +33,12 @@
 
                     <h:outputText styleClass="text" value="Предпологаемое кол-во часов: "/>
                     <p:inputText value="#{createUsersService.hours}" t:placeholder="Целое число"/>
-
-
                 </h:panelGrid>
-
-                <p:commandButton value="Зарегистрировать" action="#{createUsersService.addNewUser(createUsersService.name,
+                <p:commandButton id="mybutton" value="Зарегистрировать" action="#{createUsersService.addNewUser(createUsersService.name,
                                                 createUsersService.email, createUsersService.password, createUsersService.gitHabId, createUsersService.hours)}"
                                  style="width:250px; margin: 20px 40%;"/>
-                <h:messages id="messages" showSummary="true" showDetail="true"/>
+                <h:message style = "color:red;margin:8px;" autoUpdate="true" showSummary="true" showDetail="true" for="mybutton" class="error"></h:message>
             </h:form>
-
         </div>
     </div>
 </h:body>

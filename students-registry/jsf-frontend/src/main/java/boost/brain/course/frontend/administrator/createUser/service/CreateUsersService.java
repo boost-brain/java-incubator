@@ -4,7 +4,6 @@ import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.users.UserDto;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -26,6 +25,9 @@ public class CreateUsersService {
     @Value("${users-service-url}")
     private String urlUsers;
 
+    FacesContext context = FacesContext.getCurrentInstance();
+    FacesMessage message;
+
 
 //    @Value("${auth-login-url}")
 //    private String urlAuth;
@@ -35,10 +37,9 @@ public class CreateUsersService {
     private RestTemplate restTemplate;
     private UserDto userDto = new UserDto();
     private Credentials credentials;
-    String resultMessage;
 
     public void addNewUser(String name, String email, String password, String gitHabId, int hours) {
-        if (name != null && email != null && password != null && gitHabId != null) {
+        if (name != null & email != null & password != null & gitHabId != null) {
             userDto.setEmail(email);
             userDto.setGitHabId(gitHabId);
             userDto.setName(name);
@@ -50,22 +51,29 @@ public class CreateUsersService {
                 if (userDtoResp != null) {
                     addNewCredentials(email, password);
                 } else {
-                    resultMessage = "User " + userDto.getName() + " not created";
-                    FacesMessage warningMessage = new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "Warning summary", "Warning detail");
-                    FacesContext.getCurrentInstance().addMessage("", warningMessage);
+                    message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Внимание !!!",
+                            "Корректно заполните все поля");
+                    context.addMessage(null, message);
+                    context.validationFailed();
                 }
 
-            } catch (HttpStatusCodeException ex) {
-                System.out.println(ex.getStatusCode());
-                ex.printStackTrace();
+            } catch (Exception ex) {
+
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Внимание !!!",
+                        "Корректно заполните все поля");
+                context.addMessage(null, message);
+                context.validationFailed();
+                System.out.println(ex.getCause());
             }
 
         } else {
-            FacesMessage infoMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Info summary", "Info detail");
-            FacesContext.getCurrentInstance().addMessage("", infoMessage);
-            resultMessage = "Fill in all the fields";
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Внимание !!!",
+                    "Корректно заполните все поля");
+            context.addMessage(null, message);
+            context.validationFailed();
         }
     }
 
@@ -74,11 +82,18 @@ public class CreateUsersService {
         try {
             restTemplate = new RestTemplate();
             restTemplate.postForObject(urlAuth, credentials, Boolean.class);
-            resultMessage = "User " + userDto.getName() + " created";
-        } catch (HttpStatusCodeException ex) {
-            resultMessage = "User " + userDto.getName() + " not created";
-            System.out.println(ex.getStatusCode());
-            ex.printStackTrace();
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Пользователь создан !!!",
+                    "Данные внесены корректно");
+            context.addMessage(null, message);
+            context.validationFailed();
+        } catch (Exception ex) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Внимание !!!",
+                    "Корректно заполните все поля");
+            context.addMessage(null, message);
+            context.validationFailed();
+            System.out.println(ex.getCause());
         }
     }
 
@@ -139,13 +154,5 @@ public class CreateUsersService {
 
     public void setUrlAuth(String urlAuth) {
         this.urlAuth = urlAuth;
-    }
-
-    public String getResultMessage() {
-        return resultMessage;
-    }
-
-    public void setResultMessage(String resultMessage) {
-        this.resultMessage = resultMessage;
     }
 }

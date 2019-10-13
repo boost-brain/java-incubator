@@ -39,7 +39,6 @@
         name: "Tasks",
         data () {
             return {
-                // array: [],
                 item: 1,
                 pagination: {
                     page: 2,

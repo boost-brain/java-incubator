@@ -9,6 +9,7 @@ import NewUser from './components/NewUser'
 import Login from './components/Login'
 import store from './store'
 import {AUTH_LOGOUT} from './store/actions/auth'
+import Task from "./components/Task";
 
 Vue.use(Router)
 
@@ -68,6 +69,13 @@ export default new Router({
             props: true,
             name: 'project',
             component: Project,
+            beforeEnter: ifAuthenticated
+        },
+        {
+            path: '/task/:id',
+            props: true,
+            name: 'task',
+            component: Task,
             beforeEnter: ifAuthenticated
         },
         {

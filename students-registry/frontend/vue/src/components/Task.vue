@@ -5,23 +5,33 @@
                 <v-card v-show="isNull">
                     <v-card-text>
                         <v-text-field
-                                v-model="task.taskId"
+                                v-model="task.id"
                                 label="id"
                                 readonly
                         ></v-text-field>
                         <v-text-field
-                                v-model="task.description"
-                                label="Адрес"
+                                v-model="task.name"
+                                label="Наименование"
                                 readonly
                         ></v-text-field>
                         <v-text-field
-                                v-model="task.taskName"
-                                label="Название"
+                                v-model="task.text"
+                                label="Описание"
                                 readonly
                         ></v-text-field>
                         <v-text-field
-                                v-model="task.taskUrl"
-                                label="Адрес"
+                                v-model="task.project"
+                                label="Проект №"
+                                readonly
+                        ></v-text-field>
+                        <v-text-field
+                                v-model="task.author"
+                                label="Автор задачи"
+                                readonly
+                        ></v-text-field>
+                        <v-text-field
+                                v-model="task.implementer"
+                                label="Исполнитель"
                                 readonly
                         ></v-text-field>
                     </v-card-text>
@@ -35,6 +45,10 @@
                             Удалить
                         </v-btn>
                     </v-card-actions>
+                    <p></p>
+                    <v-alert  v-if="show" type="error">
+                        error: {{ this.error }}
+                    </v-alert>
                 </v-card>
             </v-flex>
         </v-layout>
@@ -47,11 +61,16 @@
 
     export default {
         name: "task",
-        props: ['taskId'],
+        props: ['id'],
         computed: {
             task () {
-                const id = this.taskId
-                return this.$store.getters.taskById(id)
+                return this.$store.getters.getTaskById(this.id)
+            },
+            error () {
+                return this.$store.getters.getError
+            },
+            show() {
+                return JSON.stringify(this.error) !== JSON.stringify({})
             }
         },
         components:{
@@ -66,7 +85,7 @@
             },
             isNull () {
                 return this.task !== null
-            }
+            },
         }
     }
 </script>

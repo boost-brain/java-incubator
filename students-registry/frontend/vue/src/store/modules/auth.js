@@ -3,8 +3,10 @@ import apiCall from '../../api/api'
 import usersCall from '../../api/users'
 
 const state = {
-    token: localStorage.getItem('user-token') || '',
-    sessionId: localStorage.getItem('sessionId') || '',
+    // token: localStorage.getItem('user-token') || '',
+    token: '',
+    // sessionId: localStorage.getItem('sessionId') || '',
+    sessionId: '',
     status: '',
     error: '',
     hasLoadedOnce: false,
@@ -43,13 +45,13 @@ const actions = {
                     ...resp,
                     ...resp2
                 }
-                localStorage.setItem('user-token', resp3)
+                // localStorage.setItem('user-token', resp3)
                 console.log(resp3)
             } else {
                 state.error = "unauth"
                 console.log("AUTH FAILED")
                 commit(AUTH_ERROR, state)
-                localStorage.removeItem('user-token')
+                // localStorage.removeItem('user-token')
             }
         }catch(err){
             console.log(err)
@@ -58,7 +60,7 @@ const actions = {
     [AUTH_LOGOUT]: ({commit}) => {
         return new Promise((resolve) => {
             commit(AUTH_LOGOUT)
-            localStorage.removeItem('user-token')
+            // localStorage.removeItem('user-token')
             resolve()
         })
     }

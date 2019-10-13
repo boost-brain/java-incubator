@@ -36,7 +36,7 @@
                       v-model="editedImplementer"
               ></v-text-field>
               <v-text-field
-                      name="Name"
+                      name="name"
                       label="Наименование"
                       type="text"
                       v-model="editedName"
@@ -88,7 +88,7 @@
                 editedAuthor: this.task.author,
                 editedCreateDate: this.task.createDate,
                 editedImplementer: this.task.implementer,
-                editedName: this.task.Name,
+                editedName: this.task.name,
                 editedProject: this.task.project,
                 editedText: this.task.text,
                 editedUpdateDate: this.task.updateDate
@@ -100,7 +100,7 @@
                 this.editedAuthor = this.task.authot
                 this.editedCreateDate = this.task.createDate
                 this.editedImplementer = this.task.implementer
-                this.editedName = this.task.Name
+                this.editedName = this.task.name
                 this.editedProject = this.task.project
                 this.editedText = this.task.text
                 this.editedUpdateDate = this.task.updateDate
@@ -109,10 +109,11 @@
             onSave () {
                 if (this.editedName !== '' && this.editedProject !== '' && this.editedAuthor !== '') {
                     this.updateTaskAction({
+                        id: this.task.id,
                         author: this.editedAuthor,
                         createDate: this.editedCreateDate,
                         implementer: this.editedImplementer,
-                        Name: this.editedName,
+                        name: this.editedName,
                         project: this.editedProject,
                         text: this.editedText,
                         updateDate: this.editedUpdateDate,

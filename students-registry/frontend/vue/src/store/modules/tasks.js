@@ -4,6 +4,7 @@ export default {
     state: {
         tasks: [],
         taskCount: 0,
+        error: {}
     },
     mutations: {
         setTasks (state, payload) {
@@ -46,6 +47,11 @@ export default {
         setTaskCount(state, payload){
             console.log('setTaskCount mutation')
             state.taskCount = payload
+        },
+        setError(state, err){
+            console.log('setError mutation')
+            state.error = err
+            console.log(err)
         }
     },
     actions: {
@@ -82,10 +88,15 @@ export default {
             }
         },
         async updateTaskAction({commit}, task) {
-            const result = await taskApi.update(task)
-            console.log(task)
-            const data = await result.json()
-            commit('updateTaskMutation', data)
+            console.log("updateTaskAction run")
+            try {
+                const result = await taskApi.update(task)
+                console.log(result)
+                commit('updateTaskMutation', task)
+            }catch(err){
+                commit('setError', err.body)
+                console.log(err)
+            }
         },
         async removeTaskAction({commit}, task) {
             const result = await taskApi.remove(task.id)
@@ -107,5 +118,13 @@ export default {
         getTasks (state) {
             return state.tasks
         },
+        getTaskById (state) {
+            return id => {
+                return state.tasks.find(task => task.id == id)
+            }
+        },
+        getError (state){
+            return state.error
+        }
     }
 }

@@ -16,6 +16,7 @@ export default {
     count: () => Vue.resource(url + '/count').get(),
     get: page => Vue.resource(url + '/page/'+ page +'/2').get(),
     add: task => Vue.resource(url + '/create').save(task),
-    update: task => Vue.resource(url + '/update').update(task),
-    remove: id => Vue.resource(url + '/delete{/id}').remove({id})
+    update: task => Vue.resource(url + '/put').update(task),
+    remove: id => Vue.resource(url + '/delete{/id}').remove({id}),
+    for: user => Vue.resource(url + '/for{/user}').get({user})
 }

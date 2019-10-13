@@ -2,15 +2,15 @@
     <div id="app">
         <v-app id="inspire">
             <v-card
-                    class="mx-auto"
-                    max-width="300"
-                    tile
+                    class="text-start"
+                    min-width="480"
             >
-                <v-list flat>
+                <v-list two-line subheader min-width="480">
                     <v-list-item-group v-model="item" color="primary">
                         <v-list-item
                                 v-for="(item, i) in tasks"
                                 :key="i"
+                                @click="$router.push('/task/' + item.id)"
                         >
                             <v-list-item-content>
                                 <v-list-item-title v-text="item.name"></v-list-item-title>
@@ -19,12 +19,6 @@
                         </v-list-item>
                     </v-list-item-group>
                 </v-list>
-                <v-pagination
-                        v-model="pagination.page"
-                        :length="pagination.total"
-                        :total-visible="pagination.visible"
-                        @input="next"
-                ></v-pagination>
             </v-card>
         </v-app>
     </div>
@@ -33,7 +27,7 @@
 <script>
     import {mapMutations} from 'vuex'
     import {mapActions} from 'vuex'
-    import taskApi from '../api/tasks'
+    import {mapGetters} from 'vuex'
 
     export default {
         name: "Tasks",
@@ -49,32 +43,19 @@
             }
         },
         methods: {
-            ...mapMutations(['addTaskMutation', 'updateTaskMutation', 'removeTaskMutation', 'emptyTasks', 'setTasks']),
-            ...mapActions(['getTaskCount']),
-            next (page) {
-                console.log("next()")
-                taskApi.get(page)
-                    .then(response => {
-                        console.log("response")
-                        console.log(response)
-                        this.setTasks(response.body)
-                    })
-                    .catch(error => {
-                        console.log("error")
-                        console.log(error)
-                    })
-            },
+            ...mapGetters(['getUser', 'getTasks']),
+            ...mapMutations(['emptyTasks']),
+            ...mapActions(['getUserTasks']),
         },
         computed: {
             tasks () {
-                return this.$store.getters.tasks
+                return this.getTasks()
             }
         },
         created () {
-            this.getTaskCount()
+            console.log("Created UserProfileTasks()")
             this.emptyTasks()
-            this.pagination.total = ~~(this.$store.getters.getTaskCount/2) + 1
-            this.next(1)
+            this.getUserTasks(this.getUser().email)
         }
     }
 </script>

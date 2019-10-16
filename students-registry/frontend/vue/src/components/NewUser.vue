@@ -59,9 +59,10 @@
                         <v-spacer></v-spacer>
                         <v-btn
                                 class="success"
+                                :loading="this.$store.getters.getIsLoading"
                                 @click="save"
                         >
-                            Создать
+                            Зарегестрировать
                         </v-btn>
                         <p></p>
                         <v-alert  v-if="this.error.error" type="error">

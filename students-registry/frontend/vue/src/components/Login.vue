@@ -42,8 +42,11 @@
                                 <br/>
                             </v-card-actions>
                             <p></p>
-                            <v-alert  v-if="this.error.error" type="warning">
-                                {{ this.error }}
+                            <v-alert  v-if="this.getInfo()" type="info">
+                                {{ this.getInfo() }}
+                            </v-alert>
+                            <v-alert  v-if="this.getError()" type="warning">
+                                {{ this.getError() }}
                             </v-alert>
                         </v-card>
                     </v-col>
@@ -76,6 +79,12 @@
         },
         methods: {
             ...mapActions(['AUTH_REQUEST']),
+            getInfo: function (){
+                return this.$store.getters.getInfoMessage
+            },
+            getError: function (){
+                return this.$store.getters.getErrorMessage
+            },
             doLogin: function () {
                 try {
                     console.log("login: " + this.login + " " + this.password)

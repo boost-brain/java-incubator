@@ -86,16 +86,16 @@ public class TasksController {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public String updatePut(@RequestBody TaskDto taskDto) {
-//        if (taskDto.getId() < 1 ||
-//                taskDto.getProject() < 1 ||
-//                StringUtils.isEmpty(taskDto.getAuthor()) ||
-//                !this.checkEmail(taskDto.getAuthor()) ||
-//                StringUtils.isEmpty(taskDto.getImplementer()) ||
-//                !this.checkEmail(taskDto.getImplementer()) ||
-//                StringUtils.isEmpty(taskDto.getName()) ||
-//                StringUtils.isEmpty(taskDto.getText())) {
-//            throw new NotFoundException();
-//        }
+        if (taskDto.getId() < 1 ||
+                taskDto.getProject() < 1 ||
+                StringUtils.isEmpty(taskDto.getAuthor()) ||
+                !this.checkEmail(taskDto.getAuthor()) ||
+                StringUtils.isEmpty(taskDto.getImplementer()) ||
+                !this.checkEmail(taskDto.getImplementer()) ||
+                StringUtils.isEmpty(taskDto.getName()) ||
+                StringUtils.isEmpty(taskDto.getText())) {
+            throw new NotFoundException();
+        }
         taskDto.setUpdateDate(System.currentTimeMillis());
         if (tasksRepository.update(taskDto)) {
             return HttpStatus.OK.getReasonPhrase();

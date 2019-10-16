@@ -3,12 +3,10 @@ import apiCall from '../../api/api'
 import usersCall from '../../api/users'
 
 const state = {
-    // token: localStorage.getItem('user-token') || '',
     token: '',
-    // sessionId: localStorage.getItem('sessionId') || '',
     sessionId: '',
     status: '',
-    error: '',
+    // error: '',
     hasLoadedOnce: false,
     user: {
         name: '',
@@ -17,7 +15,7 @@ const state = {
 }
 
 const getters = {
-    isAuthenticated: state => !!state.token, // && !!state.user.name,
+    isAuthenticated: state => !!state.token,
     authStatus: state => state.status,
     getToken: state => state.token,
     getSessionId: () =>  state.sessionId,
@@ -45,13 +43,12 @@ const actions = {
                     ...resp,
                     ...resp2
                 }
-                // localStorage.setItem('user-token', resp3)
                 console.log(resp3)
+
             } else {
                 state.error = "unauth"
                 console.log("AUTH FAILED")
                 commit(AUTH_ERROR, state)
-                // localStorage.removeItem('user-token')
             }
         }catch(err){
             console.log(err)
@@ -60,7 +57,6 @@ const actions = {
     [AUTH_LOGOUT]: ({commit}) => {
         return new Promise((resolve) => {
             commit(AUTH_LOGOUT)
-            // localStorage.removeItem('user-token')
             resolve()
         })
     }

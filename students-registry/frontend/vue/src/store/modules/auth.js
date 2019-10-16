@@ -6,7 +6,6 @@ const state = {
     token: '',
     sessionId: '',
     status: '',
-    // error: '',
     hasLoadedOnce: false,
     user: {
         name: '',

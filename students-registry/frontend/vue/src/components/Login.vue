@@ -45,7 +45,7 @@
                             <v-alert  v-if="this.getInfo()" type="info">
                                 {{ this.getInfo() }}
                             </v-alert>
-                            <v-alert  v-if="this.getError()" type="warning">
+                            <v-alert  v-if="showError" type="warning">
                                 {{ this.getError() }}
                             </v-alert>
                         </v-card>
@@ -67,18 +67,25 @@
 
 <script>
     import { mapActions } from 'vuex'
+    import { mapMutations } from 'vuex'
+
 
     export default {
         name: 'login',
         data () {
             return {
                 login: '',
-                password: '',
-                error: {},
+                password: ''
+            }
+        },
+        computed: {
+            showError() {
+                return JSON.stringify(this.getError()) !== JSON.stringify({})
             }
         },
         methods: {
             ...mapActions(['AUTH_REQUEST']),
+            ...mapMutations(['setErrorMessage']),
             getInfo: function (){
                 return this.$store.getters.getInfoMessage
             },
@@ -95,14 +102,10 @@
                     console.log(user)
                     this.AUTH_REQUEST(user, "user").then(() => {
                         this.$router.push('/')
-                        this.error = {
-                            message: "Request is unathorized",
-                            error:  "AUTH_ERROR"
-                        }
+                        this.setErrorMessage("Request is unathorized")
                     })
                         .catch(err => {
-                            this.error = err.body;
-                            console.log(this.error)
+                            console.log(err.body)
                         })
 
                 }catch(err){

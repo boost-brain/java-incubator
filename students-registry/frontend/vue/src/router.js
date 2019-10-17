@@ -8,7 +8,6 @@ import Profile from './views/Profile'
 import NewUser from './components/NewUser'
 import Login from './components/Login'
 import store from './store'
-import {AUTH_LOGOUT} from './store/actions/auth'
 import Task from "./components/Task";
 
 Vue.use(Router)
@@ -18,7 +17,7 @@ const ifNotAuthenticated = (to, from, next) => {
         next()
         return
     }
-    next('/')
+    next('/profile')
 }
 
 const ifAuthenticated = (to, from, next) => {
@@ -32,7 +31,7 @@ const ifAuthenticated = (to, from, next) => {
 
 const logout = (to, from, next) => {
     console.log("logout")
-    store.dispatch(AUTH_LOGOUT)
+    store.dispatch('AUTH_LOGOUT')
     next()
     return
 }

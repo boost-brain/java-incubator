@@ -3,7 +3,7 @@ import projectApi from '../../api/projects'
 export default {
     state: {
         projects: [],
-        isLoading: false,
+        // isLoading: false,
         resource: {}
     },
     mutations: {
@@ -43,10 +43,7 @@ export default {
                     ...state.projects.slice(deletionIndex + 1)
                 ]
             }
-        },
-        setLoading(state, payload){
-            state.isLoading = payload
-        },
+        }
     },
     getters: {
         getProjects (state) {
@@ -61,7 +58,6 @@ export default {
     actions: {
         async getProjectsByIdList ({commit}, Ids) {
             console.log('getProjectsByIdList run')
-            // var uniqueIds = Array.from(new Set(Ids))
             var uniqueIds = new Set(Ids)
             console.log(uniqueIds)
             commit('setLoading', true)

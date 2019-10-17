@@ -2,10 +2,7 @@ import registerApi from "../../api/register";
 
 export default {
     state: {
-        users: [],
-        isLoading: false,
-        info: '',
-        error: {},
+        users: []
     },
     mutations: {
         registerMutation: function (state, user) {
@@ -15,16 +12,6 @@ export default {
                 user
             ]
         },
-        setLoading(state, payload){
-            state.isLoading = payload
-        },
-        setInfoMessage(state, payload) {
-            state.info = payload
-        },
-        setErrorMessage(state, payload) {
-            console.log(payload)
-            state.error = payload
-        }
     },
     actions: {
         async registerAction({commit}, user) {
@@ -34,25 +21,14 @@ export default {
                 const data = await result.json()
                 console.log(data)
                 commit('registerMutation', data)
-                commit('setInfoMessage', 'Пользователь успешно зарегестрирован')
-                commit('setErrorMessage', '')
+                commit('setInfo', 'Пользователь успешно зарегестрирован')
+                commit('clearError')
             }catch(e){
                 console.log(e)
-                commit('setErrorMessage', e)
+                commit('setError', e)
             }finally {
                 commit('setLoading', false)
             }
         }
-    },
-    getters: {
-        getIsLoading(state) {
-            return state.isLoading
-        },
-        getInfoMessage(state) {
-            return state.info
-        },
-        getErrorMessage(state) {
-            return state.error
-        },
     }
 }

@@ -78,6 +78,25 @@ public class UsersController {
         }
     }
 
+    @PutMapping(path = Constants.PUT_PREFIX,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public String updatePut(@RequestBody UserDto userDto) {
+        if (StringUtils.isEmpty(userDto.getEmail()) ||
+                !this.checkEmail(userDto.getEmail()) ||
+                StringUtils.isEmpty(userDto.getGitHubId()) ||
+                StringUtils.isEmpty(userDto.getName()) ||
+                (userDto.getHours() < 1)) {
+            throw new NotFoundException();
+        }
+        userDto.setUpdateDate(System.currentTimeMillis());
+        if (usersRepository.update(userDto)) {
+            return HttpStatus.OK.getReasonPhrase();
+        } else {
+            throw new NotFoundException();
+        }
+    }
+
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{email}")
     @ResponseStatus(HttpStatus.OK)
     public String delete(@PathVariable final String email) {

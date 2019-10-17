@@ -42,11 +42,11 @@
                                 <br/>
                             </v-card-actions>
                             <p></p>
-                            <v-alert  v-if="this.getInfo()" type="info">
-                                {{ this.getInfo() }}
+                            <v-alert  v-if="showInfo" type="info">
+                                {{ info() }}
                             </v-alert>
                             <v-alert  v-if="showError" type="warning">
-                                {{ this.getError() }}
+                                {{ error() }}
                             </v-alert>
                         </v-card>
                     </v-col>
@@ -66,8 +66,7 @@
 </style>
 
 <script>
-    import { mapActions } from 'vuex'
-    import { mapMutations } from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
 
 
     export default {
@@ -81,16 +80,22 @@
         computed: {
             showError() {
                 return JSON.stringify(this.getError()) !== JSON.stringify({})
-            }
+            },
+            showInfo() {
+                return JSON.stringify(this.getInfo()) !== JSON.stringify({})
+            },
         },
         methods: {
             ...mapActions(['AUTH_REQUEST']),
-            ...mapMutations(['setErrorMessage']),
-            getInfo: function (){
-                return this.$store.getters.getInfoMessage
+            ...mapMutations(['setError', 'setInfo']),
+            ...mapGetters(['getInfo', 'getError']),
+            info: function (){
+                console.log(this.getInfo())
+                return this.getInfo()
             },
-            getError: function (){
-                return this.$store.getters.getErrorMessage
+            error: function (){
+                console.log(this.getError())
+                return this.getError()
             },
             doLogin: function () {
                 try {
@@ -101,13 +106,8 @@
                     }
                     console.log(user)
                     this.AUTH_REQUEST(user, "user").then(() => {
-                        this.$router.push('/')
-                        this.setErrorMessage("Request is unathorized")
+                        this.$router.push('/profile')
                     })
-                        .catch(err => {
-                            console.log(err.body)
-                        })
-
                 }catch(err){
                     console.log(err)
                 }

@@ -24,13 +24,35 @@ export default {
             ]
         },
         updateUserMutation(state, user) {
-            console.log("updateUserMutation")
+            console.log("updateUserMutation 2")
+            console.log(user)
             const updateIndex = state.users.findIndex(item => item.email === user['email'])
-            state.users = [
-                ...state.users.slice(0, updateIndex),
-                user,
-                ...state.users.slice(updateIndex + 1)
-            ]
+            console.log("updateIndex=" + updateIndex)
+            if(updateIndex == -1){
+                this.commit('addUserMutation',user)
+            }else{
+                state.users = [
+                    ...state.users.slice(0, updateIndex),
+                    user,
+                    ...state.users.slice(updateIndex + 1)
+                ]
+            }
+        },
+        updateProfileUserMutation(state, user) {
+            console.log("updateProfileUserMutation")
+            console.log(user)
+            const updateIndex = state.users.findIndex(item => item.email === user['email'])
+            console.log("updateIndex=" + updateIndex)
+            if(updateIndex == -1){
+                this.commit('addUserMutation',user)
+            }else{
+                state.users = [
+                    ...state.users.slice(0, updateIndex),
+                    user,
+                    ...state.users.slice(updateIndex + 1)
+                ]
+            }
+            this.commit('setUser',user)
         },
         removeUserMutation(state, user) {
             console.log("removeUserMutation")
@@ -71,9 +93,17 @@ export default {
         },
         async updateUserAction({commit}, user) {
             const result = await userApi.update(user)
-            console.log(user)
-            const data = await result.json()
-            commit('updateUserMutation', data)
+            console.log(result)
+            if(result.bodyText == 'OK') {
+                commit('updateUserMutation', user)
+            }
+        },
+        async updateProfileUserAction({commit}, user) {
+            const result = await userApi.update(user)
+            console.log(result)
+            if(result.bodyText == 'OK') {
+                commit('updateProfileUserMutation', user)
+            }
         },
         async removeUserAction({commit}, user) {
             const result = await userApi.remove(user.email)

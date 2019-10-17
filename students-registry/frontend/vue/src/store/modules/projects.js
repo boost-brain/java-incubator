@@ -3,7 +3,6 @@ import projectApi from '../../api/projects'
 export default {
     state: {
         projects: [],
-        // isLoading: false,
         resource: {}
     },
     mutations: {

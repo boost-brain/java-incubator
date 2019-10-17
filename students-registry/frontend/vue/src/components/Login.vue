@@ -38,7 +38,14 @@
                             <v-card-actions>
                                 <div class="flex-grow-1"></div>
                                 <router-link to="/new" class="btn btn-link">Регистрация нового студента</router-link>
-                                <v-btn color="primary" type="submit" form="login-form">Вход</v-btn>
+                                <v-btn
+                                        color="primary"
+                                        type="submit"
+                                        form="login-form"
+                                        :loading="this.$store.getters.getLoading"
+                                >
+                                    Вход
+                                </v-btn>
                                 <br/>
                             </v-card-actions>
                             <p></p>

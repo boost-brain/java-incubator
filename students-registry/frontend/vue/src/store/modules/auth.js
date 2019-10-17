@@ -25,6 +25,7 @@ const getters = {
 
 const actions = {
     async AUTH_REQUEST({commit, state}, user) {
+        commit('setLoading', true)
         try {
             console.log("AUTH_REQUEST action run.")
             const result = await apiCall.login(user)
@@ -53,6 +54,8 @@ const actions = {
             }
         }catch(err){
             console.log(err)
+        }finally {
+            commit('setLoading', false)
         }
     },
     AUTH_LOGOUT ({ commit }) {

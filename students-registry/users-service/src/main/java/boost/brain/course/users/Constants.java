@@ -8,6 +8,7 @@ public interface Constants {
     String CREATE_PREFIX = "/create";
     String READ_PREFIX = "/read";
     String UPDATE_PREFIX = "/update";
+    String PUT_PREFIX = "/put";
     String DELETE_PREFIX = "/delete";
 
     String COUNT_PREFIX = "/count";

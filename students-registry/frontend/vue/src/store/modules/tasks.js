@@ -3,8 +3,7 @@ import taskApi from "../../api/tasks";
 export default {
     state: {
         tasks: [],
-        taskCount: 0,
-        error: {}
+        taskCount: 0
     },
     mutations: {
         setTasks (state, payload) {
@@ -48,11 +47,6 @@ export default {
             console.log('setTaskCount mutation')
             state.taskCount = payload
         },
-        setError(state, err){
-            console.log('setError mutation')
-            state.error = err
-            console.log(err)
-        }
     },
     actions: {
         async getUserTasks ({commit}, user) {
@@ -95,7 +89,6 @@ export default {
                 commit('updateTaskMutation', task)
             }catch(err){
                 commit('setError', err.body)
-                console.log(err)
             }
         },
         async removeTaskAction({commit}, task) {
@@ -122,9 +115,6 @@ export default {
             return id => {
                 return state.tasks.find(task => task.id == id)
             }
-        },
-        getError (state){
-            return state.error
         }
     }
 }

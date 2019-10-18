@@ -59,7 +59,7 @@
                         <v-spacer></v-spacer>
                         <v-btn
                                 class="success"
-                                :loading="this.$store.getters.getIsLoading"
+                                :loading="this.$store.getters.getLoading"
                                 @click="save"
                         >
                             Зарегестрировать

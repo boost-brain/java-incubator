@@ -82,6 +82,7 @@
         <module>common-auth</module>
         <module>projects-service</module>
         <module>jsf-frontend</module>
+        <module>messages-service</module>
 
         <module>test-util</module>
         <module>users-service-test-util</module>

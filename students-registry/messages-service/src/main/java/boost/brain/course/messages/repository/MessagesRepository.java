@@ -114,7 +114,6 @@ public class MessagesRepository {
         return result;
     }
 
-
     public boolean deleteAllMessagesForUser(final String email) {
         if (StringUtils.isEmpty(email) || !this.checkEmail(email)) {
             return false;
@@ -163,7 +162,6 @@ public class MessagesRepository {
         }
         return true;
     }
-
 
     public long count() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

@@ -13,5 +13,5 @@ public interface Constants {
     String COUNT_PREFIX = "/count";
     String ALL_MESSAGES_FOR_USER = "/all-messages-for-user";
     String DELETE_ALL_MESSAGES_FOR_USER = "/delete-all-messages-for-user";
-    String MESSAGES_AS_READ = "/message-as-read";
+    String MESSAGES_AS_READ = "/messages-as-read";
 }

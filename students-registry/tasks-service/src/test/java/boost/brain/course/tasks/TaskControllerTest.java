@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@EmbeddedPostgresTest
+@EmbeddedH2Test
 public class TaskControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -239,7 +239,7 @@ public class TaskControllerTest {
         mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + PAGE_PREFIX + "/" + page + "/" + size ))
                 .andDo(print()).andExpect(status().isOk());
         String listTaskAsString = mockMvcResult.andReturn().getResponse().getContentAsString();
-        List<TaskDto> tasks = Arrays.asList(mapper.readValue(listTaskAsString, TaskDto[].class));
+        TaskDto[] tasks = mapper.readValue(listTaskAsString, TaskDto[].class);
         for (TaskDto task : tasks) {
             System.out.println(task);
         }

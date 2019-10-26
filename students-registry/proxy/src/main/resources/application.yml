@@ -26,6 +26,9 @@ zuul:
     users-service:
       path: /api/users/**
       url:  http://users-service:8080/api/users
+    messages-service:
+      path: /api/messages/**
+      url:  http://messages-service:8080/api/messages
 
 server:
   port: ${SERVER_PORT:9000}

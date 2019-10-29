@@ -1,4 +1,4 @@
-package boost.brain.course.frontend.administrator.createUser.service;
+package boost.brain.course.frontend.administrator.createUser;
 
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.users.UserDto;
@@ -17,7 +17,7 @@ import javax.inject.Named;
 @RequestScope
 @Data
 @Log
-public class CreateUsersService {
+public class CreateUsers {
 
     private String name;
     private String email;

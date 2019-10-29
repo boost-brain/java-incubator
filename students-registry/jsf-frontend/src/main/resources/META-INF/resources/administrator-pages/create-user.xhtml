@@ -20,22 +20,22 @@
                 <h:panelGrid columns="2" width="500" cellpadding="5"
                              style="margin-top: 4%; margin-left: auto; margin-right: auto">
                     <h:outputText styleClass="text" value="Имя: "/>
-                    <p:inputText id="name" value="#{createUsersService.name}" t:placeholder="Имя пользователя" required="true"/>
+                    <p:inputText id="name" value="#{createUsers.name}" t:placeholder="Имя пользователя" required="true"/>
 
                     <h:outputText styleClass="text" value="Емейл: "/>
-                    <p:inputText required="" id="email" value="#{createUsersService.email}" t:placeholder="Емейл пользователя"/>
+                    <p:inputText required="" id="email" value="#{createUsers.email}" t:placeholder="Емейл пользователя"/>
 
                     <h:outputText styleClass="text" value="Пароль: "/>
-                    <p:password id="password" value="#{createUsersService.password}" t:placeholder="Пароль"/>
+                    <p:password id="password" value="#{createUsers.password}" t:placeholder="Пароль"/>
 
                     <h:outputText styleClass="text" value="GitHub ID: "/>
-                    <p:inputText id="gitHubId" value="#{createUsersService.gitHubId}" t:placeholder="GitHub login"/>
+                    <p:inputText id="gitHubId" value="#{createUsers.gitHubId}" t:placeholder="GitHub login"/>
 
                     <h:outputText styleClass="text" value="Предпологаемое кол-во часов: "/>
-                    <p:inputText value="#{createUsersService.hours}" t:placeholder="Целое число"/>
+                    <p:inputText value="#{createUsers.hours}" t:placeholder="Целое число"/>
                 </h:panelGrid>
-                <p:commandButton id="mybutton" value="Зарегистрировать" action="#{createUsersService.addNewUser(createUsersService.name,
-                                                createUsersService.email, createUsersService.password, createUsersService.gitHubId, createUsersService.hours)}"
+                <p:commandButton id="mybutton" value="Зарегистрировать" action="#{createUsers.addNewUser(createUsers.name,
+                                                createUsers.email, createUsers.password, createUsers.gitHubId, createUsers.hours)}"
                                  style="width:250px; margin: 20px 40%;"/>
                 <h:messages style = "color:red;margin:8px;" autoUpdate="true" showSummary="true" showDetail="true" for="mybutton" class="error"></h:messages>
             </h:form>

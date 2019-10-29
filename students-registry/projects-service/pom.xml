@@ -75,19 +75,6 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.12</version>
-                <executions>
-                    <execution>
-                        <id>build-docker</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <repository>projects-service</repository>
-                </configuration>
             </plugin>
         </plugins>
     </build>

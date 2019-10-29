@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping(Constants.TASKS_CONTROLLER_PREFIX)
 public class TasksController {
 
@@ -73,6 +72,28 @@ public class TasksController {
                                 !this.checkEmail(taskDto.getImplementer()) ||
                                     StringUtils.isEmpty(taskDto.getName()) ||
                                         StringUtils.isEmpty(taskDto.getText())) {
+            throw new NotFoundException();
+        }
+        taskDto.setUpdateDate(System.currentTimeMillis());
+        if (tasksRepository.update(taskDto)) {
+            return HttpStatus.OK.getReasonPhrase();
+        } else {
+            throw new NotFoundException();
+        }
+    }
+
+    @PutMapping(path = Constants.PUT_PREFIX,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public String updatePut(@RequestBody TaskDto taskDto) {
+        if (taskDto.getId() < 1 ||
+                taskDto.getProject() < 1 ||
+                StringUtils.isEmpty(taskDto.getAuthor()) ||
+                !this.checkEmail(taskDto.getAuthor()) ||
+                StringUtils.isEmpty(taskDto.getImplementer()) ||
+                !this.checkEmail(taskDto.getImplementer()) ||
+                StringUtils.isEmpty(taskDto.getName()) ||
+                StringUtils.isEmpty(taskDto.getText())) {
             throw new NotFoundException();
         }
         taskDto.setUpdateDate(System.currentTimeMillis());

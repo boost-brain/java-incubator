@@ -8,24 +8,6 @@
 
 <h:head>
     <title>Регистрация нового пользователя</title>
-    <style>
-        body{
-            background-color: #949494;
-            background-image: url(https://www.barraques.cat/pngfile/big/19-191062_metallic-wallpaper-for-desktop-black-silver-background-hd.jpg);
-            background-attachment: fixed;
-        }
-        .text{
-            font-family: Tahoma;
-            color: #ced100;
-            float: right;
-            margin-right: 20px;
-        }
-        h2{
-            margin-top: 8%;
-            text-align: center;
-            color:#efff42;
-        }
-    </style>
 </h:head>
 <h:body>
     <h2>Для регистрации заполните форму:</h2>
@@ -42,7 +24,7 @@
            <p:password id="password" value="#{frontRegisterApi.password}" t:placeholder="runForrestRun"/>
 
            <h:outputText styleClass="text" value="GitHub ID: "/>
-           <p:inputText id="gitHubId" value="#{frontRegisterApi.gitHabId}" t:placeholder="ForrestGump"/>
+           <p:inputText id="gitHubId" value="#{frontRegisterApi.gitHubId}" t:placeholder="ForrestGump"/>
 
            <h:outputText styleClass="text" value="Могу учиться часов в неделю: "/>
            <p:inputNumber id="hours" value="#{frontRegisterApi.hours}" t:placeholder="Целое число" />

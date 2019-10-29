@@ -29,15 +29,15 @@
                     <p:password id="password" value="#{createUsersService.password}" t:placeholder="Пароль"/>
 
                     <h:outputText styleClass="text" value="GitHub ID: "/>
-                    <p:inputText id="gitHubId" value="#{createUsersService.gitHabId}" t:placeholder="GitHub login"/>
+                    <p:inputText id="gitHubId" value="#{createUsersService.gitHubId}" t:placeholder="GitHub login"/>
 
                     <h:outputText styleClass="text" value="Предпологаемое кол-во часов: "/>
                     <p:inputText value="#{createUsersService.hours}" t:placeholder="Целое число"/>
                 </h:panelGrid>
                 <p:commandButton id="mybutton" value="Зарегистрировать" action="#{createUsersService.addNewUser(createUsersService.name,
-                                                createUsersService.email, createUsersService.password, createUsersService.gitHabId, createUsersService.hours)}"
+                                                createUsersService.email, createUsersService.password, createUsersService.gitHubId, createUsersService.hours)}"
                                  style="width:250px; margin: 20px 40%;"/>
-                <h:message style = "color:red;margin:8px;" autoUpdate="true" showSummary="true" showDetail="true" for="mybutton" class="error"></h:message>
+                <h:messages style = "color:red;margin:8px;" autoUpdate="true" showSummary="true" showDetail="true" for="mybutton" class="error"></h:messages>
             </h:form>
         </div>
     </div>

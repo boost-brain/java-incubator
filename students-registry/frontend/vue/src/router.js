@@ -4,10 +4,11 @@ import Projects from './views/Projects'
 import Project from './components/Project'
 import Users from './views/Users'
 import Tasks from './views/Tasks'
+import Profile from './views/Profile'
 import NewUser from './components/NewUser'
 import Login from './components/Login'
 import store from './store'
-import {AUTH_LOGOUT} from './store/actions/auth'
+import Task from "./components/Task";
 
 Vue.use(Router)
 
@@ -16,7 +17,7 @@ const ifNotAuthenticated = (to, from, next) => {
         next()
         return
     }
-    next('/')
+    next('/profile')
 }
 
 const ifAuthenticated = (to, from, next) => {
@@ -30,7 +31,7 @@ const ifAuthenticated = (to, from, next) => {
 
 const logout = (to, from, next) => {
     console.log("logout")
-    store.dispatch(AUTH_LOGOUT)
+    store.dispatch('AUTH_LOGOUT')
     next()
     return
 }
@@ -41,7 +42,7 @@ export default new Router({
         {
             path: '/',
             name: 'base',
-            component: Projects,
+            component: Users,
             beforeEnter: ifAuthenticated
         },
         {
@@ -70,10 +71,17 @@ export default new Router({
             beforeEnter: ifAuthenticated
         },
         {
+            path: '/task/:id',
+            props: true,
+            name: 'task',
+            component: Task,
+            beforeEnter: ifAuthenticated
+        },
+        {
             path: '/new',
             name: 'newUser',
             component: NewUser,
-            beforeEnter: ifAuthenticated
+            beforeEnter: ifNotAuthenticated
         },
         {
             path: '/login',
@@ -86,6 +94,12 @@ export default new Router({
             name: 'Logout',
             component: Login,
             beforeEnter: logout,
+        },
+        {
+            path: '/profile',
+            name: 'Profile',
+            component: Profile,
+            beforeEnter: ifAuthenticated,
         },
     ]
 })

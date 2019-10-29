@@ -22,29 +22,58 @@
     <v-content>
       <router-view></router-view>
     </v-content>
+
+<!--    <div>-->
+<!--      <p></p>-->
+<!--      <v-alert  v-if="showInfo" type="info">-->
+<!--        {{ info() }}-->
+<!--      </v-alert>-->
+<!--      <v-alert  v-if="showError" type="warning">-->
+<!--        {{ error() }}-->
+<!--      </v-alert>-->
+<!--    </div>-->
+
   </v-app>
 </template>
 
 <script>
-    import {mapMutations} from 'vuex'
+  import { mapGetters, mapMutations} from 'vuex'
 
-    export default {
-        name: 'App',
-        data () {
-            return {
-                drawer: true,
-                links: [
-                    {title: 'Home', icon: 'home', url: '/'},
-                    {title: 'Проекты', icon: 'list', url: '/projects'},
-                    {title: 'Задачи', icon: 'fa-solid/tasks', url: '/tasks'},
-                    {title: 'Студенты', icon: 'supervised_user_circle', url: '/users'},
-                    {title: 'Создать', icon: 'create', url: '/new'},
-                    {title: 'Выход', icon: 'logout', url: '/logout'}
-                ]
-            }
-        },
-        methods: {
-            ...mapMutations(['AUTH_LOGOUT'])
-        }
-    };
+  export default {
+    name: 'App',
+    data () {
+      return {
+        drawer: true,
+        links: [
+          // {title: 'Home', icon: 'home', url: '/'},
+          // {title: 'Проекты', icon: 'list', url: '/projects'},
+          // {title: 'Задачи', icon: 'done_all', url: '/tasks'},
+          // {title: 'Студенты', icon: 'supervised_user_circle', url: '/users'},
+          // {title: 'Создать', icon: 'create', url: '/new'},
+          {title: 'Личный кабинет', icon: 'perm_identity', url: '/profile'},
+          {title: 'Выход', icon: 'logout', url: '/logout'}
+        ]
+      }
+    },
+    methods: {
+      ...mapMutations(['AUTH_LOGOUT', 'setError', 'setInfo']),
+      ...mapGetters(['getInfo', 'getError']),
+      info: function (){
+        console.log(this.getInfo())
+        return this.getInfo()
+      },
+      error: function (){
+        console.log(this.getError())
+        return this.getError()
+      },
+    },
+    computed: {
+      showError() {
+        return JSON.stringify(this.getError()) !== JSON.stringify({})
+      },
+      showInfo() {
+        return JSON.stringify(this.getInfo()) !== JSON.stringify({})
+      },
+    },
+  };
 </script>

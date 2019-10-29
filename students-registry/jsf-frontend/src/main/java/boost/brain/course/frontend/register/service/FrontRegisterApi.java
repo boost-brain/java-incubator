@@ -30,14 +30,14 @@ public class FrontRegisterApi {
     private String name;
     private String email;
     private String password;
-    private String gitHabId;
+    private String gitHubId;
     private int hours;
 
     public String addAccount(){
 
         String url = this.host + ":" + this.port + this.path + "/create";
 
-        UserRegDto userRegDto = new UserRegDto(this.email, this.name, this.gitHabId, this.hours, this.password);
+        UserRegDto userRegDto = new UserRegDto(this.email, this.name, this.gitHubId, this.hours, this.password);
 
         UserDto userDto = template.postForObject(url, userRegDto, UserDto.class);
         if (userDto != null) {

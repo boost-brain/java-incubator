@@ -3,7 +3,7 @@ import taskApi from "../../api/tasks";
 export default {
     state: {
         tasks: [],
-        taskCount: 0,
+        taskCount: 0
     },
     mutations: {
         setTasks (state, payload) {
@@ -46,9 +46,21 @@ export default {
         setTaskCount(state, payload){
             console.log('setTaskCount mutation')
             state.taskCount = payload
-        }
+        },
     },
     actions: {
+        async getUserTasks ({commit}, user) {
+            try{
+                commit('setLoading', true)
+                const result = await taskApi.for(user)
+                console.log(result)
+                const data = await result.json()
+                commit('setTasks', data)
+                commit('setLoading', false)
+            } catch(e) {
+                console.log(e); // 30
+            }
+        },
         async loadTasksAction ({commit}) {
             commit('setLoading', true)
             await this.state.resource.get().then(response => response.json())
@@ -70,10 +82,14 @@ export default {
             }
         },
         async updateTaskAction({commit}, task) {
-            const result = await taskApi.update(task)
-            console.log(task)
-            const data = await result.json()
-            commit('updateTaskMutation', data)
+            console.log("updateTaskAction run")
+            try {
+                const result = await taskApi.update(task)
+                console.log(result)
+                commit('updateTaskMutation', task)
+            }catch(err){
+                commit('setError', err.body)
+            }
         },
         async removeTaskAction({commit}, task) {
             const result = await taskApi.remove(task.id)
@@ -92,8 +108,13 @@ export default {
         getTaskCount (state) {
             return state.taskCount
         },
-        tasks (state) {
+        getTasks (state) {
             return state.tasks
         },
+        getTaskById (state) {
+            return id => {
+                return state.tasks.find(task => task.id == id)
+            }
+        }
     }
 }

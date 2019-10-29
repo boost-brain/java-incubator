@@ -14,7 +14,7 @@
                                     dark
                                     flat
                             >
-                                <v-toolbar-title>Login form</v-toolbar-title>
+                                <v-toolbar-title>Форма входа</v-toolbar-title>
                                 <div class="flex-grow-1"></div>
                             </v-toolbar>
                             <v-card-text>
@@ -37,8 +37,24 @@
                             </v-card-text>
                             <v-card-actions>
                                 <div class="flex-grow-1"></div>
-                                <v-btn color="primary" type="submit" form="login-form">Login</v-btn>
+                                <router-link to="/new" class="btn btn-link">Регистрация нового студента</router-link>
+                                <v-btn
+                                        color="primary"
+                                        type="submit"
+                                        form="login-form"
+                                        :loading="this.$store.getters.getLoading"
+                                >
+                                    Вход
+                                </v-btn>
+                                <br/>
                             </v-card-actions>
+                            <p></p>
+                            <v-alert  v-if="showInfo" type="info">
+                                {{ info() }}
+                            </v-alert>
+                            <v-alert  v-if="showError" type="warning">
+                                {{ error() }}
+                            </v-alert>
                         </v-card>
                     </v-col>
                 </v-row>
@@ -46,20 +62,6 @@
         </v-content>
     </v-app>
 </template>
-
-<!--<template>-->
-    <!--<div>-->
-        <!--<v-form class="login" @submit.prevent="doLogin">-->
-            <!--<h1>Вход</h1>-->
-            <!--<label>Пользователь</label>-->
-            <!--<input required v-model="login" type="text" placeholder="Snoopy"/>-->
-            <!--<label>Пароль</label>-->
-            <!--<input required v-model="password" type="password" placeholder="Password"/>-->
-            <!--<hr/>-->
-            <!--<button type="submit">Login</button>-->
-        <!--</v-form>-->
-    <!--</div>-->
-<!--</template>-->
 
 <style>
     .login {
@@ -71,18 +73,37 @@
 </style>
 
 <script>
-    import { mapActions } from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
+
 
     export default {
         name: 'login',
         data () {
             return {
                 login: '',
-                password: '',
+                password: ''
             }
+        },
+        computed: {
+            showError() {
+                return JSON.stringify(this.getError()) !== JSON.stringify({})
+            },
+            showInfo() {
+                return JSON.stringify(this.getInfo()) !== JSON.stringify({})
+            },
         },
         methods: {
             ...mapActions(['AUTH_REQUEST']),
+            ...mapMutations(['setError', 'setInfo']),
+            ...mapGetters(['getInfo', 'getError']),
+            info: function (){
+                console.log(this.getInfo())
+                return this.getInfo()
+            },
+            error: function (){
+                console.log(this.getError())
+                return this.getError()
+            },
             doLogin: function () {
                 try {
                     console.log("login: " + this.login + " " + this.password)
@@ -92,8 +113,8 @@
                     }
                     console.log(user)
                     this.AUTH_REQUEST(user, "user").then(() => {
-                        this.$router.push('/')
-                    }).catch(console.log("err"))
+                        this.$router.push('/profile')
+                    })
                 }catch(err){
                     console.log(err)
                 }

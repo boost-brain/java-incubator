@@ -10,6 +10,7 @@ services:
       - register-service
       - tasks-service
       - users-service
+      - messages-service
     environment:
       - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
       - TASKS_SERV_TASKS_URL=tasks-service:8080/api/tasks
@@ -18,10 +19,13 @@ services:
     ports:
       - 9000:9000
 
-  #  frontend:
-  #    image: frontend:latest
-  #    ports:
-  #      - 80:8080
+  frontend:
+    image: frontend:latest
+    depends_on:
+      - proxy
+      - register-service
+    ports:
+      - 80:8080
 
   jsf-frontend:
     image: jsf-frontend:latest
@@ -31,11 +35,13 @@ services:
       - auth-service
       - projects-service
       - tasks-service
+      - messages-service
     environment:
       - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
       - TASKS_SERV_TASKS_URL=tasks-service:8080/api/tasks
       - USERS_SERV_URL=users-service:8080/api/users
       - PROJECTS_SERV_URL=projects-service:8080
+      - MESSAGES_SERV_URL=messages-service:8080/api/messages
     ports:
       - 8080:8080
 
@@ -61,6 +67,9 @@ services:
       - auth-service
       - users-service
     environment:
+      #      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
+      #      - AUTH_SERV_CRED_URL=register-service:8080/api/credentials
+      #      - USERS_SERV_URL=users-service:8080/api/users
       DB_HOST: postgres
 
   tasks-service:
@@ -77,6 +86,14 @@ services:
       DB_HOST: postgres
     ports:
       - 8082:8080
+
+  messages-service:
+    image: messages-service:latest
+    environment:
+      - AUTH_SERV_LOGIN_CHECK_URL=auth-service:8080/api/login/check/
+      - DB_HOST=postgres
+    ports:
+      - 8085:8080
 
   postgres:
     image: postgres:11

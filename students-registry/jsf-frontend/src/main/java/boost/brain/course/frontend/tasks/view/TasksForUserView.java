@@ -58,7 +58,7 @@ public class TasksForUserView {
 
     public String getUserGitHubId(final String email) {
         if (httpSessionBean.getCacheUsers().containsKey(email)) {
-            return httpSessionBean.getCacheUsers().get(email).getGitHabId();
+            return httpSessionBean.getCacheUsers().get(email).getGitHubId();
         }
         return email;
     }

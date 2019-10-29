@@ -39,7 +39,6 @@
         name: "Tasks",
         data () {
             return {
-                // array: [],
                 item: 1,
                 pagination: {
                     page: 2,
@@ -50,18 +49,21 @@
             }
         },
         methods: {
+            ...mapMutations(['addTaskMutation', 'updateTaskMutation', 'removeTaskMutation', 'emptyTasks', 'setTasks']),
+            ...mapActions(['getTaskCount']),
             next (page) {
                 console.log("next()")
                 taskApi.get(page)
                     .then(response => {
+                        console.log("response")
+                        console.log(response)
                         this.setTasks(response.body)
                     })
                     .catch(error => {
+                        console.log("error")
                         console.log(error)
                     })
             },
-            ...mapMutations(['addTaskMutation', 'updateTaskMutation', 'removeTaskMutation', 'emptyTasks', 'setTasks']),
-            ...mapActions(['getTaskCount']),
         },
         computed: {
             tasks () {

@@ -1,12 +1,12 @@
-spring:
-  application:
-    name: ${SPRING_APPLICATION_NAME:api-getway}
+#spring:
+#  application:
+#    name: ${SPRING_APPLICATION_NAME:frontend}
 
-zuul:
-  prefix: ${ZUUL_PREFIX:/services}
-  routes:
-    tasks-service:
-      url: ${TASKS-SERVICE_URL:http://localhost:8080}
+#zuul:
+#  prefix: ${ZUUL_PREFIX:/services}
+#  routes:
+#    tasks-service:
+#      url: ${TASKS-SERVICE_URL:http://localhost:8080}
 
 server:
   port: ${SERVER_PORT:8080}

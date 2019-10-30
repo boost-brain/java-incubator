@@ -17,6 +17,9 @@
         <h2>Регистрация нового пользователя:</h2>
         <div id="register-form">
             <h:form>
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
                 <h:panelGrid columns="2" width="500" cellpadding="5"
                              style="margin-top: 4%; margin-left: auto; margin-right: auto">
                     <h:outputText styleClass="text" value="Имя: "/>
@@ -37,7 +40,6 @@
                 <p:commandButton id="mybutton" value="Зарегистрировать" action="#{createUsers.addNewUser(createUsers.name,
                                                 createUsers.email, createUsers.password, createUsers.gitHubId, createUsers.hours)}"
                                  style="width:250px; margin: 20px 40%;"/>
-                <h:messages style = "color:red;margin:8px;" autoUpdate="true" showSummary="true" showDetail="true" for="mybutton" class="error"></h:messages>
             </h:form>
         </div>
     </div>

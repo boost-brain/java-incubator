@@ -57,9 +57,7 @@ public class CreateUsers {
                     context.addMessage(null, message);
                     context.getPartialViewContext().getRenderIds().add("globalMessage");
                 }
-
             } catch (Exception ex) {
-
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Внимание !!!",
                         "Корректно заполните все поля");

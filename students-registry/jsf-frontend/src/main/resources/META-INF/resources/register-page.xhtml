@@ -4,6 +4,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
+    <h:outputStylesheet name="css/admins-pages/create-user.css" />
+
 <h:head>
     <title>Регистрация нового пользователя</title>
 </h:head>
@@ -30,7 +32,6 @@
 
         <p:commandButton  value="Зарегистрироваться" action="#{frontRegisterApi.addAccount()}"
                                                 style="width:250px; margin: 20px 40%;"/>
-
     </h:form>
 </h:body>
 </html>

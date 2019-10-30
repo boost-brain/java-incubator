@@ -96,16 +96,14 @@ services:
       - 8085:8080
 
   postgres:
-    image: postgres:9.5
+    image: postgres:11
     restart: always
     ports:
-      - 5431:5432
+      - 5432:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=students
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_PASSWORD: 'postgres'
     volumes:
-      - database_data:/var/lib/postgresql/10/main
+      - database_data:/var/lib/postgresql/data
 
 volumes:
   database_data:

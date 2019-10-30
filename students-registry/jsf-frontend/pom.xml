@@ -59,6 +59,7 @@
             <groupId>boost.brain.course</groupId>
             <artifactId>common-types</artifactId>
         </dependency>
+
     </dependencies>
 
     <dependencyManagement>

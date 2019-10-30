@@ -16,6 +16,7 @@ zuul:
 
 api-getway-url: http://${API_GETWAY_HOST:localhost}:${API_GETWAY_PORT:8080}
 auth-login-url: http://${AUTH_SERV_LOGIN_URL:localhost:8080/api/login}
+auth-credentials-url: "http://auth-service:8080/api/credentials"
 tasks-service-tasks-url: http://${TASKS_SERV_TASKS_URL:localhost:8080/api/tasks}
 users-service-url: http://${USERS_SERV_URL:localhost:8080/api/users}
 projects-service-url: http://${PROJECTS_SERV_URL:localhost:8080}

@@ -56,19 +56,19 @@ export default {
                 console.log(result)
                 const data = await result.json()
                 commit('setTasks', data)
-                commit('setLoading', false)
             } catch(e) {
                 console.log(e); // 30
+            } finally {
+                commit('setLoading', false)
             }
         },
-        async loadTasksAction ({commit}) {
+        async loadPageAction ({commit}, pageN) {
             commit('setLoading', true)
-            await this.state.resource.get().then(response => response.json())
-                .then(tasks => {
-                    for (var data of tasks) {
-                        commit('addTaskMutation', data)
-                    }
-                })
+            const result = await taskApi.get(pageN)
+            const tasks = await result.json()
+            for (var task of tasks) {
+                commit('addTaskMutation', task)
+            }
             commit('setLoading', false)
         },
         async addTaskAction({commit, state}, task) {

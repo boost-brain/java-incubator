@@ -1,4 +1,5 @@
 import userApi from "../../api/users";
+// import taskApi from "../../api/tasks";
 
 export default {
     state: {
@@ -24,8 +25,6 @@ export default {
             ]
         },
         updateUserMutation(state, user) {
-            console.log("updateUserMutation 2")
-            console.log(user)
             const updateIndex = state.users.findIndex(item => item.email === user['email'])
             console.log("updateIndex=" + updateIndex)
             if(updateIndex == -1){
@@ -71,14 +70,19 @@ export default {
         }
     },
     actions: {
-        async loadUsersAction ({commit}) {
+        async loadUsersAction ({commit}, pageN) {
             commit('setLoading', true)
-            await this.state.resource.get().then(response => response.json())
-                .then(users => {
-                    for (var data of users) {
-                        commit('addUserMutation', data)
-                    }
-                })
+            const result = await userApi.get(pageN)
+            const users = await result.json()
+            for (var user of users) {
+                commit('addUserMutation', user)
+            }
+            // await this.state.resource.get().then(response => response.json())
+            //     .then(users => {
+            //         for (var data of users) {
+            //             commit('addUserMutation', data)
+            //         }
+            //     })
             commit('setLoading', false)
         },
         async addUserAction({commit, state}, user) {

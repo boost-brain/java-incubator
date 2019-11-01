@@ -6,7 +6,7 @@ Vue.use(VueResource)
 const url = 'http://localhost:9000/api/projects';
 
 export default {
-    get: () => Vue.resource(url + '/all').get(),
+    get: () => Vue.resource(url + '/projects-all').get(),
     find: projectId => Vue.resource(url + '/findById{/projectId}').get(projectId),
     add: project => Vue.resource(url + '/createProject{/id}').save({}, project),
     update: project => Vue.resource(url + '/update').save(project),

@@ -1,6 +1,13 @@
 <template>
     <div id="app">
         <v-app id="inspire">
+            <div class="text-center">
+                <v-progress-circular
+                        v-if="loading"
+                        indeterminate
+                        color="primary"
+                ></v-progress-circular>
+            </div>
             <v-card
                     class="mx-auto"
                     max-width="300"
@@ -32,8 +39,8 @@
 
 <script>
     import {mapMutations} from 'vuex'
+    import {mapGetters} from 'vuex'
     import {mapActions} from 'vuex'
-    import taskApi from '../api/tasks'
 
     export default {
         name: "Tasks",
@@ -49,31 +56,26 @@
             }
         },
         methods: {
+            ...mapGetters(['getTaskCount', 'getTasks', 'getLoading']),
             ...mapMutations(['addTaskMutation', 'updateTaskMutation', 'removeTaskMutation', 'emptyTasks', 'setTasks']),
-            ...mapActions(['getTaskCount']),
+            ...mapActions(['getTaskCount', 'loadPageAction']),
             next (page) {
                 console.log("next()")
-                taskApi.get(page)
-                    .then(response => {
-                        console.log("response")
-                        console.log(response)
-                        this.setTasks(response.body)
-                    })
-                    .catch(error => {
-                        console.log("error")
-                        console.log(error)
-                    })
+                this.loadPageAction(page)
             },
         },
         computed: {
             tasks () {
-                return this.$store.getters.tasks
+                return this.getTasks()
+            },
+            loading () {
+                return this.getLoading()
             }
         },
         created () {
             this.getTaskCount()
             this.emptyTasks()
-            this.pagination.total = ~~(this.$store.getters.getTaskCount/2) + 1
+            this.pagination.total = ~~(this.getTaskCount/2) + 1
             this.next(1)
         }
     }

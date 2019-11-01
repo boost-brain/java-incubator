@@ -1,6 +1,13 @@
 <template>
     <div id="app">
         <v-app id="inspire">
+            <div class="text-center">
+                <v-progress-circular
+                        v-if="loading"
+                        indeterminate
+                        color="primary"
+                ></v-progress-circular>
+            </div>
             <v-card
                     class="mx-auto"
                     max-width="300"
@@ -33,13 +40,12 @@
 <script>
     import {mapMutations} from 'vuex'
     import {mapActions} from 'vuex'
-    import userApi from '../api/users'
+    import {mapGetters} from 'vuex'
 
     export default {
         name: "Users",
         data () {
             return {
-                // array: [],
                 item: 1,
                 pagination: {
                     page: 2,
@@ -52,20 +58,25 @@
         methods: {
             next (page) {
                 console.log("next()")
-                userApi.get(page)
-                    .then(response => {
-                        this.setUsers(response.body)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
+                this.loadUsersAction(page)
+                // userApi.get(page)
+                //     .then(response => {
+                //         this.setUsers(response.body)
+                //     })
+                //     .catch(error => {
+                //         console.log(error)
+                //     })
             },
             ...mapMutations(['addUserMutation', 'updateUserMutation', 'removeUserMutation', 'emptyUsers', 'setUsers']),
-            ...mapActions(['getUserCount']),
+            ...mapActions(['getUserCount', 'loadUsersAction']),
+            ...mapGetters(['getLoading'])
         },
         computed: {
             users () {
                 return this.$store.getters.users
+            },
+            loading () {
+                return this.getLoading()
             }
         },
         created () {

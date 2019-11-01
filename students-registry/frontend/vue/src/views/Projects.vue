@@ -1,60 +1,68 @@
 <template>
-    <v-container>
-        <v-layout>
-            <v-flex xs12 sm6 offset-sm3>
-                <v-card
-                        class="elevation-10 mb-3"
-                        v-for="item in projects"
-                        :key="item.projectId"
-                >
-                    <v-card-title primary-title>
-                        <div>
-                            <h3 class="headline mb-0">{{ item.projectName }}</h3>
-                            <div> {{ item.description }} </div>
-                            <div> {{ item.projectUrl }} </div>
-                            <div> {{ item.projectId }} </div>
-                        </div>
-                    </v-card-title>
-
-                    <v-card-actions>
-                        <v-btn
-                                class="info"
-                                :to="'/project/' + item.projectId"
-                        > Открыть </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-flex>
-        </v-layout>
-    </v-container>
+    <div id="app">
+        <v-app id="inspire">
+            <div class="text-center">
+                <v-progress-circular
+                        v-if="loading"
+                        indeterminate
+                        color="primary"
+                ></v-progress-circular>
+            </div>
+            <v-card
+                    class="mx-auto"
+                    max-width="300"
+                    tile
+            >
+                <v-list flat>
+                    <v-list-item-group v-model="item" color="primary">
+                        <v-list-item
+                                v-for="(item, i) in projects"
+                                :key="i"
+                        >
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.projectName"></v-list-item-title>
+                                <v-list-item-subtitle v-html="item.projectId"></v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-item-group>
+                </v-list>
+            </v-card>
+        </v-app>
+    </div>
 </template>
-
 <script>
 
-    import {mapMutations} from 'vuex'
-    import projectApi from '../api/projects'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
 
     export default {
+        data () {
+            return {
+                item: 1,
+            }
+        },
         methods: {
-            next () {
-                console.log("next()")
-                projectApi.get()
-                    .then(response => {
-                        this.setProjects(response.body)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            },
-            ...mapMutations(['addProjectMutation', 'setProjects']),
+            ...mapGetters(['getProjects', 'getLoading']),
+            ...mapMutations(['emptyProjects']),
+            ...mapActions(['loadAction']),
         },
         computed: {
             projects () {
-                return this.$store.getters.projects
+                return this.getProjects()
+            },
+            loading () {
+                return this.getLoading()
             }
         },
         created () {
-            console.log("load projects ()")
-            this.next ()
-        },
+            console.log("LoadAction()")
+            this.emptyProjects()
+            this.loadAction()
+        }
     }
 </script>
+
+<style scoped>
+    .v-progress-circular {
+        margin: 1rem;
+    }
+</style>

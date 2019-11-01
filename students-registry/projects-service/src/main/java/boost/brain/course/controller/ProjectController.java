@@ -19,7 +19,6 @@ import java.util.List;
 
 @Log
 @Controller
-@CrossOrigin(origins = "*")
 public class ProjectController {
 
     private ProjectRepository projectRepository;

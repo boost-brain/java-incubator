@@ -79,12 +79,13 @@ export default {
 
         async loadAction ({commit}) {
             commit('setLoading', true)
-            await this.state.resource.get().then(response => response.json())
-                .then(projects => {
-                    for (var data of projects) {
-                        commit('addProjectMutation', data)
-                    }
-                })
+            const result = await projectApi.get()
+            const data = await result.json()
+
+            for (var proj of data) {
+                console.log(proj)
+                commit('addProjectMutation', proj)
+            }
             commit('setLoading', false)
         },
 

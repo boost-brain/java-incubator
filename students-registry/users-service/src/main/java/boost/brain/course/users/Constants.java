@@ -18,4 +18,6 @@ public interface Constants {
     String USERS_FOR_EMAILS_PREFIX = "/users-for-emails";
     String USERS_ALL_PREFIX = "/users-all";
     String CHECK_IF_EXISTS_PREFIX = "/check-if-exists";
+    String UPDATE_STATUS_PREFIX = "/update-status";
+    String UPDATE_STATUSES_FOR_EMAILS_PREFIX = "/update-statuses-for-emails";
 }

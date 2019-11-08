@@ -1,10 +1,14 @@
 package boost.brain.course.users.controller;
 
 import boost.brain.course.common.users.UserDto;
+import boost.brain.course.common.users.UserStatus;
 import boost.brain.course.users.Constants;
 
+import boost.brain.course.users.controller.exceptions.BadRequestException;
+import boost.brain.course.users.controller.exceptions.ConflictException;
 import boost.brain.course.users.controller.exceptions.NotFoundException;
 import boost.brain.course.users.repository.UsersRepository;
+import lombok.extern.java.Log;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +17,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
+@Log
 @RestController
 @RequestMapping(Constants.USERS_CONTROLLER_PREFIX)
 public class UsersController {
@@ -34,14 +40,15 @@ public class UsersController {
                 StringUtils.isEmpty(userDto.getGitHubId()) ||
                 StringUtils.isEmpty(userDto.getName()) ||
                 (userDto.getHours() < 1)) {
-            throw new NotFoundException();
+            throw new BadRequestException();
         }
+        userDto.setStatus(UserStatus.BUSY);
         long time = System.currentTimeMillis();
         userDto.setCreateDate(time);
         userDto.setUpdateDate(time);
         UserDto result = usersRepository.create(userDto);
         if (result == null) {
-            throw new NotFoundException();
+            throw new ConflictException();
         }
         return result;
     }
@@ -67,8 +74,9 @@ public class UsersController {
                 !this.checkEmail(userDto.getEmail()) ||
                 StringUtils.isEmpty(userDto.getGitHubId()) ||
                 StringUtils.isEmpty(userDto.getName()) ||
+                (userDto.getStatus() == null) ||
                 (userDto.getHours() < 1)) {
-            throw new NotFoundException();
+            throw new BadRequestException();
         }
         userDto.setUpdateDate(System.currentTimeMillis());
         if (usersRepository.update(userDto)) {
@@ -86,8 +94,9 @@ public class UsersController {
                 !this.checkEmail(userDto.getEmail()) ||
                 StringUtils.isEmpty(userDto.getGitHubId()) ||
                 StringUtils.isEmpty(userDto.getName()) ||
+                (userDto.getStatus() == null) ||
                 (userDto.getHours() < 1)) {
-            throw new NotFoundException();
+            throw new BadRequestException();
         }
         userDto.setUpdateDate(System.currentTimeMillis());
         if (usersRepository.update(userDto)) {
@@ -101,7 +110,7 @@ public class UsersController {
     @ResponseStatus(HttpStatus.OK)
     public String delete(@PathVariable final String email) {
         if (StringUtils.isEmpty(email) || !this.checkEmail(email)) {
-            throw new NotFoundException();
+            throw new BadRequestException();
         }
         if (usersRepository.delete(email)) {
             return HttpStatus.OK.getReasonPhrase();
@@ -121,11 +130,11 @@ public class UsersController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserDto> page(@PathVariable int page, @PathVariable int size) {
         if (page < 1 || size < 1) {
-            throw new NotFoundException();
+            throw new BadRequestException();
         }
         List<UserDto> result = usersRepository.getPage(page,size);
         if (result == null) {
-            throw new NotFoundException();
+            throw new ConflictException();
         }
         return result;
     }
@@ -135,11 +144,11 @@ public class UsersController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserDto> usersForEmails(@RequestBody List<String> emails) {
         if (emails == null || emails.isEmpty()) {
-            throw new NotFoundException();
+            throw new BadRequestException();
         }
         List<UserDto> result = usersRepository.usersForEmails(emails);
         if (result == null) {
-            throw new NotFoundException();
+            throw new ConflictException();
         }
         return result;
     }
@@ -149,7 +158,7 @@ public class UsersController {
     public List<UserDto> allUsers() {
         List<UserDto> result = usersRepository.allUsers();
         if (result == null) {
-            throw new NotFoundException();
+            throw new ConflictException();
         }
         return result;
     }
@@ -157,9 +166,47 @@ public class UsersController {
     @GetMapping(path = Constants.CHECK_IF_EXISTS_PREFIX + "/{email}")
     public boolean checkIfExists(@PathVariable String email) {
         if (StringUtils.isEmpty(email) || !this.checkEmail(email)) {
-            throw new NotFoundException();
+            throw new BadRequestException();
         }
         return usersRepository.checkIfExists(email);
+    }
+
+    @PostMapping(path = Constants.UPDATE_STATUS_PREFIX + "/{email}",
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public String updateStatus(@PathVariable String email,
+                               @RequestBody UserStatus status) {
+        if (StringUtils.isEmpty(email) || !this.checkEmail(email) || (status == null)) {
+            throw new BadRequestException();
+        }
+        UserDto userDto = usersRepository.read(email);
+        if (userDto == null) {
+            throw new NotFoundException();
+        }
+        userDto.setUpdateDate(System.currentTimeMillis());
+        userDto.setStatus(status);
+        if (usersRepository.updateStatus(userDto)) {
+            return HttpStatus.OK.getReasonPhrase();
+        } else {
+            throw new ConflictException();
+        }
+    }
+
+    @PostMapping(path = Constants.UPDATE_STATUSES_FOR_EMAILS_PREFIX,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public String updateStatusesForEmails(@RequestBody Map<String, UserStatus> emailsWithStatusesMap) {
+        log.info("Start UsersController.updateStatusesForEmails");
+        if (emailsWithStatusesMap == null || emailsWithStatusesMap.isEmpty()) {
+            throw new BadRequestException();
+        }
+        if (usersRepository.updateStatusesForEmails(emailsWithStatusesMap)) {
+            log.info("Finish UsersController.updateStatusesForEmails");
+            return HttpStatus.OK.getReasonPhrase();
+        } else {
+            log.severe("Throw ConflictException in UsersController.updateStatusesForEmails");
+            throw new ConflictException();
+        }
     }
 
 
@@ -170,6 +217,8 @@ public class UsersController {
         }
         return true;
     }
+
+
 
 
 }

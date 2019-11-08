@@ -1,14 +1,15 @@
 package boost.brain.course.users.repository.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import boost.brain.course.common.users.UserStatus;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 @Entity
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserEntity {
 
     @Id
@@ -18,5 +19,8 @@ public class UserEntity {
     private int hours;
     private long createDate;
     private long updateDate;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
 }

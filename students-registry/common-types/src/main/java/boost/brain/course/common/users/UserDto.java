@@ -11,4 +11,5 @@ public class UserDto {
     private int hours;
     private long createDate;
     private long updateDate;
+    private UserStatus status;
 }

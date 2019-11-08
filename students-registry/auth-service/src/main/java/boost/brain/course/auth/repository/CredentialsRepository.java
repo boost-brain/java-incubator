@@ -95,5 +95,4 @@ public class CredentialsRepository {
         entityManager.remove(credentialsEntity);
         return true;
     }
-
 }

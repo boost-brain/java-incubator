@@ -134,5 +134,4 @@ public class SessionsRepository {
         }
         return result;
     }
-
 }

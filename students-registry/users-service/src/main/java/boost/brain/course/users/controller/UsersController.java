@@ -209,7 +209,6 @@ public class UsersController {
         }
     }
 
-
     private boolean checkEmail(final String email) {
         EmailValidator emailValidator = new EmailValidator();
         if (!emailValidator.isValid(email, null)) {
@@ -217,8 +216,4 @@ public class UsersController {
         }
         return true;
     }
-
-
-
-
 }

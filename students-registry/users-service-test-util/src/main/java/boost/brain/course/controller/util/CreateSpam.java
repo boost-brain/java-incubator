@@ -64,7 +64,7 @@ public class CreateSpam extends RecursiveTask<Boolean> {
             stringBuilder.append(getLetter());
         }
 
-        return stringBuilder.toString();
+        return "test-user-" + stringBuilder.toString();
     }
 
     private char getLetter() {

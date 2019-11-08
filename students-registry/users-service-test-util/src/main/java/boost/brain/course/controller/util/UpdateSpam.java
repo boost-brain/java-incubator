@@ -1,5 +1,6 @@
 package boost.brain.course.controller.util;
 
+import boost.brain.course.common.users.UserStatus;
 import boost.brain.course.controller.Constants;
 import boost.brain.course.common.users.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -66,6 +67,7 @@ public class UpdateSpam extends RecursiveTask<Boolean> {
             String generatedName = generateName();
             user.setName(generatedName);
             user.setHours(random.nextInt(10) + 1);
+            user.setStatus(UserStatus.TEMPORARILY_INACTIVE);
             startTime = System.currentTimeMillis();
 
             HttpHeaders headers = new HttpHeaders();
@@ -79,7 +81,11 @@ public class UpdateSpam extends RecursiveTask<Boolean> {
             }
             HttpEntity<String> entity = new HttpEntity<>(patchInJson, headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(url + USERS_CONTROLLER_PREFIX + "/" + UPDATE_PREFIX, HttpMethod.PATCH, new HttpEntity<>(user), String.class);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url + USERS_CONTROLLER_PREFIX + "/" + UPDATE_PREFIX,
+                    HttpMethod.PATCH,
+                    new HttpEntity<>(user),
+                    String.class);
 
             stopTime = System.currentTimeMillis();
             elapsedTime = stopTime - startTime;
@@ -93,7 +99,7 @@ public class UpdateSpam extends RecursiveTask<Boolean> {
             stringBuilder.append(getLetter());
         }
 
-        return stringBuilder.toString();
+        return "test-user-" + stringBuilder.toString();
     }
 
     private char getLetter(){

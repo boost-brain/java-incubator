@@ -1,7 +1,7 @@
 package boost.brain.course.users.repository;
 
-//import boost.brain.course.users.controller.dto.UserDto;
 import boost.brain.course.common.users.UserDto;
+import boost.brain.course.common.users.UserStatus;
 import boost.brain.course.users.repository.entities.UserEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Transactional
@@ -101,6 +102,45 @@ public class UsersRepository {
             result.add(userDto);
         }
         return result;
+    }
+
+    public boolean updateStatus(final UserDto userDto) {
+        if (userDto == null) {
+            return false;
+        }
+        UserEntity userEntity = entityManager.find(UserEntity.class, userDto.getEmail());
+        if (userEntity == null) {
+            return false;
+        }
+        BeanUtils.copyProperties(userDto, userEntity, "createDate", "email", "gitHubId", "name", "hours");
+        entityManager.merge(userEntity);
+        return true;
+    }
+
+    public boolean updateStatusesForEmails(Map<String, UserStatus> emailsWithStatusesMap) {
+        if (emailsWithStatusesMap == null || emailsWithStatusesMap.isEmpty()) {
+            return false;
+        }
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
+        Root<UserEntity> from = cq.from(UserEntity.class);
+
+        Predicate where = from.get("email").in(emailsWithStatusesMap.keySet());
+        CriteriaQuery<UserEntity> select = cq.select(from).where(where);
+        TypedQuery<UserEntity> typedQuery = entityManager.createQuery(select);
+        List<UserEntity> userEntities = typedQuery.getResultList();
+
+        if (userEntities.isEmpty()) {
+            return false;
+        }
+        long currentTime = System.currentTimeMillis();
+        for (UserEntity userEntity: userEntities) {
+            UserStatus userStatus = emailsWithStatusesMap.get(userEntity.getEmail());
+            userEntity.setStatus(userStatus);
+            userEntity.setUpdateDate(currentTime);
+            entityManager.merge(userEntity);
+        }
+        return true;
     }
 
     public List<UserDto> usersForEmails(final List<String> emails) {

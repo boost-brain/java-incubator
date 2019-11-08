@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 @Transactional
@@ -102,5 +104,34 @@ public class SessionsRepository {
         }
 
         return sessionEntity.isActive();
+    }
+
+    public Map<String, Long> getEmailsWithStartTimeMap() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<CredentialsEntity> cq = cb.createQuery(CredentialsEntity.class);
+        Root<CredentialsEntity> from = cq.from(CredentialsEntity.class);
+        CriteriaQuery<CredentialsEntity> select = cq.select(from);
+        TypedQuery<CredentialsEntity> typedQuery = entityManager.createQuery(select);
+        List<CredentialsEntity> credentialsEntities = typedQuery.getResultList();
+
+        Map<String, Long> result = new HashMap<>();
+        for (CredentialsEntity credentialsEntity: credentialsEntities) {
+            long startTime = this.getMaxStartTime(credentialsEntity);
+            if (startTime > 0) {
+                result.put(credentialsEntity.getUserId(),startTime);
+            }
+        }
+        return result;
+    }
+
+    private long getMaxStartTime(CredentialsEntity credentialsEntity) {
+        long result = 0;
+        Map<String, SessionEntity> sessionEntities = credentialsEntity.getSessionEntities();
+        for (SessionEntity sessionEntity : sessionEntities.values()) {
+            if (result < sessionEntity.getStartTime()) {
+                result = sessionEntity.getStartTime();
+            }
+        }
+        return result;
     }
 }

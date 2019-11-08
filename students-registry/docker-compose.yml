@@ -51,7 +51,8 @@ services:
     depends_on:
       - postgres
     environment:
-      DB_HOST: postgres
+      - DB_HOST=postgres
+      - USERS_SERV_URL=users-service:8080/api/users
     ports:
       - 8081:8080
 

@@ -34,6 +34,11 @@ import org.springframework.context.ApplicationContext;
  * -url=http://localhost:8082 -o=delete -c=15
  * -url=http://localhost:8082 -o=update -c=4
  * -url=http://localhost:8082 -o=page -c=100
+ * -url=http://localhost:8082 -o=users-for-emails -c=10
+ * -url=http://localhost:8082 -o=users-all -c=1
+ * -url=http://localhost:8082 -o=check-if-exists -c=1
+ * -url=http://localhost:8082 -o=update-status -c=1
+ * -url=http://localhost:8082 -o=update-statuses-for-emails -c=1
  *
 */
 @Log

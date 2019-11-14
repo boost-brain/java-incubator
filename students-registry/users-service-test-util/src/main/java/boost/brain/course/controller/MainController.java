@@ -24,7 +24,7 @@ public class MainController {
         restTemplate = new RestTemplate();
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setConnectTimeout(1000);
-        requestFactory.setReadTimeout(1000);
+        requestFactory.setReadTimeout(10000);
 
         restTemplate.setRequestFactory(requestFactory);
     }
@@ -102,6 +102,32 @@ public class MainController {
                 executeUpdate(url, count);
                 break;
             }
+
+            case USERS_FOR_EMAILS: {
+                executeUsersForEmails(url, count);
+                break;
+            }
+
+            case USERS_ALL: {
+                executeUsersAll(url, count);
+                break;
+            }
+
+            case CHECK_IF_EXISTS: {
+                executeCheckIfExists(url, count);
+                break;
+            }
+
+            case UPDATE_STATUS: {
+                executeUpdateStatus(url, count);
+                break;
+            }
+
+            case UPDATE_STATUSES_FOR_EMAILS: {
+                executeUpdateStatusesForEmails(url, count);
+                break;
+            }
+
             default:
                 executeCount(url, count);
         }
@@ -119,6 +145,76 @@ public class MainController {
         long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
         log.info("Update all for " + count + " (20 on page) times  = " + elapsedTime + "ms");
+    }
+
+    private void executeUpdateStatus(String url, Long count) {
+        long startTime = System.currentTimeMillis();
+        ForkJoinPool pool = new ForkJoinPool(4);
+        pool.invoke(new UpdateStatusSpam(url, count, restTemplate));
+
+        while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
+        }
+
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        log.info("UpdateStatus all for " + count + " (20 on page) times  = " + elapsedTime + "ms");
+    }
+
+    private void executeUpdateStatusesForEmails(String url, Long count) {
+        long startTime = System.currentTimeMillis();
+        ForkJoinPool pool = new ForkJoinPool(4);
+        pool.invoke(new UpdateStatusesForEmailsSpam(url, count, restTemplate));
+
+        while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
+        }
+
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        log.info("UpdateStatus all for " + count + " (20 on page) times  = " + elapsedTime + "ms");
+    }
+
+    private void executeUsersForEmails(String url, Long count) {
+        long startTime = System.currentTimeMillis();
+        ForkJoinPool pool = new ForkJoinPool(4);
+        pool.invoke(new UsersForEmailsSpam(url, count, restTemplate));
+
+        while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
+        }
+
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        log.info("UsersForEmail all for " + count + " (20 on page) times  = " + elapsedTime + "ms");
+    }
+
+    private void executeUsersAll(String url, Long count) {
+        long startTime = System.currentTimeMillis();
+        ForkJoinPool pool = new ForkJoinPool(4);
+        pool.invoke(new UsersAllSpam(url, count, restTemplate));
+
+        while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
+        }
+
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        log.info("UsersAll for " + count + " times  = " + elapsedTime + "ms");
+    }
+
+    private void executeCheckIfExists(String url, Long count) {
+        long startTime = System.currentTimeMillis();
+        ForkJoinPool pool = new ForkJoinPool(4);
+        pool.invoke(new CheckIfExistsSpam(url, count, restTemplate));
+
+        while (pool.getActiveThreadCount() != 0) {
+            Thread.yield();
+        }
+
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        log.info("CheckIfExists all for " + count + " (20 on page) times  = " + elapsedTime + "ms");
     }
 
     private void executeRead(String url, Long count) {
@@ -226,6 +322,16 @@ public class MainController {
                 return InputOperations.READ;
             case Constants.UPDATE_PREFIX:
                 return InputOperations.UPDATE;
+            case Constants.USERS_FOR_EMAILS_PREFIX:
+                return InputOperations.USERS_FOR_EMAILS;
+            case Constants.USERS_ALL_PREFIX:
+                return InputOperations.USERS_ALL;
+            case Constants.CHECK_IF_EXISTS_PREFIX:
+                return InputOperations.CHECK_IF_EXISTS;
+            case Constants.UPDATE_STATUS_PREFIX:
+                return InputOperations.UPDATE_STATUS;
+            case Constants.UPDATE_STATUSES_FOR_EMAILS_PREFIX:
+                return InputOperations.UPDATE_STATUSES_FOR_EMAILS;
             default:
                 return InputOperations.COUNT;
         }

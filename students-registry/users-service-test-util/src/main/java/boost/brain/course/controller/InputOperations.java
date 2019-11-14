@@ -6,5 +6,10 @@ public enum InputOperations {
     DELETE,
     PAGE,
     READ,
-    UPDATE
+    UPDATE,
+    USERS_FOR_EMAILS,
+    USERS_ALL,
+    CHECK_IF_EXISTS,
+    UPDATE_STATUS,
+    UPDATE_STATUSES_FOR_EMAILS
 }

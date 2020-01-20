@@ -1,0 +1,5 @@
+Логин GitHub: SuperJavaMan
+Хочу, чтобы меня называли: Олег
+Мой стек технологий: Java Core, Spring Boot, Spring Data, Spring Security JWT, RabbitMQ, WebSokets, Docker, Angular
+Хочу участовать в проекте, который затрагивает мой стек технологий.
+Могу уделять работе над проектом -  30-40 часов в неделю.

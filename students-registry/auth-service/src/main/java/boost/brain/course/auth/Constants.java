@@ -17,5 +17,7 @@ public interface Constants {
     long TIME_DELAY_FOR_TEMPORARILY_INACTIVE = 7 * 24 * 60 * 60 * 1000;
     long TIME_DELAY_FOR_ACADEMIC_LEAVE = 14 * 24 * 60 * 60 * 1000;
     long FIXED_DELAY_UPDATE_STATUSES_FOR_USERS = 24 * 60 * 60 * 1000;
+
+    //Prefixes for external services
     String UPDATE_STATUSES_FOR_EMAILS_PREFIX = "/update-statuses-for-emails";
 }

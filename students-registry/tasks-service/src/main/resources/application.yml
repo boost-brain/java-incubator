@@ -20,3 +20,4 @@ server:
   port: ${SERVER_PORT:8080}
 
 auth-login-check-url: http://${AUTH_SERV_LOGIN_CHECK_URL:localhost:8080/api/login/check/}
+users-service-url: http://${USERS_SERV_URL:localhost:8080/api/users}

@@ -20,4 +20,7 @@ public interface Constants {
     String FROM_PREFIX = "/from";
     String IN_PREFIX = "/in";
 
+    //Prefixes for external services
+    String UPDATE_STATUS_PREFIX = "/update-status";
+
 }

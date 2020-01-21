@@ -129,7 +129,6 @@ class UsersControllerTest {
 
         assertNotNull(responseCount);
         assertEquals(count, responseCount);
-
         verify(usersRepository, times(1)).count();
     }
 
@@ -210,5 +209,6 @@ class UsersControllerTest {
 
         assertNotNull(responseString);
         assertEquals(reasonPhraseOK, responseString);
+        verify(usersRepository, times(1)).updateStatusesForEmails(anyMap());
     }
 }

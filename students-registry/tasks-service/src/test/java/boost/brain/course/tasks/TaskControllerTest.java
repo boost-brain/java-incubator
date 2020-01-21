@@ -224,7 +224,7 @@ public class TaskControllerTest {
                 .andExpect(status().isNotFound());
 
         mockMvc.perform(delete(TASKS_CONTROLLER_PREFIX + DELETE_PREFIX + "/0"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -246,12 +246,12 @@ public class TaskControllerTest {
 
         page = 0;
         mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + PAGE_PREFIX + "/" + page + "/" + size ))
-                .andDo(print()).andExpect(status().isNotFound());
+                .andDo(print()).andExpect(status().isBadRequest());
 
         page = 1;
         size = 0;
         mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + PAGE_PREFIX + "/" + page + "/" + size ))
-                .andDo(print()).andExpect(status().isNotFound());
+                .andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -269,7 +269,7 @@ public class TaskControllerTest {
         assertThat(tasks.size()).isGreaterThanOrEqualTo(3);
 
         mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + FOR_PREFIX + "/" + "qwe"))
-                .andDo(print()).andExpect(status().isNotFound());
+                .andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -287,7 +287,7 @@ public class TaskControllerTest {
         assertThat(tasks.size()).isGreaterThanOrEqualTo(3);
 
         mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + FROM_PREFIX + "/" + "qwe"))
-                .andDo(print()).andExpect(status().isNotFound());
+                .andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -308,7 +308,7 @@ public class TaskControllerTest {
                 .andDo(print()).andExpect(jsonPath("$").isEmpty());
 
         mockMvcResult = mockMvc.perform(get(TASKS_CONTROLLER_PREFIX + IN_PREFIX + "/-222"))
-                .andDo(print()).andExpect(status().isNotFound());
+                .andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test

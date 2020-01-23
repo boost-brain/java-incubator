@@ -1,9 +1,11 @@
 package boost.brain.course.tasks.controller;
 
-import boost.brain.course.tasks.Constants;
 import boost.brain.course.common.tasks.CommentDto;
+import boost.brain.course.tasks.Constants;
 import boost.brain.course.tasks.controller.exceptions.NotFoundException;
 import boost.brain.course.tasks.repository.CommentsRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(Constants.COMMENTS_CONTROLLER_PREFIX)
+@Api(value = "Rest контроллер для для Комментриев (Comments) к Задачам (Task)")
 public class CommentsController {
 
     private final CommentsRepository commentsRepository;
@@ -24,15 +27,15 @@ public class CommentsController {
     public CommentsController(CommentsRepository commentsRepository) {
         this.commentsRepository = commentsRepository;
     }
-
+    @ApiOperation(value = "Чтение одного Комментария по его id", response = CommentDto.class)
     @PostMapping(path = Constants.CREATE_PREFIX,
-                consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public CommentDto create(@RequestBody CommentDto commentDto) {
         if (commentDto.getTaskId() < 1 ||
                 StringUtils.isEmpty(commentDto.getAuthor()) ||
-                    !this.checkEmail(commentDto.getAuthor()) ||
-                        StringUtils.isEmpty(commentDto.getText())) {
+                !this.checkEmail(commentDto.getAuthor()) ||
+                StringUtils.isEmpty(commentDto.getText())) {
             throw new NotFoundException();
         }
         long time = System.currentTimeMillis();
@@ -46,7 +49,8 @@ public class CommentsController {
     }
 
     @GetMapping(path = Constants.READ_PREFIX + "/{id}",
-                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Чтение одного Комментария по его id", response = CommentDto.class)
     public CommentDto read(@PathVariable long id) {
         if (id < 1) {
             throw new NotFoundException();
@@ -59,14 +63,15 @@ public class CommentsController {
     }
 
     @PatchMapping(path = Constants.UPDATE_PREFIX,
-                consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Обновление данных Комментария, возращает текст HttpStatus", response = String.class)
     public String update(@RequestBody CommentDto commentDto) {
         if (commentDto.getId() < 1 ||
                 commentDto.getTaskId() < 1 ||
-                    StringUtils.isEmpty(commentDto.getAuthor()) ||
-                        !this.checkEmail(commentDto.getAuthor()) ||
-                            StringUtils.isEmpty(commentDto.getText())) {
+                StringUtils.isEmpty(commentDto.getAuthor()) ||
+                !this.checkEmail(commentDto.getAuthor()) ||
+                StringUtils.isEmpty(commentDto.getText())) {
             throw new NotFoundException();
         }
         commentDto.setUpdateDate(System.currentTimeMillis());
@@ -79,6 +84,7 @@ public class CommentsController {
 
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Удаление одного Комментария по его id", response = String.class)
     public String delete(@PathVariable long id) {
         //Проверяем идентификатор комментария
         if (id < 1) {
@@ -92,14 +98,17 @@ public class CommentsController {
     }
 
     @GetMapping(path = Constants.COUNT_PREFIX,
-                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Считает количество Комментариев в БД", response = Long.class)
     public long count() {
         return commentsRepository.count();
     }
 
+
     @GetMapping(path = Constants.FOR_PREFIX + "/{taskId}",
-                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Считывание коллекции Комментариев для конкретного Задания", response = List.class)
     public List<CommentDto> commentsFrom(@PathVariable long taskId) {
         //Проверяем идентификатор пользователя(автора)
         if (taskId < 1) {
@@ -113,9 +122,10 @@ public class CommentsController {
     }
 
     @GetMapping(path = Constants.FILTER_PREFIX,
-                produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<CommentDto> filter( @RequestParam(required = false, defaultValue = "0") long taskId,
-                                    @RequestParam(required = false, defaultValue = "") String author) {
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Считывание коллекции Заданий с фильтрацией long- id Задания, String- автор ", response = List.class)
+    public List<CommentDto> filter(@RequestParam(required = false, defaultValue = "0") long taskId,
+                                   @RequestParam(required = false, defaultValue = "") String author) {
         List<CommentDto> result = commentsRepository.filter(taskId, author);
         if (result == null) {
             throw new NotFoundException();
@@ -123,12 +133,15 @@ public class CommentsController {
         return result;
     }
 
+    /**
+     * Проверка электронной почты а валидность
+     *
+     * @param email адрес почты в String
+     * @return true если валидная
+     */
     private boolean checkEmail(final String email) {
         EmailValidator emailValidator = new EmailValidator();
-        if (!emailValidator.isValid(email, null)) {
-            return false;
-        }
-        return true;
+        return emailValidator.isValid(email, null);
     }
 
 }

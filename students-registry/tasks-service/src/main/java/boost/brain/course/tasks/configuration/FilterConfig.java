@@ -25,7 +25,7 @@ public class FilterConfig {
     public FilterRegistrationBean<CheckSessionFilter> checkSessionFilter(){
         FilterRegistrationBean<CheckSessionFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new CheckSessionFilter(getCheckHeaderSession()));
-        registrationBean.addUrlPatterns("/*");
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }

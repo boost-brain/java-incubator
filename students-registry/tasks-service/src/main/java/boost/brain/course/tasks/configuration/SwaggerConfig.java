@@ -39,7 +39,7 @@ public class SwaggerConfig {
     }
 
     /**
-     * Контакты с маэстро
+     * Контакты маэстро
      *
      * @return контакт
      */
@@ -80,14 +80,17 @@ public class SwaggerConfig {
     }
 
     /**
-     * текстовое Описание сервиса
+     * Описание микросервиса
      *
      * @return описание
      */
     private String getDescription() {
-        return "Микросервис “tasks-service” предназначен для управления и хранения в БД данных Задач и комментарий для них.\n" +
-                "Построен на Docker образе openjdk:8-jdk-alpine, с использованием фреймворка SpringBoot, в качестве БД используется внешняя (не входящая в образ) Postgresql база. Для упрощения написания кода используется Lombok. В качестве документирования Swagger (swagger-ui).\n" +
-                "Доступ к данным через Api –интерфейс.\n";
+        return "Микросервис “tasks-service” предназначен для управления заданиями и комментарями к ним.\n" +
+                "Собирается в Docker-образ на основе openjdk:8-jdk-alpine, с использованием фреймворка SpringBoot, для хранения данных используется внешняя (не входящая в образ) Postgresql база данных.\n" +
+                "Для упрощения написания кода используется Lombok. \n" +
+                "Для документирования используется Swagger (swagger-ui).\n" +
+                "Работа с микросервисом осуществляется через REST API.\n" +
+                "Конфигурация сервиса производится переменными окружения.\n";
     }
 
     /**
@@ -96,24 +99,24 @@ public class SwaggerConfig {
      * @return Имя
      */
     private String getTitle() {
-        return "Сервис управления и хранения задачами (Task), а так же комментариям к ним";
+        return "Сервис управления заданиями (TaskDto) и комментариями (CommentDto) к ним";
     }
 
     /**
      * Заглушка
      *
-     * @return спсок вендоров
+     * @return список вендоров
      */
     private Collection<VendorExtension> getVendorExtension() {
         return Collections.singletonList(new VendorExtension() {
             @Override
             public String getName() {
-                return "1";
+                return "None";
             }
 
             @Override
             public Object getValue() {
-                return "1";
+                return "None";
             }
         });
     }

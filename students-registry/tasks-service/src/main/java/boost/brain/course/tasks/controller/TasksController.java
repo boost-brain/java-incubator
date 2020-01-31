@@ -25,7 +25,7 @@ import java.util.List;
 @Log
 @RestController
 @RequestMapping(Constants.TASKS_CONTROLLER_PREFIX)
-@Api(value = "Rest контроллер для Заданий (Task)")
+@Api(value = "REST контроллер для управления заданиями (TaskDto)")
 public class TasksController {
 
     private final TasksRepository tasksRepository;
@@ -41,8 +41,13 @@ public class TasksController {
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Добавление нового задания в базу, если поля в добавляемом объекте пустые, то исключение- " +
-            "BadRequestException (HttpStatus.BAD_REQUEST)")
+    @ApiOperation(value = "Добавление нового задания в формате JSON, если поля (кроме id, createDate и updateDate) " +
+            "в передаваемом объекте пустые или не проходят валидацию, то отдаётся Runtime исключение " +
+            "BadRequestException (HttpStatus.BAD_REQUEST). " +
+            "В случае если полученный объект был корректный, но не получилось его добавить, отдаётся " +
+            "Runtime исключение ConflictException (HttpStatus.CONFLICT). Также при добавлении задания, производится " +
+            "обращение к микросервису управления пользователями (users-service) для изменения статуса исполнителя." +
+            "\"Занят\"")
     public TaskDto create(@RequestBody TaskDto taskDto) {
         if (taskDto.getProject() < 1 ||
                 StringUtils.isEmpty(taskDto.getAuthor()) ||
@@ -67,8 +72,8 @@ public class TasksController {
 
     @GetMapping(path = Constants.READ_PREFIX + "/{id}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Чтение одного Задания по его id, если id <0, то исключение -BadRequestException " +
-            "(HttpStatus.BAD_REQUEST). Если объект в БД не найден, то NotFoundException(HttpStatus.NOT_FOUND)")
+    @ApiOperation(value = "Чтение задания в формате JSON по его id, если id < 0, то отдаётся Runtime исключение BadRequestException " +
+            "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
     public TaskDto read(@PathVariable long id) {
         if (id < 1) {
             throw new BadRequestException();
@@ -83,8 +88,15 @@ public class TasksController {
     @PatchMapping(path = Constants.UPDATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Обновление данных TaskDto (Задания). Исключение BadRequestException (HttpStatus.BAD_REQUEST) в " +
-            "случае неверных данных, и NotFoundException(HttpStatus.NOT_FOUND) кода объект не найден в БД")
+    @ApiOperation(value = "Обновление данных задания (TaskDto в формате JSON)," +
+            " если поля (кроме createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию, " +
+            "то отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST)." +
+            "В случае если полученный объект был корректный, но не получилось его обновить, отдаётся " +
+            "Runtime исключение ConflictException (HttpStatus.CONFLICT), а если по id задания " +
+            "не найдено ранее сохранённое заданиие, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)" +
+            "Также при обновлении задания, если поменялся исполнитель, то производится обращение к микросервису управления " +
+            "пользователями (users-service) для изменения статуса исполнителя." +
+            "\"Занят\"")
     public String update(@RequestBody TaskDto taskDto) {
         if (taskDto.getId() < 1 ||
                 taskDto.getProject() < 1 ||
@@ -114,8 +126,15 @@ public class TasksController {
     @PutMapping(path = Constants.PUT_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Обновление данных TaskDto (Задания). Исключение BadRequestException (HttpStatus.BAD_REQUEST) в " +
-            "случае неверных данных, и NotFoundException(HttpStatus.NOT_FOUND) кода объект не найден в БД")
+    @ApiOperation(value = "Обновление данных задания (TaskDto в формате JSON)," +
+            " если поля (кроме createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию, " +
+            "то отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST)." +
+            "В случае если полученный объект был корректный, но не получилось его обновить, отдаётся " +
+            "Runtime исключение ConflictException (HttpStatus.CONFLICT), а если по id задания " +
+            "не найдено ранее сохранённое заданиие, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)" +
+            "Также при обновлении задания, если поменялся исполнитель, то производится обращение к микросервису управления " +
+            "пользователями (users-service) для изменения статуса исполнителя." +
+            "\"Занят\"")
     public String updatePut(@RequestBody TaskDto taskDto) {
         if (taskDto.getId() < 1 ||
                 taskDto.getProject() < 1 ||
@@ -144,8 +163,8 @@ public class TasksController {
 
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Удаление данных TaskDto (Задания) по id. Исключение BadRequestException (HttpStatus.BAD_REQUEST)" +
-            "в случчае неверных данных, и NotFoundException(HttpStatus.NOT_FOUND) кода объект не найден в БД")
+    @ApiOperation(value = "Удаление задания (TaskDto) по id, если id < 0, то отдаётся Runtime исключение BadRequestException " +
+            "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
     public String delete(@PathVariable long id) {
         if (id < 1) {
             throw new BadRequestException();
@@ -160,15 +179,17 @@ public class TasksController {
     @GetMapping(path = Constants.COUNT_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Считает количество Заданий (TaskDto) в БД", response = Long.class)
+    @ApiOperation(value = "Получение количества всех хранимых заданий (TaskDto)", response = Long.class)
     public @ResponseBody long count() {
         return tasksRepository.count();
     }
 
     @GetMapping(path = Constants.PAGE_PREFIX + "/{page}/{size}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Считает коллекцию Заданий (TaskDto) с пагинацией )(/{page}/{size}) в БД. В случае page < 1 || " +
-            "size < 1 BadRequestException ((HttpStatus.BAD_REQUEST)). Если данные невозможно получить, то ConflictException(HttpStatus.CONFLICT)")
+    @ApiOperation(value = "Получение коллекции заданий (TaskDto) с пагинацией )(/{page}/{size}). В случае если page < 1 или " +
+            "size < 1 отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST). " +
+            "Если запрос корректный но не получилось получить коллекцию, то отдаётся " +
+            "Runtime исключение ConflictException(HttpStatus.CONFLICT).")
     public List<TaskDto> page(@PathVariable int page, @PathVariable int size) {
         //Проверяем номер страницы и размер
         if (page < 1 || size < 1) {
@@ -183,8 +204,11 @@ public class TasksController {
 
     @GetMapping(path = Constants.FOR_PREFIX + "/{implementer}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Считывание коллекции Заданий для конкретного исполнителя (e-mail). В случае некорректных данных" +
-            " -BadRequestException(HttpStatus.BAD_REQUEST). Если данные не найдены, то ConflictException(HttpStatus.CONFLICT)", response = List.class)
+    @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного исполнителя по его e-mail. " +
+            "В случае если email указан в неккоректной формате, то отдаётся Runtime исключение " +
+            "BadRequestException(HttpStatus.BAD_REQUEST). " +
+            "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
+            "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
     public List<TaskDto> tasksFor(@PathVariable String implementer) {
         if (StringUtils.isEmpty(implementer) || !this.checkEmail(implementer)) {
             throw new BadRequestException();
@@ -198,8 +222,11 @@ public class TasksController {
 
     @GetMapping(path = Constants.FROM_PREFIX + "/{author}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Считывание коллекции Заданий для конкретного автора (e-mail). В случае некорректных данных" +
-            " -BadRequestException(HttpStatus.BAD_REQUEST). Если данные не найдены, то ConflictException(HttpStatus.CONFLICT)")
+    @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного автора по его e-mail. " +
+            "В случае если email указан в неккоректной формате, то отдаётся Runtime исключение " +
+            "BadRequestException(HttpStatus.BAD_REQUEST). " +
+            "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
+            "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
     public List<TaskDto> tasksFrom(@PathVariable String author) {
         if (StringUtils.isEmpty(author) || !this.checkEmail(author)) {
             throw new BadRequestException();
@@ -213,8 +240,11 @@ public class TasksController {
 
     @GetMapping(path = Constants.IN_PREFIX + "/{project}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Считывание коллекции Заданий для конкретного проекта (id Проекта). В случае некорректных данных" +
-            " -BadRequestException(HttpStatus.BAD_REQUEST). Если данные не найдены, то ConflictException(HttpStatus.CONFLICT)")
+    @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного проекта по его id. " +
+            "В случае если id указан в неккоректной формате, то отдаётся Runtime исключение " +
+            "BadRequestException(HttpStatus.BAD_REQUEST). " +
+            "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
+            "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
     public List<TaskDto> tasksIn(@PathVariable int project) {
         if (project < 1) {
             throw new BadRequestException();
@@ -228,8 +258,11 @@ public class TasksController {
 
     @GetMapping(path = Constants.FILTER_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Считывание коллекции Заданий с фильтрацией по id проекта, автору (e-mail), исполнителю(e-mail). " +
-            " Если данные не найдены, то ConflictException(HttpStatus.CONFLICT)")
+    @ApiOperation(value = "Получение коллекции заданий (TaskDto) с фильтрацией по id проекта, автору (e-mail), исполнителю(e-mail). " +
+            "В случае если параметры указаны в неккоректной формате, то отдаётся Runtime исключение " +
+            "BadRequestException(HttpStatus.BAD_REQUEST). " +
+            "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
+            "Runtime исключениеConflictException(HttpStatus.CONFLICT).", response = List.class)
     public List<TaskDto> filter( @RequestParam(required = false, defaultValue = "0") int project,
                                  @RequestParam(required = false, defaultValue = "") String author,
                                  @RequestParam(required = false, defaultValue = "") String implementer) {

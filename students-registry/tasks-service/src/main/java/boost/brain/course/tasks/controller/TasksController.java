@@ -72,7 +72,7 @@ public class TasksController {
 
     @GetMapping(path = Constants.READ_PREFIX + "/{id}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Чтение задания в формате JSON по его id, если id < 0, то отдаётся Runtime исключение BadRequestException " +
+    @ApiOperation(value = "Чтение задания в формате JSON по его id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
             "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
     public TaskDto read(@PathVariable long id) {
         if (id < 1) {
@@ -93,7 +93,7 @@ public class TasksController {
             "то отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST)." +
             "В случае если полученный объект был корректный, но не получилось его обновить, отдаётся " +
             "Runtime исключение ConflictException (HttpStatus.CONFLICT), а если по id задания " +
-            "не найдено ранее сохранённое заданиие, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)" +
+            "не найдено ранее сохранённое задание, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)" +
             "Также при обновлении задания, если поменялся исполнитель, то производится обращение к микросервису управления " +
             "пользователями (users-service) для изменения статуса исполнителя." +
             "\"Занят\"")
@@ -131,7 +131,7 @@ public class TasksController {
             "то отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST)." +
             "В случае если полученный объект был корректный, но не получилось его обновить, отдаётся " +
             "Runtime исключение ConflictException (HttpStatus.CONFLICT), а если по id задания " +
-            "не найдено ранее сохранённое заданиие, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)" +
+            "не найдено ранее сохранённое задание, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)" +
             "Также при обновлении задания, если поменялся исполнитель, то производится обращение к микросервису управления " +
             "пользователями (users-service) для изменения статуса исполнителя." +
             "\"Занят\"")
@@ -163,7 +163,7 @@ public class TasksController {
 
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Удаление задания (TaskDto) по id, если id < 0, то отдаётся Runtime исключение BadRequestException " +
+    @ApiOperation(value = "Удаление задания (TaskDto) по id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
             "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
     public String delete(@PathVariable long id) {
         if (id < 1) {
@@ -205,7 +205,7 @@ public class TasksController {
     @GetMapping(path = Constants.FOR_PREFIX + "/{implementer}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного исполнителя по его e-mail. " +
-            "В случае если email указан в неккоректной формате, то отдаётся Runtime исключение " +
+            "В случае если email указан в некорректном формате, то отдаётся Runtime исключение " +
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
@@ -223,7 +223,7 @@ public class TasksController {
     @GetMapping(path = Constants.FROM_PREFIX + "/{author}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного автора по его e-mail. " +
-            "В случае если email указан в неккоректной формате, то отдаётся Runtime исключение " +
+            "В случае если email указан в некорректном формате, то отдаётся Runtime исключение " +
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
@@ -241,7 +241,7 @@ public class TasksController {
     @GetMapping(path = Constants.IN_PREFIX + "/{project}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного проекта по его id. " +
-            "В случае если id указан в неккоректной формате, то отдаётся Runtime исключение " +
+            "В случае если id указан в некорректном формате, то отдаётся Runtime исключение " +
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
@@ -259,10 +259,10 @@ public class TasksController {
     @GetMapping(path = Constants.FILTER_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Получение коллекции заданий (TaskDto) с фильтрацией по id проекта, автору (e-mail), исполнителю(e-mail). " +
-            "В случае если параметры указаны в неккоректной формате, то отдаётся Runtime исключение " +
+            "В случае если параметры указаны в некорректном формате, то отдаётся Runtime исключение " +
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
-            "Runtime исключениеConflictException(HttpStatus.CONFLICT).", response = List.class)
+            "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
     public List<TaskDto> filter( @RequestParam(required = false, defaultValue = "0") int project,
                                  @RequestParam(required = false, defaultValue = "") String author,
                                  @RequestParam(required = false, defaultValue = "") String implementer) {

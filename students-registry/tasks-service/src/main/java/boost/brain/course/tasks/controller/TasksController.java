@@ -9,6 +9,8 @@ import boost.brain.course.tasks.controller.exceptions.NotFoundException;
 import boost.brain.course.tasks.repository.TasksRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.java.Log;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,11 @@ public class TasksController {
             "Runtime исключение ConflictException (HttpStatus.CONFLICT). Также при добавлении задания, производится " +
             "обращение к микросервису управления пользователями (users-service) для изменения статуса исполнителя." +
             "\"Занят\"")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Создан TaskDto объект.", response = TaskDto.class),
+            @ApiResponse(code = 409, message = "Поля (кроме id, createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию."),
+            @ApiResponse(code = 400, message = "Полученный объект был корректный, но не получилось его добавить.")
+    })
     public TaskDto create(@RequestBody TaskDto taskDto) {
         if (taskDto.getProject() < 1 ||
                 StringUtils.isEmpty(taskDto.getAuthor()) ||
@@ -74,6 +81,11 @@ public class TasksController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Чтение задания в формате JSON по его id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
             "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Передан TaskDto объект из БД.", response = TaskDto.class),
+            @ApiResponse(code = 400, message = "Поле id неверное (<1)."),
+            @ApiResponse(code = 404, message = "Объект TaskDto в БД не найден.")
+    })
     public TaskDto read(@PathVariable long id) {
         if (id < 1) {
             throw new BadRequestException();
@@ -97,6 +109,12 @@ public class TasksController {
             "Также при обновлении задания, если поменялся исполнитель, то производится обращение к микросервису управления " +
             "пользователями (users-service) для изменения статуса исполнителя." +
             "\"Занят\"")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Обновлен TaskDto объект.", response = TaskDto.class),
+            @ApiResponse(code = 400, message = "Поля (кроме id, createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию."),
+            @ApiResponse(code = 404, message = "Объект TaskDto в БД не найден."),
+            @ApiResponse(code = 409, message = "Полученный объект был корректный, но не получилось его обновить.")
+    })
     public String update(@RequestBody TaskDto taskDto) {
         if (taskDto.getId() < 1 ||
                 taskDto.getProject() < 1 ||
@@ -135,6 +153,12 @@ public class TasksController {
             "Также при обновлении задания, если поменялся исполнитель, то производится обращение к микросервису управления " +
             "пользователями (users-service) для изменения статуса исполнителя." +
             "\"Занят\"")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Обновлен TaskDto объект.", response = TaskDto.class),
+            @ApiResponse(code = 400, message = "Поля (кроме id, createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию."),
+            @ApiResponse(code = 404, message = "Объект TaskDto в БД не найден."),
+            @ApiResponse(code = 409, message = "Полученный объект был корректный, но не получилось его обновить.")
+    })
     public String updatePut(@RequestBody TaskDto taskDto) {
         if (taskDto.getId() < 1 ||
                 taskDto.getProject() < 1 ||
@@ -165,6 +189,11 @@ public class TasksController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Удаление задания (TaskDto) по id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
             "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Удален TaskDto объект.", response = String.class),
+            @ApiResponse(code = 400, message = "Запрашиваемый id пустой или не проходит валидацию."),
+            @ApiResponse(code = 404, message = "Объект TaskDto c запрашиваемым id в БД не найден."),
+    })
     public String delete(@PathVariable long id) {
         if (id < 1) {
             throw new BadRequestException();
@@ -180,7 +209,8 @@ public class TasksController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Получение количества всех хранимых заданий (TaskDto)", response = Long.class)
-    public @ResponseBody long count() {
+    public @ResponseBody
+    long count() {
         return tasksRepository.count();
     }
 
@@ -190,12 +220,17 @@ public class TasksController {
             "size < 1 отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Коллекция с постраничным выводом.", response = List.class),
+            @ApiResponse(code = 400, message = "Страница <1 или размер <1"),
+            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
+    })
     public List<TaskDto> page(@PathVariable int page, @PathVariable int size) {
         //Проверяем номер страницы и размер
         if (page < 1 || size < 1) {
             throw new BadRequestException();
         }
-        List<TaskDto> result = tasksRepository.getPage(page,size);
+        List<TaskDto> result = tasksRepository.getPage(page, size);
         if (result == null) {
             throw new ConflictException();
         }
@@ -209,6 +244,11 @@ public class TasksController {
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Коллекция для запрашиваемого исполнителя.", response = List.class),
+            @ApiResponse(code = 400, message = "Неверный формат email или email пуст"),
+            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
+    })
     public List<TaskDto> tasksFor(@PathVariable String implementer) {
         if (StringUtils.isEmpty(implementer) || !this.checkEmail(implementer)) {
             throw new BadRequestException();
@@ -227,6 +267,11 @@ public class TasksController {
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Коллекция для запрашиваемого автора.", response = List.class),
+            @ApiResponse(code = 400, message = "Неверный формат email или email пуст"),
+            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
+    })
     public List<TaskDto> tasksFrom(@PathVariable String author) {
         if (StringUtils.isEmpty(author) || !this.checkEmail(author)) {
             throw new BadRequestException();
@@ -245,6 +290,11 @@ public class TasksController {
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Коллекция для запрашиваемого id проекта.", response = List.class),
+            @ApiResponse(code = 400, message = "Неверный id проектат"),
+            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
+    })
     public List<TaskDto> tasksIn(@PathVariable int project) {
         if (project < 1) {
             throw new BadRequestException();
@@ -263,9 +313,13 @@ public class TasksController {
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
-    public List<TaskDto> filter( @RequestParam(required = false, defaultValue = "0") int project,
-                                 @RequestParam(required = false, defaultValue = "") String author,
-                                 @RequestParam(required = false, defaultValue = "") String implementer) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Коллекция для запданного фильтра.", response = List.class),
+            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
+    })
+    public List<TaskDto> filter(@RequestParam(required = false, defaultValue = "0") int project,
+                                @RequestParam(required = false, defaultValue = "") String author,
+                                @RequestParam(required = false, defaultValue = "") String implementer) {
         List<TaskDto> result = tasksRepository.filter(project, author, implementer);
         if (result == null) {
             throw new ConflictException();

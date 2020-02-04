@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping(Constants.TASKS_CONTROLLER_PREFIX)
 @Api(value = "REST контроллер для управления заданиями (TaskDto)")
-public class TasksController {
+public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <TaskDto>{
 
     private final TasksRepository tasksRepository;
     @Value("${users-service-url}")
@@ -43,18 +43,7 @@ public class TasksController {
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Добавление нового задания в формате JSON, если поля (кроме id, createDate и updateDate) " +
-            "в передаваемом объекте пустые или не проходят валидацию, то отдаётся Runtime исключение " +
-            "BadRequestException (HttpStatus.BAD_REQUEST). " +
-            "В случае если полученный объект был корректный, но не получилось его добавить, отдаётся " +
-            "Runtime исключение ConflictException (HttpStatus.CONFLICT). Также при добавлении задания, производится " +
-            "обращение к микросервису управления пользователями (users-service) для изменения статуса исполнителя." +
-            "\"Занят\"")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Создан TaskDto объект.", response = TaskDto.class),
-            @ApiResponse(code = 409, message = "Поля (кроме id, createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию."),
-            @ApiResponse(code = 400, message = "Полученный объект был корректный, но не получилось его добавить.")
-    })
+
     public TaskDto create(@RequestBody TaskDto taskDto) {
         if (taskDto.getProject() < 1 ||
                 StringUtils.isEmpty(taskDto.getAuthor()) ||

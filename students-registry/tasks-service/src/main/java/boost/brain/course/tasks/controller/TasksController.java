@@ -1,28 +1,33 @@
 package boost.brain.course.tasks.controller;
 
+import boost.brain.course.common.tasks.TaskDto;
 import boost.brain.course.common.users.UserStatus;
 import boost.brain.course.tasks.Constants;
-import boost.brain.course.common.tasks.TaskDto;
 import boost.brain.course.tasks.controller.exceptions.BadRequestException;
 import boost.brain.course.tasks.controller.exceptions.ConflictException;
 import boost.brain.course.tasks.controller.exceptions.NotFoundException;
 import boost.brain.course.tasks.repository.TasksRepository;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.extern.java.Log;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+
+/**
+ * RestController сервиса обработки Заданий.
+ * в интерфейсе CommonApiMethodSwaggerAnnotationsAble содержится информация для сервиса документации Swagger
+ */
 
 @Log
 @RestController
@@ -43,7 +48,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-
     public TaskDto create(@RequestBody TaskDto taskDto) {
         if (taskDto.getProject() < 1 ||
                 StringUtils.isEmpty(taskDto.getAuthor()) ||
@@ -68,13 +72,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
 
     @GetMapping(path = Constants.READ_PREFIX + "/{id}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Чтение задания в формате JSON по его id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
-            "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Передан TaskDto объект из БД.", response = TaskDto.class),
-            @ApiResponse(code = 400, message = "Поле id неверное (<1)."),
-            @ApiResponse(code = 404, message = "Объект TaskDto в БД не найден.")
-    })
     public TaskDto read(@PathVariable long id) {
         if (id < 1) {
             throw new BadRequestException();
@@ -89,21 +86,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
     @PatchMapping(path = Constants.UPDATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Обновление данных задания (TaskDto в формате JSON)," +
-            " если поля (кроме createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию, " +
-            "то отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST)." +
-            "В случае если полученный объект был корректный, но не получилось его обновить, отдаётся " +
-            "Runtime исключение ConflictException (HttpStatus.CONFLICT), а если по id задания " +
-            "не найдено ранее сохранённое задание, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)" +
-            "Также при обновлении задания, если поменялся исполнитель, то производится обращение к микросервису управления " +
-            "пользователями (users-service) для изменения статуса исполнителя." +
-            "\"Занят\"")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Обновлен TaskDto объект.", response = TaskDto.class),
-            @ApiResponse(code = 400, message = "Поля (кроме id, createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию."),
-            @ApiResponse(code = 404, message = "Объект TaskDto в БД не найден."),
-            @ApiResponse(code = 409, message = "Полученный объект был корректный, но не получилось его обновить.")
-    })
     public String update(@RequestBody TaskDto taskDto) {
         if (taskDto.getId() < 1 ||
                 taskDto.getProject() < 1 ||
@@ -133,22 +115,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
     @PutMapping(path = Constants.PUT_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Обновление данных задания (TaskDto в формате JSON)," +
-            " если поля (кроме createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию, " +
-            "то отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST)." +
-            "В случае если полученный объект был корректный, но не получилось его обновить, отдаётся " +
-            "Runtime исключение ConflictException (HttpStatus.CONFLICT), а если по id задания " +
-            "не найдено ранее сохранённое задание, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)" +
-            "Также при обновлении задания, если поменялся исполнитель, то производится обращение к микросервису управления " +
-            "пользователями (users-service) для изменения статуса исполнителя." +
-            "\"Занят\"")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Обновлен TaskDto объект.", response = TaskDto.class),
-            @ApiResponse(code = 400, message = "Поля (кроме id, createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию."),
-            @ApiResponse(code = 404, message = "Объект TaskDto в БД не найден."),
-            @ApiResponse(code = 409, message = "Полученный объект был корректный, но не получилось его обновить.")
-    })
-    public String updatePut(@RequestBody TaskDto taskDto) {
+    public String patch(@RequestBody TaskDto taskDto) {
         if (taskDto.getId() < 1 ||
                 taskDto.getProject() < 1 ||
                 StringUtils.isEmpty(taskDto.getAuthor()) ||
@@ -176,13 +143,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
 
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Удаление задания (TaskDto) по id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
-            "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Удален TaskDto объект.", response = String.class),
-            @ApiResponse(code = 400, message = "Запрашиваемый id пустой или не проходит валидацию."),
-            @ApiResponse(code = 404, message = "Объект TaskDto c запрашиваемым id в БД не найден."),
-    })
     public String delete(@PathVariable long id) {
         if (id < 1) {
             throw new BadRequestException();
@@ -197,7 +157,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
     @GetMapping(path = Constants.COUNT_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Получение количества всех хранимых заданий (TaskDto)", response = Long.class)
     public @ResponseBody
     long count() {
         return tasksRepository.count();
@@ -205,15 +164,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
 
     @GetMapping(path = Constants.PAGE_PREFIX + "/{page}/{size}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Получение коллекции заданий (TaskDto) с пагинацией )(/{page}/{size}). В случае если page < 1 или " +
-            "size < 1 отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST). " +
-            "Если запрос корректный но не получилось получить коллекцию, то отдаётся " +
-            "Runtime исключение ConflictException(HttpStatus.CONFLICT).")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Коллекция с постраничным выводом.", response = List.class),
-            @ApiResponse(code = 400, message = "Страница <1 или размер <1"),
-            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
-    })
     public List<TaskDto> page(@PathVariable int page, @PathVariable int size) {
         //Проверяем номер страницы и размер
         if (page < 1 || size < 1) {
@@ -228,16 +178,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
 
     @GetMapping(path = Constants.FOR_PREFIX + "/{implementer}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного исполнителя по его e-mail. " +
-            "В случае если email указан в некорректном формате, то отдаётся Runtime исключение " +
-            "BadRequestException(HttpStatus.BAD_REQUEST). " +
-            "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
-            "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Коллекция для запрашиваемого исполнителя.", response = List.class),
-            @ApiResponse(code = 400, message = "Неверный формат email или email пуст"),
-            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
-    })
     public List<TaskDto> tasksFor(@PathVariable String implementer) {
         if (StringUtils.isEmpty(implementer) || !this.checkEmail(implementer)) {
             throw new BadRequestException();
@@ -251,16 +191,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
 
     @GetMapping(path = Constants.FROM_PREFIX + "/{author}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного автора по его e-mail. " +
-            "В случае если email указан в некорректном формате, то отдаётся Runtime исключение " +
-            "BadRequestException(HttpStatus.BAD_REQUEST). " +
-            "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
-            "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Коллекция для запрашиваемого автора.", response = List.class),
-            @ApiResponse(code = 400, message = "Неверный формат email или email пуст"),
-            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
-    })
     public List<TaskDto> tasksFrom(@PathVariable String author) {
         if (StringUtils.isEmpty(author) || !this.checkEmail(author)) {
             throw new BadRequestException();
@@ -274,16 +204,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
 
     @GetMapping(path = Constants.IN_PREFIX + "/{project}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Получение коллекции заданий (TaskDto) для конкретного проекта по его id. " +
-            "В случае если id указан в некорректном формате, то отдаётся Runtime исключение " +
-            "BadRequestException(HttpStatus.BAD_REQUEST). " +
-            "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
-            "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Коллекция для запрашиваемого id проекта.", response = List.class),
-            @ApiResponse(code = 400, message = "Неверный id проектат"),
-            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
-    })
     public List<TaskDto> tasksIn(@PathVariable int project) {
         if (project < 1) {
             throw new BadRequestException();
@@ -297,15 +217,6 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
 
     @GetMapping(path = Constants.FILTER_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "Получение коллекции заданий (TaskDto) с фильтрацией по id проекта, автору (e-mail), исполнителю(e-mail). " +
-            "В случае если параметры указаны в некорректном формате, то отдаётся Runtime исключение " +
-            "BadRequestException(HttpStatus.BAD_REQUEST). " +
-            "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
-            "Runtime исключение ConflictException(HttpStatus.CONFLICT).", response = List.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Коллекция для запданного фильтра.", response = List.class),
-            @ApiResponse(code = 409, message = "Нет данных для вывода коллекции.")
-    })
     public List<TaskDto> filter(@RequestParam(required = false, defaultValue = "0") int project,
                                 @RequestParam(required = false, defaultValue = "") String author,
                                 @RequestParam(required = false, defaultValue = "") String implementer) {

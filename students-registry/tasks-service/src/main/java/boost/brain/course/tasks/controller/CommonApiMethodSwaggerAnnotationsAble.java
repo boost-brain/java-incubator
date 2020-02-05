@@ -14,10 +14,10 @@ import java.util.List;
 
 @Api
 public interface CommonApiMethodSwaggerAnnotationsAble<T> {
-    @ApiOperation(value = "Добавление новогоЗадания в формате JSON, если поля (кроме id, createDate и updateDate) " +
+    @ApiOperation(value = "Добавление нового задания в формате JSON, если поля (кроме id, createDate и updateDate) " +
             "в передаваемом объекте пустые или не проходят валидацию, то отдаётся Runtime исключение " +
             "BadRequestException (HttpStatus.BAD_REQUEST). В случае если полученный объект был корректный, но не получилось его добавить, отдаётся " +
-            "Runtime исключение ConflictException (HttpStatus.CONFLICT). Также при добавленииЗадания, производится " +
+            "Runtime исключение ConflictException (HttpStatus.CONFLICT). Также при добавлении задания, производится " +
             "обращение к микросервису управления пользователями (users-service) для изменения статуса исполнителя." +
             "\"Занят\"")
     @ApiResponses(value = {
@@ -25,7 +25,7 @@ public interface CommonApiMethodSwaggerAnnotationsAble<T> {
             @ApiResponse(code = 409, message = "Поля (кроме id, createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию."),
             @ApiResponse(code = 400, message = "Полученный объект был корректный, но не получилось его добавить.")
     })
-    T create(@RequestBody T Dto);
+    T create(@RequestBody T taskDto);
 
 
     @ApiOperation(value = "Чтение задания в формате JSON по его id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
@@ -52,7 +52,7 @@ public interface CommonApiMethodSwaggerAnnotationsAble<T> {
             @ApiResponse(code = 404, message = "Объект  TaskDto в БД не найден."),
             @ApiResponse(code = 409, message = "Полученный объект был корректный, но не получилось его обновить.")
     })
-    String update(@RequestBody T Dto);
+    String update(@RequestBody T taskDto);
 
     @ApiOperation(value = "Обновление данных задания ( TaskDto в формате JSON)," +
             " если поля (кроме createDate и updateDate) в передаваемом объекте пустые или не проходят валидацию, " +
@@ -69,21 +69,21 @@ public interface CommonApiMethodSwaggerAnnotationsAble<T> {
             @ApiResponse(code = 404, message = "Объект  TaskDto в БД не найден."),
             @ApiResponse(code = 409, message = "Полученный объект был корректный, но не получилось его обновить.")
     })
-    String patch(@RequestBody T Dto);
+    String put(@RequestBody T taskDto);
 
-    @ApiOperation(value = "Удаление задания ( TaskDto) по id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
+    @ApiOperation(value = "Удаление задания( TaskDto) по id, если id < 1, то отдаётся Runtime исключение BadRequestException " +
             "(HttpStatus.BAD_REQUEST). Если задание не найдено, то отдаётся Runtime исключение NotFoundException (HttpStatus.NOT_FOUND)")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Удален  TaskDto объект.", response = String.class),
+            @ApiResponse(code = 200, message = "Удален TaskDto объект.", response = String.class),
             @ApiResponse(code = 400, message = "Запрашиваемый id пустой или не проходит валидацию."),
-            @ApiResponse(code = 404, message = "Объект  TaskDto c запрашиваемым id в БД не найден."),
+            @ApiResponse(code = 404, message = "Объект TaskDto c запрашиваемым id в БД не найден."),
     })
     String delete(@PathVariable long id);
 
     @ApiOperation(value = "Получение количества всех хранимых заданий ( TaskDto)", response = Long.class)
     long count();
 
-    @ApiOperation(value = "Получение коллекции заданий ( TaskDto) с пагинацией )(/{page}/{size}). В случае если page < 1 или " +
+    @ApiOperation(value = "Получение коллекции заданий( TaskDto) с пагинацией )(/{page}/{size}). В случае если page < 1 или " +
             "size < 1 отдаётся Runtime исключение BadRequestException (HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный но не получилось получить коллекцию, то отдаётся " +
             "Runtime исключение ConflictException(HttpStatus.CONFLICT).")
@@ -95,7 +95,7 @@ public interface CommonApiMethodSwaggerAnnotationsAble<T> {
     List<T> page(@PathVariable int page, @PathVariable int size);
 
 
-    @ApiOperation(value = "Получение коллекции заданий ( TaskDto) для конкретного исполнителя по его e-mail. " +
+    @ApiOperation(value = "Получение коллекции заданий( TaskDto) для конкретного исполнителя по его e-mail. " +
             "В случае если email указан в некорректном формате, то отдаётся Runtime исключение " +
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
@@ -107,7 +107,7 @@ public interface CommonApiMethodSwaggerAnnotationsAble<T> {
     })
     List<T> tasksFor(@PathVariable String implementer);
 
-    @ApiOperation(value = "Получение коллекции заданий ( TaskDto) для конкретного автора по его e-mail. " +
+    @ApiOperation(value = "Получение коллекции заданий( TaskDto) для конкретного автора по его e-mail. " +
             "В случае если email указан в некорректном формате, то отдаётся Runtime исключение " +
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
@@ -119,7 +119,7 @@ public interface CommonApiMethodSwaggerAnnotationsAble<T> {
     })
     List<T> tasksFrom(@PathVariable String author);
 
-    @ApiOperation(value = "Получение коллекции заданий ( TaskDto) для конкретного проекта по его id. " +
+    @ApiOperation(value = "Получение коллекции заданий( TaskDto) для конкретного проекта по его id. " +
             "В случае если id указан в некорректном формате, то отдаётся Runtime исключение " +
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +
@@ -132,7 +132,7 @@ public interface CommonApiMethodSwaggerAnnotationsAble<T> {
     List<T> tasksIn(@PathVariable int project);
 
 
-    @ApiOperation(value = "Получение коллекции заданий ( TaskDto) с фильтрацией по id проекта, автору (e-mail), исполнителю(e-mail). " +
+    @ApiOperation(value = "Получение коллекции заданий( TaskDto) с фильтрацией по id проекта, автору (e-mail), исполнителю(e-mail). " +
             "В случае если параметры указаны в некорректном формате, то отдаётся Runtime исключение " +
             "BadRequestException(HttpStatus.BAD_REQUEST). " +
             "Если запрос корректный, но не получилось получить коллекцию, то отдаётся " +

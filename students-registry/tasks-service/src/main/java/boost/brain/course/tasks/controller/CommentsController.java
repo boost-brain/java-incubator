@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * RestController сервиса обработки комментариев к Заданиям.
+ * в интерфейсе CommentApiMethodSwaggerAnnotationsAble содержится информация для сервиса документации Swagger
+ */
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(Constants.COMMENTS_CONTROLLER_PREFIX)
-public class CommentsController {
+public class CommentsController implements CommentApiMethodSwaggerAnnotationsAble{
 
     private final CommentsRepository commentsRepository;
 

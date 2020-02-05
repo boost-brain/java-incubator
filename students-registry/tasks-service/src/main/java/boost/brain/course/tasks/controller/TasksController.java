@@ -115,7 +115,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
     @PutMapping(path = Constants.PUT_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public String patch(@RequestBody TaskDto taskDto) {
+    public String put(@RequestBody TaskDto taskDto) {
         if (taskDto.getId() < 1 ||
                 taskDto.getProject() < 1 ||
                 StringUtils.isEmpty(taskDto.getAuthor()) ||

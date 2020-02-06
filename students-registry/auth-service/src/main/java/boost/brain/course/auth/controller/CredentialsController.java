@@ -4,16 +4,22 @@ import boost.brain.course.auth.Constants;
 import boost.brain.course.auth.exception.NotFoundException;
 import boost.brain.course.auth.repository.CredentialsRepository;
 import boost.brain.course.common.auth.Credentials;
+import io.swagger.annotations.Api;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+/**
+ * REST контроллер сервиса управления полномочиями (Credentials).
+ * в интерфейсе CredentialsControllerApiMethodSwaggerAnnotation содержится информация для сервиса документации Swagger
+ */
 
 @RestController
 @Log
 @RequestMapping(path = Constants.CREDENTIALS_CONTROLLER_PREFIX)
-public class CredentialsController {
+@Api(value = "REST контроллер сервиса управления полномочиями (Credentials)")
+public class CredentialsController implements CredentialsControllerApiMethodSwaggerAnnotation{
     private final CredentialsRepository credentialsRepository;
 
     @Autowired

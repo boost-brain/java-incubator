@@ -19,10 +19,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * RestController сервиса обработки данных пользователей (User).
+ * в интерфейсе UserControllerApiMethodSwaggerAnnotationsAble содержится информация для сервиса документации Swagger
+ */
+
 @Log
 @RestController
 @RequestMapping(Constants.USERS_CONTROLLER_PREFIX)
-public class UsersController {
+public class UsersController implements UserControllerApiMethodSwaggerAnnotationsAble{
 
     private final UsersRepository usersRepository;
 

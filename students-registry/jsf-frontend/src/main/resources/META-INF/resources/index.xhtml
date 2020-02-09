@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="WEB-INF/common_template.xhtml">
+    <ui:define name="page_title">Главная страницы</ui:define>
+
+    <ui:define name="page_body">
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Вход в личный кабинет" url="/secured/main"/>
+                    <p:menuitem value="Регистрация" url="register-page.xhtml"/>
+                </p:menubar>
+            </h:form>
+
+    </ui:define>
+</ui:composition>

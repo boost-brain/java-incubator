@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:proxy}
+zuul:
+  debug:
+    request: true
+  routes:
+    auth-service:
+      path: /api/auth/**
+      url: http://auth-service:8080/api/login
+    auth-credentials:
+      path: /api/credentials/**
+      url: http://auth-service:8080/api/credentials
+    projects-service:
+      path: /api/projects/**
+      url: http://projects-service:8080
+    register-service:
+      path: /api/register/**
+      url: http://register-service:8080/api/register
+    tasks-service:
+      path: /api/comments/**
+      url:  http://tasks-service:8080/api/comments
+    tasks-service-tasks:
+      path: /api/tasks/**
+      url:  http://tasks-service:8080/api/tasks
+    users-service:
+      path: /api/users/**
+      url:  http://users-service:8080/api/users
+    messages-service:
+      path: /api/messages/**
+      url:  http://messages-service:8080/api/messages
+
+server:
+  port: ${SERVER_PORT:9000}

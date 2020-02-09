@@ -1,0 +1,23 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  application:
+    name: ${SPRING_APPLICATION_NAME:tasks-service}
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_LOGIN:postgres}
+    password: ${DB_PASSWORD:postgres}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:students}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+auth-login-check-url: http://${AUTH_SERV_LOGIN_CHECK_URL:localhost:8080/api/login/check/}
+users-service-url: http://${USERS_SERV_URL:localhost:8080/api/users}

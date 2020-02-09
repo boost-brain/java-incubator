@@ -1,0 +1,15 @@
+spring:
+    datasource:
+        password: ${DB_PASSWORD:postgres}
+        url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:students}
+        username: ${DB_LOGIN:postgres}
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+server:
+    port: ${SERVER_PORT:8080}

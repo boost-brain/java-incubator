@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xml:lang="en" lang="en">
+<h:head>
+    <title>tasks for user</title>
+</h:head>
+<h:body>
+    <ui:insert name = "header" >
+        <ui:include src = "/secured/logout.xhtml" />
+    </ui:insert>
+    <h:form>
+        <p:dataTable var="task" value="#{tasksForUserView.tasks}" rows="5"
+                     paginator="true"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,20,50,100">
+            <p:column style="width:auto; max-width: 50px; min-width: 10px"  headerText="Id" sortBy="#{task.id}">
+                <h:outputText value="#{task.id}" />
+            </p:column>
+            <p:column headerText="Author" sortBy="#{task.author}">
+                <h:outputText value="#{tasksForUserView.getUserGitHubId(task.author)}" />
+            </p:column>
+            <p:column headerText="Name" sortBy="#{task.name}">
+                <h:outputText value="#{task.name}" />
+            </p:column>
+            <p:column headerText="Project" sortBy="#{task.project}">
+                <h:outputText value="#{tasksForUserView.getProjectNameForId(task.project)}" />
+            </p:column>
+            <p:column headerText="CreateDate" sortBy="#{task.createDate}">
+                <h:outputText value="#{task.createDate}">
+                    <f:convertDateTime dateStyle="long" pattern = "dd-MM-yyyy hh:mm:ss" />
+                </h:outputText>
+            </p:column>
+            <p:column headerText="UpdateDate" sortBy="#{task.updateDate}">
+                <h:outputText value="#{task.updateDate}" >
+                    <f:convertDateTime dateStyle="long" pattern = "dd-MM-yyyy hh:mm:ss" />
+                </h:outputText>
+            </p:column>
+            <f:facet name="paginatorTopLeft">
+                <p:commandButton type="button" icon="pi pi-refresh" />
+            </f:facet>
+
+            <f:facet name="paginatorBottomRight">
+                <p:commandButton type="button" icon="pi pi-cloud-upload" />
+            </f:facet>
+        </p:dataTable>
+    </h:form>
+</h:body>
+</html>

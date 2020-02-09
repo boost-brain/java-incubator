@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  application:
+    name: ${SPRING_APPLICATION_NAME:users-service-test-util}
+
+server:
+  port: 9090

@@ -72,7 +72,6 @@
 
 
     <modules>
-        <module>frontend</module>
         <module>users-service</module>
         <module>register-service</module>
         <module>auth-service</module>

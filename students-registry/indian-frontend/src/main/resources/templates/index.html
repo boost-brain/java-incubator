@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Проект "Реестр студентов"</title>
+    <div th:insert="~{insertion :: #css}"></div>
+</head>
+<body>
+<H1>
+    <div th:text="${actiontext}">re</div>
+</H1>
+<form action="#" th:action="@{/entering}" th:object="${credentials}" method="post">
+    <input type="email" th:field="*{login} ">
+    <input type="password" th:field="*{password}">
+    <input type="submit" value="Вход"/> <input type="reset" value="Reset"/>
+</form>
+</body>
+</html>

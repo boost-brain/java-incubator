@@ -19,19 +19,18 @@ services:
     ports:
       - 9000:9000
 
+  indian-frontend:
+    image: indian-frontend:latest
+    depends_on:
+      - proxy
+    ports:
+    - 80:8080
   frontend:
     image: frontend:latest
     depends_on:
       - proxy
       - register-service
-    ports:
-      - 80:8080
-
-  jsf-frontend:
-    image: jsf-frontend:latest
-    depends_on:
-      - users-service
-      - register-service
+      -  users-service
       - auth-service
       - projects-service
       - tasks-service
@@ -44,7 +43,7 @@ services:
       - PROJECTS_SERV_URL=projects-service:8080
       - MESSAGES_SERV_URL=messages-service:8080/api/messages
     ports:
-      - 8080:8080
+      - 80:8080
 
   auth-service:
     image: auth-service:latest

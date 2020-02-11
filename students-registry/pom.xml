@@ -80,7 +80,7 @@
         <module>common-types</module>
         <module>common-auth</module>
         <module>projects-service</module>
-        <module>jsf-frontend</module>
+<!--        <module>jsf-frontend</module>-->
         <module>messages-service</module>
         <module>indian-frontend</module>
 

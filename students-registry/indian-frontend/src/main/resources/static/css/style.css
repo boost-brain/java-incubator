@@ -1,3 +1,19 @@
 H1 {
-    color: blueviolet;
+
+}
+
+.topmenu {
+    color: green;
+}
+
+.footer {
+    color: red;
+}
+
+.registration {
+    color: blue;
+}
+
+.actiontext {
+    text-decoration-style: double;
 }

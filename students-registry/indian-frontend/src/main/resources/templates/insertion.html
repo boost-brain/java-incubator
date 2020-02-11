@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org/" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <div id="css">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </div>
 </head>
 <body>
-<div id="css">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+
+
+<div id="top">
+    <div class="topmenu">
+        <h1>Здесь будет Верхнее меню</h1>
+    </div>
 </div>
+
+<div id="bottom">
+    <div class="footer">
+        <h1>Здесь будет Подвал</h1>
+    </div>
+</div>
+
 </body>
 </html>

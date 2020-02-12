@@ -105,8 +105,6 @@ public class IndexController {
     /**
      * Проверка ответа на валидность
      *
-     * @param responseEntity
-     * @return
      */
     private boolean checkResponseForRegistrationAndLoging(ResponseEntity<Session> responseEntity) {
         return Objects.requireNonNull(responseEntity.getBody()).getSessionId() == null;

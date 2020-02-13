@@ -125,11 +125,15 @@ public class IndexController {
         return credentials;
     }
 
-    @GetMapping("allusers")
+    @GetMapping("showallusers")
     public String showAllUsers(Model model) {
         ResponseEntity<List> responseEntity = restTemplate.getForEntity(Constants.USER_SERVER + "api/users/users-all",
                 List.class);
+//        List <UserDtoWithNormalDate>userDtoList = (List<UserDtoWithNormalDate>) responseEntity.getBody().stream()
+//                .map(UserDtoWithNormalDate::UserDtoToUserDtoWithNormalDate)
+//                .collect(Collectors.toList());
         List userDtoList = responseEntity.getBody();
+
         model.addAttribute("actiontext", "Реестр студентов");
         model.addAttribute("userlist", userDtoList);
         return "showallusers";

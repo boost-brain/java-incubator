@@ -7,7 +7,7 @@
     <div th:insert="~{insertion :: #css}"></div>
 </head>
 <body>
-<container>
+<div class="container-fluid">
 
     <div th:insert="~{insertion :: #top}"></div>
 
@@ -36,7 +36,12 @@
             <td><span th:text="${user.name}"> name </span></td>
             <td><span th:text="${user.gitHubId}"> gitHubId </span></td>
             <td><span th:text="${user.hours}"> hours </span></td>
-            <td><span th:text="${user.createDate}"> createDate </span></td>
+            <td>
+                <!--            <td><script th:inline="javascript">-->
+
+                <!--                // </script>-->
+            <td id="createdate">22555444455</td>
+            </td>
             <td><span th:text="${user.updateDate}"> updateDate </span></td>
             <td><span th:text="${user.status}"> status </span></td>
         </tr>
@@ -44,6 +49,7 @@
     </table>
 
     <div th:insert="~{insertion :: #bottom}"></div>
-</container>
+</div>
+<div th:insert="~{insertion :: #boforeendbody}"></div>
 </body>
 </html>

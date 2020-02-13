@@ -4,9 +4,13 @@ import boost.brain.course.Constants;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
 import boost.brain.course.common.register.UserRegDto;
+import boost.brain.course.common.users.UserDto;
+import boost.brain.course.dto.UserDtoWithNormalDate;
 import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
@@ -16,8 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Log
 @Controller
@@ -104,7 +110,6 @@ public class IndexController {
 
     /**
      * Проверка ответа на валидность
-     *
      */
     private boolean checkResponseForRegistrationAndLoging(ResponseEntity<Session> responseEntity) {
         return Objects.requireNonNull(responseEntity.getBody()).getSessionId() == null;
@@ -125,13 +130,15 @@ public class IndexController {
 
     @GetMapping("showallusers")
     public String showAllUsers(Model model) {
-        ResponseEntity<List> responseEntity = restTemplate.getForEntity(Constants.USER_SERVER + "api/users/users-all",
-                List.class);
-//        List <UserDtoWithNormalDate>userDtoList = (List<UserDtoWithNormalDate>) responseEntity.getBody().stream()
-//                .map(UserDtoWithNormalDate::UserDtoToUserDtoWithNormalDate)
-//                .collect(Collectors.toList());
-        List userDtoList = responseEntity.getBody();
-
+        List<UserDtoWithNormalDate> userDtoList = Objects.requireNonNull(
+                restTemplate.exchange(RequestEntity
+                                .get(URI.create(Constants.USER_SERVER + "api/users/users-all"))
+                                .build(),
+                        new ParameterizedTypeReference<List<UserDto>>() {
+                        }).getBody())
+                .stream()
+                .map(UserDtoWithNormalDate::UserDtoToUserDtoWithNormalDate)
+                .collect(Collectors.toList());
         model.addAttribute("actiontext", "Реестр студентов");
         model.addAttribute("userlist", userDtoList);
         return "showallusers";

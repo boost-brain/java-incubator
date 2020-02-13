@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../static/css/style.css"/>
     <meta charset="UTF-8">
-    <title>Проект "Реестр студентов"</title>
+    <title>Проект "Реестр студентов"</title>5
     <div th:insert="~{insertion :: #css}"></div>
 </head>
 <body>
@@ -36,10 +36,7 @@
             <td><span th:text="${user.name}"> name </span></td>
             <td><span th:text="${user.gitHubId}"> gitHubId </span></td>
             <td><span th:text="${user.hours}"> hours </span></td>
-            <td>
-                <script> longdate_to_string(455666555)</script>
-
-            </td>
+            <td><span th:text="${user.createDate}"> createDate </span></td>
             <td><span th:text="${user.updateDate}"> updateDate </span></td>
             <td><span th:text="${user.status}"> status </span></td>
         </tr>

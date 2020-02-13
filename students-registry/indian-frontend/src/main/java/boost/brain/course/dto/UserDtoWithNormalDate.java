@@ -7,13 +7,12 @@ import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 
 
 /**
  * Класс, аналог UserDto с изменённой датой создания и обновления.
- * В UserDto хранятся в long, здесь в LocalDate.
+ * В UserDto хранятся в long, здесь в String.
  */
 @Log
 @Data
@@ -29,24 +28,18 @@ public class UserDtoWithNormalDate {
     /**
      * Метод преобразует класс UserDto в UserDtoToUserDtoWithNormalDate
      */
-    public static UserDtoWithNormalDate UserDtoToUserDtoWithNormalDate(Object obj) {
-        if (obj.getClass().isInstance(UserDto.class)) {
-            UserDto userDto = (UserDto) obj;
-            UserDtoWithNormalDate userDtoWithNormalDate = new UserDtoWithNormalDate();
-            BeanUtils.copyProperties(userDto, userDtoWithNormalDate, "createDate", "updateDate");
-            log.info(userDtoWithNormalDate.toString());
-            userDtoWithNormalDate.createDate = dateFromLong(userDto.getCreateDate());
-            userDtoWithNormalDate.updateDate = dateFromLong(userDto.getUpdateDate());
-            return userDtoWithNormalDate;
-        }
-        return null;
+    public static UserDtoWithNormalDate UserDtoToUserDtoWithNormalDate(UserDto userDto) {
+        UserDtoWithNormalDate userDtoWithNormalDate = new UserDtoWithNormalDate();
+        BeanUtils.copyProperties(userDto, userDtoWithNormalDate, "createDate", "updateDate");
+        userDtoWithNormalDate.createDate = dateFromLong(userDto.getCreateDate());
+        userDtoWithNormalDate.updateDate = dateFromLong(userDto.getUpdateDate());
+        return userDtoWithNormalDate;
     }
 
-    /*
-    Преобразует дату из long в LocalDate
+    /**
+    Преобразует дату из long в String
      */
     private static String dateFromLong(long createDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        return new Timestamp(createDate).toLocalDateTime().format(DateTimeFormatter.ofPattern("DD MM YYYY"));
+        return new Timestamp(createDate).toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 }

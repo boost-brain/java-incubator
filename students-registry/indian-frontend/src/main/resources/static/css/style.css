@@ -17,3 +17,8 @@ H1 {
 .actiontext {
     text-decoration-style: double;
 }
+
+.logo {
+    max-height: 10%;
+    max-width: 10%;
+}

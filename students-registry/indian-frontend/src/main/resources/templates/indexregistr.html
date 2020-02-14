@@ -10,14 +10,9 @@
 <div class="text-primary">
     <div th:text="${actiontext}"></div>
 </div>
-<form action="#" th:action="@{/entering}" th:object="${credentials}" method="post">
-    <input type="email" th:field="*{login} ">
-    <input type="password" th:field="*{password}">
-    <input type="submit" value="Вход"/> <input type="reset" value="Reset"/>
-</form>
-<div class="registration">
-    <a th:href="@{/registration}">Регистрация</a>
-</div>
+<h1>
+    зарегистрирован
+</h1>
 
 <div th:insert="~{insertion :: #bottom}"></div>
 

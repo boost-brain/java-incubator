@@ -4,12 +4,10 @@ import boost.brain.course.Constants;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
 import boost.brain.course.common.register.UserRegDto;
-import boost.brain.course.dto.UserDtoWithNormalDate;
-import boost.brain.course.service.ClassConverterService;
+import boost.brain.course.common.users.UserDto;
 import boost.brain.course.service.RequestsForOtherServices;
 import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.Objects;
 
 @Log
@@ -66,29 +63,21 @@ public class IndexController {
 
     @PostMapping("/registration")
     public String registration(UserRegDto userRegDto, Model model) {
-        HttpEntity<UserRegDto> userRegDtoRequest = new HttpEntity<>(userRegDto);
-        ResponseEntity<Session> response = restTemplate.postForEntity(Constants.USER_SERVER + "api/users/create",
-                userRegDtoRequest, Session.class);
-        if (checkResponseForRegistrationAndLoging(response)) {
-            doBadRegistration(model, userRegDtoRequest, response);
-            return "index";
-        }
-        model.addAttribute("actiontext", "Регистрация прошла успешно.");
-        log.info("Зарегистрирован пользователь " + Objects.requireNonNull(userRegDtoRequest.getBody()).getEmail());
+        ResponseEntity<UserDto> response = RequestsForOtherServices.registrationInTheServiceUser(userRegDto);
 
-        Credentials credentials = ClassConverterService.getCredentialsFromUserReg(userRegDto);
-        HttpEntity<Credentials> credentialRequest = new HttpEntity<>(credentials);
-        response = restTemplate.postForEntity(Constants.AUTH_SERVER + "/api/credentials/create",
-                credentialRequest, Session.class);
-        session = response.getBody();
-        model.addAttribute("credentials", credentials);
-        return "index";
+        model.addAttribute("actiontext", "Регистрация прошла успешно.");
+        log.info("Зарегистрирован пользователь " + userRegDto.getEmail());
+
+        ResponseEntity<Boolean> responseAuth = RequestsForOtherServices.registrationInTheServiceAuth(userRegDto);
+        log.info("Save auth : " + response.getBody().toString());
+
+        return "indexregistr";
     }
 
-    private void doBadRegistration(Model model, HttpEntity<UserRegDto> request, ResponseEntity<Session> responseEntity) {
+    private void doBadRegistration(Model model, UserRegDto userRegDto, ResponseEntity<Session> responseEntity) {
         model.addAttribute("actiontext", "Не удалось зарегистрировать. ");
-        log.info("Неверная попытка регистрации пользователя " + Objects.requireNonNull(request.getBody()).getEmail()
-                + "код:" + responseEntity.getStatusCode().toString());
+        log.info("Неверная попытка регистрации пользователя " + userRegDto.getName()
+                + " . Код ответа: " + responseEntity.getStatusCode().toString());
         model.addAttribute("credentials", new Credentials());
     }
 
@@ -99,14 +88,6 @@ public class IndexController {
         return Objects.requireNonNull(responseEntity.getBody()).getSessionId() == null;
     }
 
-
-    @GetMapping("showallusers")
-    public String showAllUsers(Model model) {
-        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList();
-        model.addAttribute("actiontext", "Реестр студентов");
-        model.addAttribute("userlist", userDtoList);
-        return "showallusers";
-    }
 
     /**
      * Ошибка входа

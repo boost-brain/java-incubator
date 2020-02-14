@@ -2,7 +2,8 @@ package boost.brain.course;
 
 public interface Constants {
     String INDEXCONTROLLER_PREFIX = "";
-    String SERVER_ADDRESS = "http://185.255.135.104";
+    String USERCONTROLLER_PREFIX="users/";
+    String SERVER_ADDRESS = "http://185.255.135.104/";
     String AUTH_SERVER="http://185.255.135.104:8081/";
     String USER_SERVER="http://185.255.135.104:8082/";
     String PROJECT_SERVER="http://185.255.135.104:8083/";

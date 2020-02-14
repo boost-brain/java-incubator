@@ -34,9 +34,10 @@ public class IndexController {
 
     @GetMapping(value = {"/", "/index"})
     public String index(Model model) {
-        model.addAttribute("actiontext", "Введите Электронную почту и пароль");
+        //   model.addAttribute("actiontext", "Введите Электронную почту и пароль");
         model.addAttribute("credentials", new Credentials());
-        return "index";
+        model.addAttribute("regdto", new UserRegDto());
+        return "indexreg2";
     }
 
     @PostMapping(value = "/entering")
@@ -63,6 +64,7 @@ public class IndexController {
 
     @PostMapping("/registration")
     public String registration(UserRegDto userRegDto, Model model) {
+        log.severe(userRegDto.toString());
         ResponseEntity<UserDto> response = RequestsForOtherServices.registrationInTheServiceUser(userRegDto);
 
         model.addAttribute("actiontext", "Регистрация прошла успешно.");

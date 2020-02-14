@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css"/>
-    <meta charset="UTF-8">
-    <title>Проект "Реестр студентов"</title>5
+    <title>Проект "Реестр студентов"</title>
     <div th:insert="~{insertion :: #css}"></div>
 </head>
 <body>
@@ -11,10 +9,10 @@
 
     <div th:insert="~{insertion :: #top}"></div>
 
-    <div class="actiontext">
+<div class="container-fluid align-content-center>">
+    <div class="text-center text-uppercase">
         <div th:text="${actiontext}"></div>
     </div>
-
     <table class="table table-striped table-light">
         <thead class="thead-dark">
         <tr>
@@ -42,6 +40,7 @@
         </tr>
         </tbody>
     </table>
+</div>
 
     <div th:insert="~{insertion :: #bottom}"></div>
 </div>

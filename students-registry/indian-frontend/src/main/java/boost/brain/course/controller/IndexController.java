@@ -4,13 +4,12 @@ import boost.brain.course.Constants;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
 import boost.brain.course.common.register.UserRegDto;
-import boost.brain.course.common.users.UserDto;
 import boost.brain.course.dto.UserDtoWithNormalDate;
+import boost.brain.course.service.ClassConverterService;
+import boost.brain.course.service.RequestsForOtherServices;
 import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
@@ -20,10 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Log
 @Controller
@@ -49,11 +46,9 @@ public class IndexController {
     public String entering(Credentials credentials, Model model) {
         log.info("Попытка входа для " + credentials.getLogin());
 
-        HttpEntity<Credentials> request = new HttpEntity<>(credentials);
-        ResponseEntity<Session> response = restTemplate.postForEntity(Constants.AUTH_SERVER + "api/login/login",
-                request, Session.class);
+        ResponseEntity<Session> response = RequestsForOtherServices.getSessionResponseEntityWhenLogin(credentials);
         if (checkResponseForRegistrationAndLoging(response)) {
-            doBadEntering(model, request, response);
+            doBadEntering(model, credentials, response);
             return "index";
         }
         /***
@@ -62,25 +57,14 @@ public class IndexController {
         return "index";
     }
 
-    /**
-     * Ошибка входа
-     *
-     * @param model   model для шаблонизатора
-     * @param request запрос
-     */
-    private void doBadEntering(Model model, HttpEntity<Credentials> request, ResponseEntity<Session> response) {
-        model.addAttribute("actiontext", "Пользователь не найден, или введён неверный пароль.");
-        log.info("Неверная попытка входа пользователя " + Objects.requireNonNull(request.getBody()).getLogin());
-    }
-
-    @GetMapping("registration")
+    @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("actiontext", "Регистрация нового пользователя.");
         model.addAttribute("regdto", new UserRegDto());
         return "registration";
     }
 
-    @PostMapping("registration")
+    @PostMapping("/registration")
     public String registration(UserRegDto userRegDto, Model model) {
         HttpEntity<UserRegDto> userRegDtoRequest = new HttpEntity<>(userRegDto);
         ResponseEntity<Session> response = restTemplate.postForEntity(Constants.USER_SERVER + "api/users/create",
@@ -92,7 +76,7 @@ public class IndexController {
         model.addAttribute("actiontext", "Регистрация прошла успешно.");
         log.info("Зарегистрирован пользователь " + Objects.requireNonNull(userRegDtoRequest.getBody()).getEmail());
 
-        Credentials credentials = getCredentialsFromUserReg(userRegDto);
+        Credentials credentials = ClassConverterService.getCredentialsFromUserReg(userRegDto);
         HttpEntity<Credentials> credentialRequest = new HttpEntity<>(credentials);
         response = restTemplate.postForEntity(Constants.AUTH_SERVER + "/api/credentials/create",
                 credentialRequest, Session.class);
@@ -115,33 +99,23 @@ public class IndexController {
         return Objects.requireNonNull(responseEntity.getBody()).getSessionId() == null;
     }
 
-    /**
-     * Делает из userDto объект класса Credentials
-     *
-     * @param userRegDto объект
-     * @return объект
-     */
-    private Credentials getCredentialsFromUserReg(UserRegDto userRegDto) {
-        Credentials credentials = new Credentials();
-        credentials.setLogin(userRegDto.getEmail());
-        credentials.setPassword(userRegDto.getPassword());
-        return credentials;
-    }
 
     @GetMapping("showallusers")
     public String showAllUsers(Model model) {
-        List<UserDtoWithNormalDate> userDtoList = Objects.requireNonNull(
-                restTemplate.exchange(RequestEntity
-                                .get(URI.create(Constants.USER_SERVER + "api/users/users-all"))
-                                .build(),
-                        new ParameterizedTypeReference<List<UserDto>>() {
-                        }).getBody())
-                .stream()
-                .map(UserDtoWithNormalDate::UserDtoToUserDtoWithNormalDate)
-                .collect(Collectors.toList());
+        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList();
         model.addAttribute("actiontext", "Реестр студентов");
         model.addAttribute("userlist", userDtoList);
         return "showallusers";
+    }
+
+    /**
+     * Ошибка входа
+     *
+     * @param model model для шаблонизатора
+     */
+    private void doBadEntering(Model model, Credentials credentials, ResponseEntity<Session> response) {
+        model.addAttribute("actiontext", "Пользователь не найден, или введён неверный пароль.");
+        log.info("Неверная попытка входа пользователя " + credentials.getLogin());
     }
 
 

@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:insert="~{insertion :: #top}"></div>
-<div class="actiontext">
+<div class="text-primary">
     <div th:text="${actiontext}"></div>
 </div>
 <form action="#" th:action="@{/entering}" th:object="${credentials}" method="post">

@@ -17,7 +17,9 @@
     </nav>
     <div class="tab-content tabs" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div style="align-content: center" th:text="${actiontext}"></div>
             <form class="form-horizontal tab" th:action="@{/entering}" th:object="${credentials}" method="post">
+
                 <div class="form-group">
                     <label for="exampleInputEmail">Email</label>
                     <input type="email" class="form-control" id="exampleInputEmail" th:field="*{login} ">

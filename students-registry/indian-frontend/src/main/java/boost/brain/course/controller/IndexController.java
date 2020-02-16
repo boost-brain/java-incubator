@@ -34,7 +34,7 @@ public class IndexController {
 
     @GetMapping(value = {"/", "/index"})
     public String index(Model model) {
-        //   model.addAttribute("actiontext", "Введите Электронную почту и пароль");
+          model.addAttribute("actiontext", "Введите Электронную почту и пароль");
         model.addAttribute("credentials", new Credentials());
         model.addAttribute("regdto", new UserRegDto());
         return "indexreg2";
@@ -65,13 +65,20 @@ public class IndexController {
     @PostMapping("/registration")
     public String registration(UserRegDto userRegDto, Model model) {
         log.severe(userRegDto.toString());
-        ResponseEntity<UserDto> response = RequestsForOtherServices.registrationInTheServiceUser(userRegDto);
+        try{
+        ResponseEntity<UserDto> response = RequestsForOtherServices.registrationInTheServiceUser(userRegDto);}
+        catch (Exception e){
+            model.addAttribute("actiontext", "Регистрация прошла неудачно.");
+            model.addAttribute("regdto", new UserRegDto());
+            model.addAttribute("credentials", new Credentials());
+            return "indexreg2";
+        }
 
         model.addAttribute("actiontext", "Регистрация прошла успешно.");
         log.info("Зарегистрирован пользователь " + userRegDto.getEmail());
 
         ResponseEntity<Boolean> responseAuth = RequestsForOtherServices.registrationInTheServiceAuth(userRegDto);
-        log.info("Save auth : " + response.getBody().toString());
+        log.info("Save auth : " + userRegDto.getEmail());
 
         return "indexregistr";
     }

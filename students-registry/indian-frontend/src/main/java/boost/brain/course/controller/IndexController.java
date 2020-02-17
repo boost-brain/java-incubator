@@ -5,6 +5,7 @@ import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
 import boost.brain.course.common.register.UserRegDto;
 import boost.brain.course.common.users.UserDto;
+import boost.brain.course.dto.UserDtoWithNormalDate;
 import boost.brain.course.service.RequestsForOtherServices;
 import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Objects;
 
 @Log
@@ -34,67 +37,109 @@ public class IndexController {
 
     @GetMapping(value = {"/", "/index"})
     public String index(Model model) {
-          model.addAttribute("actiontext", "Введите Электронную почту и пароль");
+        model.addAttribute("actiontext", "Введите Электронную почту и пароль");
         model.addAttribute("credentials", new Credentials());
         model.addAttribute("regdto", new UserRegDto());
-        return "indexreg2";
-    }
-
-    @PostMapping(value = "/entering")
-    public String entering(Credentials credentials, Model model) {
-        log.info("Попытка входа для " + credentials.getLogin());
-
-        ResponseEntity<Session> response = RequestsForOtherServices.getSessionResponseEntityWhenLogin(credentials);
-        if (checkResponseForRegistrationAndLoging(response)) {
-            doBadEntering(model, credentials, response);
-            return "index";
-        }
-        /***
-         * Вход прошёл. доделать
-         */
         return "index";
     }
 
-    @GetMapping("/registration")
-    public String registration(Model model) {
-        model.addAttribute("actiontext", "Регистрация нового пользователя.");
-        model.addAttribute("regdto", new UserRegDto());
-        return "registration";
+    @GetMapping(value = {"/indexlog"})
+    public String indexlog(Model model, HttpServletResponse httpServletResponse) {
+        httpServletResponse.addHeader("SesionId", Objects.requireNonNull(session).getSessionId());
+        model.addAttribute("actiontext", "Главная страница.");
+        return "indexlog";
     }
+
+    @PostMapping(value = "/entering")
+    public String entering(Credentials credentials, Model model, HttpServletResponse responseEntering) {
+        ResponseEntity<Session> response = RequestsForOtherServices.getSessionResponseEntityWhenLogin(credentials);
+        if (checkResponseForRegistrationAndLoging(response)) {
+            doBadEntering(model, credentials);
+            return "index";
+        }
+        doGoodEntering(model, credentials);
+        /***
+         * Вход прошёл. : todo: доделать
+         */
+        session = response.getBody();
+        responseEntering.addHeader("SesionId", Objects.requireNonNull(session).getSessionId());
+        return "indexlog";
+
+    }
+
+
+    /**
+     * Проверка - залогинен ли пользователь? Валидна ли его сессия?
+     *
+     * @return результат ( true- сессия разрешена)
+     */
+    private boolean checklogin() {
+        /**
+         * заглушка todo: доделать
+         */
+        // AUTH_SERVER + Constants.LOGIN_PREFIX +   @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
+        return true;
+    }
+
 
     @PostMapping("/registration")
     public String registration(UserRegDto userRegDto, Model model) {
-        log.severe(userRegDto.toString());
-        try{
-        ResponseEntity<UserDto> response = RequestsForOtherServices.registrationInTheServiceUser(userRegDto);}
-        catch (Exception e){
-            model.addAttribute("actiontext", "Регистрация прошла неудачно.");
-            model.addAttribute("regdto", new UserRegDto());
-            model.addAttribute("credentials", new Credentials());
-            return "indexreg2";
+        try {
+            ResponseEntity<UserDto> response = RequestsForOtherServices.registrationInTheServiceUser(userRegDto);
+            ResponseEntity<Boolean> responseAuth = RequestsForOtherServices.registrationInTheServiceAuth(userRegDto);
+        } catch (Exception e) {
+
+            doBadRegistration(model, userRegDto);
+            return "index";
         }
-
-        model.addAttribute("actiontext", "Регистрация прошла успешно.");
-        log.info("Зарегистрирован пользователь " + userRegDto.getEmail());
-
-        ResponseEntity<Boolean> responseAuth = RequestsForOtherServices.registrationInTheServiceAuth(userRegDto);
-        log.info("Save auth : " + userRegDto.getEmail());
-
+        doGoodRegistration(model, userRegDto);
         return "indexregistr";
     }
 
-    private void doBadRegistration(Model model, UserRegDto userRegDto, ResponseEntity<Session> responseEntity) {
-        model.addAttribute("actiontext", "Не удалось зарегистрировать. ");
-        log.info("Неверная попытка регистрации пользователя " + userRegDto.getName()
-                + " . Код ответа: " + responseEntity.getStatusCode().toString());
-        model.addAttribute("credentials", new Credentials());
+
+    @GetMapping(Constants.USERCONTROLLER_PREFIX + "showallusers")
+    public String showAllUsers(Model model) {
+        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList();
+        model.addAttribute("actiontext", "Реестр студентов");
+        model.addAttribute("userlist", userDtoList);
+        return "showallusers";
     }
+
+    /**
+     * Метод, если регистрация прошла неудачно
+     */
+    private void doBadRegistration(Model model, UserRegDto userRegDto) {
+        log.info("Неудачная попытка регистрации пользователя " + userRegDto.getName());
+        model.addAttribute("actiontext", "Не удалось зарегистрировать. ");
+        model.addAttribute("credentials", new Credentials());
+        model.addAttribute("regdto", new UserRegDto());
+    }
+
+    /**
+     * Метод удачной регистрации
+     */
+    private void doGoodRegistration(Model model, UserRegDto userRegDto) {
+        log.info("Зарегистрирован пользователь " + userRegDto.getEmail());
+        model.addAttribute("actiontext", "Регистрация прошла успешно.");
+    }
+
 
     /**
      * Проверка ответа на валидность
      */
     private boolean checkResponseForRegistrationAndLoging(ResponseEntity<Session> responseEntity) {
-        return Objects.requireNonNull(responseEntity.getBody()).getSessionId() == null;
+        return (responseEntity.getBody() == null)
+                || (responseEntity.getBody().getSessionId() == null)
+                || (responseEntity.getBody().getSessionId().isEmpty());
+    }
+
+
+    /**
+     * Вход выполнен нормально
+     */
+    private void doGoodEntering(Model model, Credentials credentials) {
+        model.addAttribute("actiontext", "Главная страница.");
+        log.info("Пользователь " + credentials.getLogin() + " вошёл в систему.");
     }
 
 
@@ -103,8 +148,10 @@ public class IndexController {
      *
      * @param model model для шаблонизатора
      */
-    private void doBadEntering(Model model, Credentials credentials, ResponseEntity<Session> response) {
+    private void doBadEntering(Model model, Credentials credentials) {
         model.addAttribute("actiontext", "Пользователь не найден, или введён неверный пароль.");
+        model.addAttribute("credentials", credentials);
+        model.addAttribute("regdto", new UserRegDto());
         log.info("Неверная попытка входа пользователя " + credentials.getLogin());
     }
 

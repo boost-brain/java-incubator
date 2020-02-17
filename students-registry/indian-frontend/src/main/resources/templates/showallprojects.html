@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>Проект "Реестр студентов"</title>
+    <div th:insert="~{insertion :: #css}"></div>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div th:insert="~{insertion :: #top}"></div>
+
+    <div class="container-fluid align-content-center>">
+        <div class="text-center text-uppercase">
+            <div th:text="${actiontext}"></div>
+        </div>
+
+        <table class="table table-striped table-light">
+            <thead class="thead-dark">
+            <tr>
+                <th> ID проекта</th>
+                <th> Адрес проекта</th>
+                <th> Название</th>
+                <th> Описание</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${projects.isEmpty()}">
+                <td colspan="2"> No project Available</td>
+            </tr>
+            <tr th:each="project : ${projects}">
+                <td><span th:text="${project.projectId}"> id </span></td>
+                <td><span th:text="${project.projectUrl}"> Адрес проекта </span></td>
+                <td><span th:text="${project.projectName}"> Название </span></td>
+                <td><span th:text="${project.description}"> Описание </span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:insert="~{insertion :: #bottom}"></div>
+</div>
+<div th:insert="~{insertion :: #boforeendbody}"></div>
+</body>
+</html>

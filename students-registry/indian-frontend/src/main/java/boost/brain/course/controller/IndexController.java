@@ -3,6 +3,7 @@ package boost.brain.course.controller;
 import boost.brain.course.Constants;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
+import boost.brain.course.common.projects.ProjectDto;
 import boost.brain.course.common.register.UserRegDto;
 import boost.brain.course.common.users.UserDto;
 import boost.brain.course.dto.UserDtoWithNormalDate;
@@ -45,9 +46,13 @@ public class IndexController {
 
     @GetMapping(value = {"/indexlog"})
     public String indexlog(Model model, HttpServletResponse httpServletResponse) {
-        httpServletResponse.addHeader("SesionId", Objects.requireNonNull(session).getSessionId());
-        model.addAttribute("actiontext", "Главная страница.");
-        return "indexlog";
+        try {
+            httpServletResponse.addHeader("SesionId", Objects.requireNonNull(session).getSessionId());
+            model.addAttribute("actiontext", "Главная страница.");
+            return "indexlog";
+        } catch (NullPointerException Npe) {
+            return "index";
+        }
     }
 
     @PostMapping(value = "/entering")
@@ -62,7 +67,7 @@ public class IndexController {
          * Вход прошёл. : todo: доделать
          */
         session = response.getBody();
-        responseEntering.addHeader("SesionId", Objects.requireNonNull(session).getSessionId());
+        responseEntering.addHeader(Constants.SECURE_HEADER, Objects.requireNonNull(session).getSessionId());
         return "indexlog";
 
     }
@@ -99,11 +104,35 @@ public class IndexController {
 
     @GetMapping(Constants.USERCONTROLLER_PREFIX + "showallusers")
     public String showAllUsers(Model model) {
-        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList();
+        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList(session);
         model.addAttribute("actiontext", "Реестр студентов");
         model.addAttribute("userlist", userDtoList);
         return "showallusers";
     }
+
+    @GetMapping("/project/showall")
+    public String showAllProjects(Model model) {
+        List<ProjectDto> projectDtoList = RequestsForOtherServices.getAllUserDtoList(session);
+        model.addAttribute("actiontext", "Список проектов");
+        model.addAttribute("projects", projectDtoList);
+        return "showallprojects";
+    }
+
+    @GetMapping("/project/new")
+    public String createNewProject(ProjectDto projectDto, Model model) {
+        model.addAttribute("project", new ProjectDto());
+        model.addAttribute("actiontext", "Создание нового проекта");
+        return "newproject";
+    }
+
+    @PostMapping("/project/new")
+    public String createNewProject(Model model) {
+        List<ProjectDto> projectDtoList = RequestsForOtherServices.getAllUserDtoList(session);
+        model.addAttribute("projects", projectDtoList);
+        model.addAttribute("actiontext", "Новый проект успешно создан");
+        return "showallprojects";
+    }
+
 
     /**
      * Метод, если регистрация прошла неудачно

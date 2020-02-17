@@ -19,16 +19,64 @@
 
 <div id="top">
     <div class="topmenu container">
-        <div class="navbar bg-light navbar-light navbar-expand-lg">
+        <div class="navbar navbar-light navbar-expand-lg" style="background-color: #e3f2fd;">
             <a class="navbar-brand"> <img src="../img/bblogo.jpg" alt="BoostBrain" class="logo"> BoostBrain</a>
             <div id="my_nav" class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/index}">Главная</a>
+                        <a class="nav-link" th:href="@{/indexlog}">Главная</a>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/users/showallusers}">Журнал студентов</a>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Студенты
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" th:href="@{/users/showallusers}">Журнал студентов</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProject" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Проекты
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownProject">
+                            <a class="dropdown-item" th:href="@{/users/showallusers}">Список всех проектов</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTask" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Задания
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownTask">
+                            <a class="dropdown-item" th:href="@{/users/showallusers}">Список всех заданий</a>
+                            <a class="dropdown-item" th:href="@{/users/showallusers}">Список моих заданий</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownmessage" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Сообщения
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownmessage">
+                            <a class="dropdown-item" th:href="@{/users/showallusers}">Список отправленных сообщений</a>
+                            <a class="dropdown-item" th:href="@{/users/showallusers}">Список принятых сообщений</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+
                 </ul>
             </div>
         </div>

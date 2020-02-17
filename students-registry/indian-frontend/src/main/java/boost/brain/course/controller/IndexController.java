@@ -43,6 +43,13 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping(value = {"/indexlog"})
+    public String indexlog(Model model, HttpServletResponse httpServletResponse) {
+        httpServletResponse.addHeader("SesionId", Objects.requireNonNull(session).getSessionId());
+        model.addAttribute("actiontext", "Главная страница.");
+        return "indexlog";
+    }
+
     @PostMapping(value = "/entering")
     public String entering(Credentials credentials, Model model, HttpServletResponse responseEntering) {
         ResponseEntity<Session> response = RequestsForOtherServices.getSessionResponseEntityWhenLogin(credentials);
@@ -131,6 +138,7 @@ public class IndexController {
      * Вход выполнен нормально
      */
     private void doGoodEntering(Model model, Credentials credentials) {
+        model.addAttribute("actiontext", "Главная страница.");
         log.info("Пользователь " + credentials.getLogin() + " вошёл в систему.");
     }
 

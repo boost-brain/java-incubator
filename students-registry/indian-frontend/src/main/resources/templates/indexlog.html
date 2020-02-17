@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>Проект "Реестр студентов"</title>
+    <div th:insert="~{insertion :: #meta}"></div>
+    <div th:insert="~{insertion :: #css}"></div>
+</head>
+<body>
+<div th:insert="~{insertion :: #top}"></div>
+<div class="text-primary">
+    <div th:text="${actiontext}"></div>
+</div>
+<form action="#" th:action="@{/entering}" th:object="${credentials}" method="post">
+    <input type="email" th:field="*{login} ">
+    <input type="password" th:field="*{password}">
+    <input type="submit" value="Вход"/> <input type="reset" value="Reset"/>
+</form>
+<div class="registration">
+    <a th:href="@{/registration}">Регистрация</a>
+</div>
+
+<div th:insert="~{insertion :: #bottom}"></div>
+
+<div th:insert="~{insertion :: #boforeendbody}"></div>
+</body>
+</html>

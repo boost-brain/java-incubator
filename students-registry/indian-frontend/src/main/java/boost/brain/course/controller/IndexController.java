@@ -5,7 +5,9 @@ import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
 import boost.brain.course.common.projects.ProjectDto;
 import boost.brain.course.common.register.UserRegDto;
+import boost.brain.course.common.tasks.TaskDto;
 import boost.brain.course.common.users.UserDto;
+import boost.brain.course.dto.TaskDtoWithNormalDate;
 import boost.brain.course.dto.UserDtoWithNormalDate;
 import boost.brain.course.service.RequestsForOtherServices;
 import lombok.extern.java.Log;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,6 +32,7 @@ import java.util.Objects;
 public class IndexController {
     Session session = null;
     RestTemplate restTemplate;
+    String currentUser = null;
 
     public IndexController() {
         RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
@@ -51,6 +55,7 @@ public class IndexController {
             model.addAttribute("actiontext", "Главная страница.");
             return "indexlog";
         } catch (NullPointerException Npe) {
+            currentUser = null;
             return "index";
         }
     }
@@ -66,24 +71,11 @@ public class IndexController {
         /***
          * Вход прошёл. : todo: доделать
          */
+        currentUser = credentials.getLogin();
         session = response.getBody();
         responseEntering.addHeader(Constants.SECURE_HEADER, Objects.requireNonNull(session).getSessionId());
         return "indexlog";
 
-    }
-
-
-    /**
-     * Проверка - залогинен ли пользователь? Валидна ли его сессия?
-     *
-     * @return результат ( true- сессия разрешена)
-     */
-    private boolean checklogin() {
-        /**
-         * заглушка todo: доделать
-         */
-        // AUTH_SERVER + Constants.LOGIN_PREFIX +   @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
-        return true;
     }
 
 
@@ -104,7 +96,7 @@ public class IndexController {
 
     @GetMapping(Constants.USERCONTROLLER_PREFIX + "showallusers")
     public String showAllUsers(Model model) {
-        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList(session);
+        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList();
         model.addAttribute("actiontext", "Реестр студентов");
         model.addAttribute("userlist", userDtoList);
         return "showallusers";
@@ -112,25 +104,59 @@ public class IndexController {
 
     @GetMapping("/project/showall")
     public String showAllProjects(Model model) {
-        List<ProjectDto> projectDtoList = RequestsForOtherServices.getAllUserDtoList(session);
+        List<ProjectDto> projectDtoList = RequestsForOtherServices.getAllProjectDtoList(session);
         model.addAttribute("actiontext", "Список проектов");
         model.addAttribute("projects", projectDtoList);
         return "showallprojects";
     }
 
     @GetMapping("/project/new")
-    public String createNewProject(ProjectDto projectDto, Model model) {
+    public String createNewProject(Model model) {
         model.addAttribute("project", new ProjectDto());
         model.addAttribute("actiontext", "Создание нового проекта");
         return "newproject";
     }
 
     @PostMapping("/project/new")
-    public String createNewProject(Model model) {
-        List<ProjectDto> projectDtoList = RequestsForOtherServices.getAllUserDtoList(session);
-        model.addAttribute("projects", projectDtoList);
-        model.addAttribute("actiontext", "Новый проект успешно создан");
+    public String createNewProject(ProjectDto projectDto, Model model) {
+        if (RequestsForOtherServices.saveNewProject(projectDto, session)) {
+            model.addAttribute("projects", RequestsForOtherServices.getAllProjectDtoList(session));
+            model.addAttribute("actiontext", "Новый проект успешно создан");
+        } else {
+            model.addAttribute("projects", Collections.emptyList());
+            model.addAttribute("actiontext", "Новый проект не удалось создать");
+        }
         return "showallprojects";
+    }
+
+    @GetMapping("/task/showall")
+    public String showAllTasks(Model model) {
+        List<TaskDtoWithNormalDate> taskDtoList = RequestsForOtherServices.getAllTaskDtoList(session);
+        model.addAttribute("actiontext", "Список заданий");
+        model.addAttribute("tasks", taskDtoList);
+        return "showalltasks";
+    }
+
+    @GetMapping("/task/new")
+    public String createNewTask(Model model) {
+        model.addAttribute("task", new TaskDto());
+        model.addAttribute("users", RequestsForOtherServices.getUserDtoList());
+        model.addAttribute("actiontext", "Создание нового задания");
+        return "newtask";
+    }
+
+
+    @PostMapping("/task/new")
+    public String createNewTask(TaskDto taskDto, Model model) {
+        taskDto.setAuthor(currentUser);
+        if (RequestsForOtherServices.saveNewTask(taskDto, session)) {
+            model.addAttribute("tasks", RequestsForOtherServices.getAllTaskDtoList(session));
+            model.addAttribute("actiontext", "Новое задание успешно создано");
+        } else {
+            model.addAttribute("tasks", Collections.emptyList());
+            model.addAttribute("actiontext", "Новое задание не удалось создать");
+        }
+        return "showalltasks";
     }
 
 

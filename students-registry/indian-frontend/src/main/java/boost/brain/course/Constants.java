@@ -9,5 +9,5 @@ public interface Constants {
     String PROJECT_SERVER = "http://185.255.135.104:8083/";
     String TASK_SERVER = "http://185.255.135.104:8084/";
     String REG_SERVER = "http://185.255.135.104:8080/";
-    String SECURE_HEADER = "SesionId";
+    String SECURE_HEADER = "sessionId";
 }

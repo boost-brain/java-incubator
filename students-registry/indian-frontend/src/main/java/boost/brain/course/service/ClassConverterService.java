@@ -2,7 +2,9 @@ package boost.brain.course.service;
 
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.register.UserRegDto;
+import boost.brain.course.common.tasks.TaskDto;
 import boost.brain.course.common.users.UserDto;
+import boost.brain.course.dto.TaskDtoWithNormalDate;
 import boost.brain.course.dto.UserDtoWithNormalDate;
 import org.springframework.beans.BeanUtils;
 
@@ -32,6 +34,17 @@ public class ClassConverterService {
         credentials.setLogin(userRegDto.getEmail());
         credentials.setPassword(userRegDto.getPassword());
         return credentials;
+    }
+
+    /**
+     * Преобразует TaskDto в TaskDtoWithNormalDate
+     */
+    public static TaskDtoWithNormalDate getTaskDtoToTaskDtoWithNormalDate(TaskDto taskDto) {
+        TaskDtoWithNormalDate taskDtoWithNormalDate = new TaskDtoWithNormalDate();
+        BeanUtils.copyProperties(taskDto, taskDtoWithNormalDate, "createDate", "updateDate");
+        taskDtoWithNormalDate.setCreateDate(dateFromLong(taskDto.getCreateDate()));
+        taskDtoWithNormalDate.setUpdateDate(dateFromLong(taskDto.getUpdateDate()));
+        return taskDtoWithNormalDate;
     }
 
     /*

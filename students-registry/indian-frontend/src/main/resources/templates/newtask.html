@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>Проект "Реестр студентов"</title>
+    <div th:insert="~{insertion :: #css}"></div>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div th:insert="~{insertion :: #top}"></div>
+
+    <div class="container-fluid align-content-center>">
+        <div class="text-center text-uppercase">
+            <div th:text="${actiontext}"></div>
+        </div>
+
+        <form th:action="@{/task/new}" th:object="${task}" method="post">
+            <div class="form-group">
+                <label for="projectID">ID Проекта</label>
+                <textarea class="form-control" id="projectID" aria-describedby="ID Проекта"
+                          th:field="*{project}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1"> Автор </label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" th:field="*{author}"
+                          rows="1" th:value="${author}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlTextarea2"> Исполнитель </label>
+                <textarea class="form-control" id="exampleFormControlTextarea2" th:field="*{implementer}"
+                          rows="1" th:value="${author}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlTextarea3"> Название </label>
+                <textarea class="form-control" id="exampleFormControlTextarea3" th:field="*{name}"
+                          rows="1"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlTextarea4"> Текст задания </label>
+                <textarea class="form-control" id="exampleFormControlTextarea4" th:field="*{text}"
+                          rows="10"></textarea>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <div th:insert="~{insertion :: #bottom}"></div>
+</div>
+<div th:insert="~{insertion :: #boforeendbody}"></div>
+</body>
+</html>

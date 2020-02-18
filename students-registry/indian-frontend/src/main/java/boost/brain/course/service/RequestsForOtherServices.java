@@ -5,7 +5,9 @@ import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
 import boost.brain.course.common.projects.ProjectDto;
 import boost.brain.course.common.register.UserRegDto;
+import boost.brain.course.common.tasks.TaskDto;
 import boost.brain.course.common.users.UserDto;
+import boost.brain.course.dto.TaskDtoWithNormalDate;
 import boost.brain.course.dto.UserDtoWithNormalDate;
 import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -97,7 +99,7 @@ public class RequestsForOtherServices {
     /**
      * Получает список всех пользователей от сервиса Проектов
      */
-    public static List<ProjectDto> getAllUserDtoList(Session session) {
+    public static List<ProjectDto> getAllProjectDtoList(Session session) {
         try {
             return Objects.requireNonNull(
                     new RestTemplateBuilder()
@@ -132,6 +134,55 @@ public class RequestsForOtherServices {
             return response.getStatusCode().is2xxSuccessful();
         } catch (RestClientException | NullPointerException e) {
             log.warning("Не удалось сохранить новый проект. " + projectDto.toString());
+            return false;
+        }
+    }
+
+    /**
+     * Получение коллекции всех заданий
+     */
+    public static List<TaskDtoWithNormalDate> getAllTaskDtoList(Session session) {
+        try {
+            return Objects.requireNonNull(
+                    new RestTemplateBuilder()
+                            .additionalMessageConverters(new MappingJackson2HttpMessageConverter())
+                            .build()
+                            .exchange(RequestEntity
+                                            .get(URI.create(Constants.TASK_SERVER +
+                                                    "api/tasks/page/1/5000"))
+                                            .header(Constants.SECURE_HEADER, session.getSessionId())
+                                            .build(),
+                                    new ParameterizedTypeReference<List<TaskDto>>() {
+                                    }).getBody())
+                    .stream().map(ClassConverterService::getTaskDtoToTaskDtoWithNormalDate).collect(Collectors.toList());
+        } catch (RestClientException | NullPointerException e) {
+            return Collections.EMPTY_LIST;
+        }
+    }
+
+    /**
+     * Создание нового задания
+     */
+    public static boolean saveNewTask(TaskDto taskDto, Session session) {
+        try {
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(Constants.SECURE_HEADER, session.getSessionId());
+            HttpEntity<TaskDto> request = new HttpEntity<>(taskDto, httpHeaders);
+            ResponseEntity<TaskDto> response = new RestTemplateBuilder()
+                    .additionalMessageConverters(new MappingJackson2HttpMessageConverter())
+                    .build()
+                    .postForEntity(URI.create(Constants.TASK_SERVER +
+                            "api/tasks/create"), request, TaskDto.class);
+            if (Objects.nonNull(response.getBody())) {
+                log.info("Создано новое задание " + taskDto.toString());
+                return response.getStatusCode().is2xxSuccessful();
+            }
+            log.warning("Не удалось сохранить новое задание. " + taskDto.toString());
+            log.warning(response.getBody().toString());
+            return false;
+//        } catch (RestClientException | NullPointerException e) {
+        }catch (AbstractMethodError a){
+            log.warning("Не удалось сохранить новое задание. " + taskDto.toString());
             return false;
         }
     }

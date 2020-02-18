@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -73,20 +74,6 @@ public class IndexController {
     }
 
 
-    /**
-     * Проверка - залогинен ли пользователь? Валидна ли его сессия?
-     *
-     * @return результат ( true- сессия разрешена)
-     */
-    private boolean checklogin() {
-        /**
-         * заглушка todo: доделать
-         */
-        // AUTH_SERVER + Constants.LOGIN_PREFIX +   @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
-        return true;
-    }
-
-
     @PostMapping("/registration")
     public String registration(UserRegDto userRegDto, Model model) {
         try {
@@ -104,7 +91,7 @@ public class IndexController {
 
     @GetMapping(Constants.USERCONTROLLER_PREFIX + "showallusers")
     public String showAllUsers(Model model) {
-        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList(session);
+        List<UserDtoWithNormalDate> userDtoList = RequestsForOtherServices.getUserDtoList();
         model.addAttribute("actiontext", "Реестр студентов");
         model.addAttribute("userlist", userDtoList);
         return "showallusers";
@@ -119,17 +106,21 @@ public class IndexController {
     }
 
     @GetMapping("/project/new")
-    public String createNewProject(ProjectDto projectDto, Model model) {
+    public String createNewProject(Model model) {
         model.addAttribute("project", new ProjectDto());
         model.addAttribute("actiontext", "Создание нового проекта");
         return "newproject";
     }
 
     @PostMapping("/project/new")
-    public String createNewProject(Model model) {
-        List<ProjectDto> projectDtoList = RequestsForOtherServices.getAllUserDtoList(session);
-        model.addAttribute("projects", projectDtoList);
-        model.addAttribute("actiontext", "Новый проект успешно создан");
+    public String createNewProject(ProjectDto projectDto, Model model) {
+        if (RequestsForOtherServices.saveNewProject(projectDto, session)) {
+            model.addAttribute("projects", RequestsForOtherServices.getAllUserDtoList(session));
+            model.addAttribute("actiontext", "Новый проект успешно создан");
+        } else {
+            model.addAttribute("projects", Collections.emptyList());
+            model.addAttribute("actiontext", "Новый проект не удалось создать");
+        }
         return "showallprojects";
     }
 

@@ -73,7 +73,7 @@ services:
       #      - USERS_SERV_URL=users-service:8080/api/users
       DB_HOST: postgres
     ports:
-      - 8083:8080
+      - 8086:8080
   tasks-service:
     image: tasks-service:latest
     environment:

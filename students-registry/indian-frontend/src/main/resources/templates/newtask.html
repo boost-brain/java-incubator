@@ -22,15 +22,11 @@
             </div>
 
             <div class="form-group">
-                <label for="exampleFormControlTextarea1"> Автор </label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" th:field="*{author}"
-                          rows="1" value= "bjcreslin@gmail.com">bjcreslin@gmail.com</textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="exampleFormControlTextarea2"> Исполнитель </label>
-                <textarea class="form-control" id="exampleFormControlTextarea2" th:field="*{implementer}"
-                          rows="1" value= "bjcreslin@gmail.com">bjcreslin@gmail.com</textarea>
+                <label for="inputGroupSelect01"> Исполнитель </label>
+                <select class="custom-select" id="inputGroupSelect01" th:field="*{implementer}">
+                    <option th:each="user:${users}" th:value="${user.email}" th:utext="${user.name}"
+                    ></option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -44,7 +40,6 @@
                 <textarea class="form-control" id="exampleFormControlTextarea4" th:field="*{text}"
                           rows="8" value="текст">Текст</textarea>
             </div>
-
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

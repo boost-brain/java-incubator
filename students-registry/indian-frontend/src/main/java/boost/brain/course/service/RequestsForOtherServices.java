@@ -165,6 +165,7 @@ public class RequestsForOtherServices {
      */
     public static boolean saveNewTask(TaskDto taskDto, Session session) {
         try {
+            log.info("Создание нового задания " + taskDto.toString());
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(Constants.SECURE_HEADER, session.getSessionId());
             HttpEntity<TaskDto> request = new HttpEntity<>(taskDto, httpHeaders);

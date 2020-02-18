@@ -140,7 +140,7 @@ public class IndexController {
     @GetMapping("/task/new")
     public String createNewTask(Model model) {
         model.addAttribute("task", new TaskDto());
-        model.addAttribute("author", currentUser);
+        model.addAttribute("users", RequestsForOtherServices.getUserDtoList());
         model.addAttribute("actiontext", "Создание нового задания");
         return "newtask";
     }
@@ -148,6 +148,7 @@ public class IndexController {
 
     @PostMapping("/task/new")
     public String createNewTask(TaskDto taskDto, Model model) {
+        taskDto.setAuthor(currentUser);
         if (RequestsForOtherServices.saveNewTask(taskDto, session)) {
             model.addAttribute("tasks", RequestsForOtherServices.getAllTaskDtoList(session));
             model.addAttribute("actiontext", "Новое задание успешно создано");

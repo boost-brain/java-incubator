@@ -11,13 +11,11 @@ import boost.brain.course.users.repository.UsersRepository;
 import lombok.extern.java.Log;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +55,7 @@ public class UsersController {
 
     @GetMapping(path = Constants.READ_PREFIX + "/{email}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public UserDto read(@PathVariable String email, HttpServletResponse httpServletResponse) {
+    public UserDto read(@PathVariable String email) {
         if (StringUtils.isEmpty(email) || !this.checkEmail(email)) {
             throw new NotFoundException();
         }
@@ -65,7 +63,6 @@ public class UsersController {
         if (result == null) {
             throw new NotFoundException();
         }
-        httpServletResponse.addHeader("Access-Control-Allow-Origin","*");
         return result;
     }
 

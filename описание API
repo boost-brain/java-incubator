@@ -1,0 +1,54 @@
+Описание API сервисов
+Адрес сервера:
+185.255.135.104
+Сервисы (по плану работают через прокси,  у него порт 9000), но в данном варианте можно и напрямую к каждому сервису стучать. Предпочтительнее через прокси. У данной версии отключен CORS при прямой адресации.  Так же тут нет фронта.
+!Внимание! Ко многим сервисам возможен доступ только для залогиненных пользователей.
+1.	Список адресов сервисов 
+routes:
+  auth-service:
+    path: http://185.255.135.104:9000/api/auth/
+  auth-credentials:
+    path: http://185.255.135.104:9000/api/credentials/
+  projects-service:
+    path: http://185.255.135.104:9000/api/projects/
+  register-service:
+    path: http://185.255.135.104:9000/api/register/
+  tasks-service:
+    path: http://185.255.135.104:9000/api/comments/
+  tasks-service-tasks:
+    path: http://185.255.135.104:9000/api/tasks/
+  users-service:
+    path: http://185.255.135.104:9000/api/users/
+  messages-service:
+    path: http://185.255.135.104:9000/api/messages/
+
+
+2.	Credentials Controller и Login Controller
+Тут описание:
+http://185.255.135.104:8081/swagger-ui.html
+3.	Users Controller    (Этот контроллер без защиты, то есть до него можно достучаться неавторизованному пользователю)
+ http://185.255.135.104:8082/swagger-ui.html
+
+4.	Project Controller
+http://185.255.135.104:8083/swagger-ui.html
+
+5.	Comments Controller и Tasks Controller
+http://185.255.135.104:8084/swagger-ui.html
+
+6.	Messages Controller
+http://185.255.135.104:8085/swagger-ui.htm
+
+7.	Register Controller (НЕ РАБОЧИЙ!!!!)
+http://185.255.135.104:8086/swagger-ui.html
+
+
+Важно! Что бы зарегистрировать нового пользователя нужно вручную ( через АПИ – сервисы) создать User и  Credential для него ( в качестве id используется электронная почта). Пароль надо передавать в нешифрованном виде! (система шифрует пароль сама перед отправлением в базу)
+Важно! Когда логинется пользователь (http://185.255.135.104:8081/swagger-ui.html#/login-controller/loginUsingPOST ) система отдает объект :
+{
+  "sessionId": "string",
+  "startTime": 0,
+  "validTime": 0
+}
+
+Полученный sessionId, надо передавать с каждым запросом как header.
+ 

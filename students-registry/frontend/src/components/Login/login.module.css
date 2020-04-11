@@ -1,0 +1,13 @@
+.formDesign {
+    align-items: center;
+    align-content: center;
+}
+
+.formHeader {
+    margin-top: 20px;
+   justify-content: center;
+}
+inLine {
+    justify-content: space-around;
+}
+

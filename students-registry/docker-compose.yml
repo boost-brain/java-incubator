@@ -1,4 +1,4 @@
-version: '2'
+version: '3.7'
 
 services:
 
@@ -19,31 +19,19 @@ services:
     ports:
       - 9000:9000
 
-  indian-frontend:
-    image: indian-frontend:latest
-    depends_on:
-      - proxy
+
+  frontend:
+    build:
+    context: .
+    dockerfile: Dockerfile
+    volumes:
+        - '.:/app'
+        - '/app/node_modules'
     ports:
-    - 80:8080
-#  frontend:
-#    image: frontend:latest
-#    depends_on:
-#      - proxy
-#      - register-service
-#      -  users-service
-#      - auth-service
-#      - projects-service
-#      - tasks-service
-#      - messages-service
-#    environment:
-#      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
-#      - AUTH_SERV_CREDENTIALS_URL=auth-service:8080/api/credentials
-#      - TASKS_SERV_TASKS_URL=tasks-service:8080/api/tasks
-#      - USERS_SERV_URL=users-service:8080/api/users
-#      - PROJECTS_SERV_URL=projects-service:8080
-#      - MESSAGES_SERV_URL=messages-service:8080/api/messages
-#    ports:
-#      - 80:8080
+        - 80:8080
+    environment:
+        - CHOKIDAR_USEPOLLING=true
+
 
   auth-service:
     image: auth-service:latest

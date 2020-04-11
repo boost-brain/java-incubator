@@ -6,6 +6,7 @@ const CREATE_NEW_CREDENTIALS = "CREATE_NEW_CREDENTIALS";
 const CREATE_NEW_USER = "CREATE_NEW_USER";
 const SET_SUCCESS_LOGIN = "SET_SUCCESS_LOGIN";
 const SET_USER_EMAIL = "SET_USER_EMAIL";
+const LOGOUT = "LOGOUT";
 
 const InitialState = {
     credential: {
@@ -16,7 +17,7 @@ const InitialState = {
 
     isAuthenticated: false,
     userEmail: null,
-    isUserCreated:false
+    isUserCreated: false
 };
 
 
@@ -50,8 +51,19 @@ let loginReducer = (state = InitialState, action) => {
         case CREATE_NEW_USER:
             return {
                 ...state,
-                isUserCreated:true
+                isUserCreated: true
             };
+        case LOGOUT:
+            return {
+                ...state,
+                credential: {
+                    sessionId: null,
+                    startTime: 0,
+                    validTime: 0
+                },
+                isAuthenticated: false,
+                userEmail: null
+            }
         default: {
             return state;
         }
@@ -62,15 +74,16 @@ export const setCredential = (credential) => ({type: SET_SUBMIT_SUCCEEDED, crede
 export const setWrongCredential = () => ({type: SET_WRONG_CREDENTIAL});
 export const setSuccessLogin = () => ({type: SET_SUCCESS_LOGIN});
 export const setUserEmail = (email) => ({type: SET_USER_EMAIL, email: email});
-export const createNewCredential = ()  => ({type: CREATE_NEW_CREDENTIALS});
-export const createNewUser = () => ({type: CREATE_NEW_USER})
+export const createNewCredential = () => ({type: CREATE_NEW_CREDENTIALS});
+export const createNewUser = () => ({type: CREATE_NEW_USER});
+export const logout = () => ({type: LOGOUT});
 
-export const createNewCredentialThunkCreator=(newCredentials)=>{
-return (dispatch)   =>{
-    CreateNewUser.createNewCredentials(newCredentials).then(data=>{
-        dispatch(createNewCredential());
-    })
-}
+export const createNewCredentialThunkCreator = (newCredentials) => {
+    return (dispatch) => {
+        CreateNewUser.createNewCredentials(newCredentials).then(data => {
+            dispatch(createNewCredential());
+        })
+    }
 };
 
 export const loginThunkCreator = (formData) => {
@@ -82,5 +95,12 @@ export const loginThunkCreator = (formData) => {
         })
     }
 };
+export const logoutThunkCreator=()=>{
+    return(dispatch) =>{
+        loginAPI.doLogout().then(data => {
+            dispatch(logout());
+        })
+    }
+}
 
 export default loginReducer;

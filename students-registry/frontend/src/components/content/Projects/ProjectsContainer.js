@@ -28,7 +28,6 @@ class ProjectsContainer extends React.Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        debugger
         if (this.props.currentPage !== prevProps.currentPage) {
             this.projectsUpdate();
         }

@@ -1,14 +1,27 @@
 import React from 'react';
 import Header from "./Header";
 import {connect} from "react-redux";
-import {setCredential, setSuccessLogin, setWrongCredential} from "../../redux/login-reducer";
+import {logoutThunkCreator, setCredential, setSuccessLogin, setWrongCredential} from "../../redux/login-reducer";
 
 
 class HeaderContainer extends React.Component {
 
+    emailOnClick = () => {
+        alert("profile")
+    }
+
+    logoutOnClick = () => {
+        this.props.logoutThunkCreator()
+    }
+
     render() {
         return (<div>
-                <Header {...this.props}/>
+                <Header userEmail={this.props.userEmail}
+                        emailOnClick={this.emailOnClick}
+                        logoutOnClick={this.logoutOnClick}
+                        isAuthenticated={this.props.isAuthenticated}
+
+                />
             </div>
         )
     }
@@ -23,7 +36,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     setCredential,
     setWrongCredential,
-    setSuccessLogin
+    setSuccessLogin,
+    logoutThunkCreator
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer);

@@ -3,6 +3,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import logo from '../../assets/img/bblogo.jpg';
 import css from './header.module.css';
 import {Link} from "react-router-dom";
+import UserInfoLogo from "./UserInfoLogo";
 
 
 const Header = (props) => {
@@ -58,7 +59,10 @@ const Header = (props) => {
                     <Col>
                         <div className={css.loginBlock}>
                             {props.isAuthenticated ?
-                                props.userEmail :
+                                <UserInfoLogo userEmail={props.userEmail}
+                                              emailOnClick={props.emailOnClick}
+                                              logoutOnClick={props.logoutOnClick}
+                                /> :
                                 <Link to="/loginPage" className="bg-dark navbar-dark border">
                                     <h1> Login</h1>
                                 </Link>}

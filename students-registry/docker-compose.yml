@@ -21,7 +21,7 @@ services:
 
 
   frontend:
-    build:
+    image: frontend:latest
     context: .
     dockerfile: Dockerfile
     volumes:

@@ -14,14 +14,6 @@ class ShowProjects extends React.Component {
         )
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.currentPage !== prevProps.currentPage) {
-            this.props.getPaginationProjectsThunkCreator(this.props.currentPage, this.props.numberForPage)
-        }
-        if (this.props.projects !== prevProps.projects) {
-            this.props.getPaginationProjectsThunkCreator(this.props.currentPage, this.props.numberForPage)
-        }
-    }
 
     render() {
         return (<div>

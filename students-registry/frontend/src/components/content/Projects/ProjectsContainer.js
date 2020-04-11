@@ -19,8 +19,22 @@ import ShowProjects from "./ShowProjects";
 
 class ProjectsContainer extends React.Component {
 
-    componentDidMount() {
+    projectsUpdate() {
         this.props.getPaginationProjectsThunkCreator(this.props.currentPage, this.props.numberForPage);
+    }
+
+    componentDidMount() {
+        this.projectsUpdate();
+    };
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        debugger
+        if (this.props.currentPage !== prevProps.currentPage) {
+            this.projectsUpdate();
+        }
+        if (this.props.totalCount !== prevProps.totalCount) {
+            this.projectsUpdate();
+        }
     };
 
     render = () => {
@@ -48,6 +62,7 @@ class ProjectsContainer extends React.Component {
 const mapStateToProps = (state) => {
     return {
         projects: state.projectsPage.projects,
+        totalCount: state.projectsPage.totalCount,
         isFetching: state.projectsPage.isFetching,
         currentPage: state.projectsPage.currentPage,
         numberForPage: state.projectsPage.numberForPage

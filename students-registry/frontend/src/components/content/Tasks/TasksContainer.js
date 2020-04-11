@@ -25,11 +25,6 @@ class TasksContainer extends React.Component {
     };
     componentDidUpdate(prevProps, prevState, snapshot) {
 
-        console.log('pre '+prevProps.currentPage)
-        console.log('fff '+this.props.currentPage)
-
-        console.log('pretasks '+prevProps.tasks)
-        console.log('ffftasks '+this.props.tasks)
 
         if (this.props.currentPage !== prevProps.currentPage) {
             this.props.getPaginationTasksThunkCreator(this.props.currentPage, this.props.numberForPage)

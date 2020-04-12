@@ -29,6 +29,16 @@ const GET_ALL_USERS_END_POINT = API_URL + 'users/users-all';
 const USERS_COUNT_END_POINT = API_URL + 'users/count';
 const GET_PAGINATION_END_POINT = API_URL + 'users/page/';
 
+// MESSAGES_CONTROLLER_PREFIX = API_PREFIX + "/messages";
+const CREATE_NEW_MESSAGE_END_POINT = API_URL + 'messages/create/';
+const DELETE_MESSAGE_END_POINT = API_URL + 'messages/delete/';
+const MESSAGES_COUNT_MESSAGE_END_POINT = API_URL + 'messages/count/';
+const READ_MESSAGE_END_POINT = API_URL + 'messages/read/';
+const UPDATE_MESSAGE_END_POINT = API_URL + 'messages/update/';
+const ALL_MESSAGES_FOR_USER_END_POINT = API_URL + 'messages/all-messages-for-user/';
+const DELETE_ALL_MESSAGES_FOR_USER = API_URL + 'messages/delete-all-messages-for-user/';
+const SET_MESSAGES_AS_READ = API_URL + 'messages/messages-as-read/';
+
 export const loginAPI = {
     doLogin(formData) {
         return axios.post(loginEndPointURL, {
@@ -203,7 +213,6 @@ export const Usersapi = {
             return response.data;
         })
     },
-
     getAllUsers() {
         let sessionId = localStorage.getItem('sessionId');
         return axios.get(GET_ALL_USERS_END_POINT, {headers: {sessionId: sessionId}}).then(response => {
@@ -211,6 +220,127 @@ export const Usersapi = {
         })
     },
 
-
 };
+export const MessageAPI = {
+    // private long id;
+    // private String author;
+    // private String recipient;
+    // private String text;
+    // private long createDate;
+    // private long editDate;
+    // private long readDate;
+    // private boolean edited;
+    // private boolean read;
+
+    createNewMessage(newMessage) {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios({
+            method: 'POST',
+            url: CREATE_NEW_MESSAGE_END_POINT,
+            headers: {sessionId: sessionId},
+            data: newMessage
+        }).then(function (response) {
+            console.log(response);
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },
+    deleteMessage(idMessage) {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios({
+            method: 'DELETE',
+            url: DELETE_MESSAGE_END_POINT + idMessage,
+            headers: {sessionId: sessionId},
+        }).then(function (response) {
+            console.log(response);
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },
+    deleteAllMessagesForUser(email) {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios({
+            method: 'DELETE',
+            url: DELETE_ALL_MESSAGES_FOR_USER + email,
+            headers: {sessionId: sessionId},
+        }).then(function (response) {
+            console.log(response);
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },
+    readMessage(idMessage) {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios({
+            method: 'get',
+            url: READ_MESSAGE_END_POINT + idMessage,
+            headers: {sessionId: sessionId},
+        }).then(function (response) {
+            console.log(response);
+            return response.data
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },
+    countMessages() {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios({
+            method: 'GET',
+            url: MESSAGES_COUNT_MESSAGE_END_POINT,
+            headers: {sessionId: sessionId},
+        }).then(function (response) {
+            console.log(response);
+            return response.data;
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },
+    updateMessage(message) {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios.patch(
+            UPDATE_MESSAGE_END_POINT,
+            {headers: {sessionId: sessionId}},
+            {data: message}).then(response => {
+            console.log(response);
+            return response.data;
+        })
+            .catch(function (error) {
+                console.log(error);
+            });
+    },
+    setMessagesAsRead(messages) {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios.patch(
+            SET_MESSAGES_AS_READ,
+            {headers: {sessionId: sessionId}},
+            {data: messages}).then(response => {
+            console.log(response);
+            return response.data;
+        })
+            .catch(function (error) {
+                console.log(error);
+            });
+    },
+    readAllMessagesForUser(email) {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios({
+            method: 'get',
+            url: ALL_MESSAGES_FOR_USER_END_POINT + email,
+            headers: {sessionId: sessionId},
+        }).then(function (response) {
+            console.log(response);
+            return response.data
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },
+
+
+}
 

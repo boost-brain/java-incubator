@@ -42,7 +42,7 @@ export class ShowOneProject extends React.Component {
     };
 
     doDeleteProject=()=>{
-        alert(this.props.project.projectId)
+
          this.props.deleteProjectThunkCreator(this.props.project.projectId);
 
     };

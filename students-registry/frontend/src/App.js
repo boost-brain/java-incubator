@@ -4,20 +4,21 @@ import {Col, Container, Row} from "react-bootstrap";
 import Content from "./components/content/Content";
 import css from './app.module.css';
 import HeaderContainer from "./components/header/HeaderContainer";
-import {loginIfTrueWithStartAppThunkCreator} from "./redux/login-reducer";
+import {connect} from "react-redux";
+import {initializeApp} from "./redux/app-reducer";
+import Preloader from "./components/common/preloader/Preloader";
 
 class App extends React.Component {
     componentDidMount() {
-        let sessionId = localStorage.getItem('sessionId');
-        let userEmail = localStorage.getItem('userEmail');
-        if (!!userEmail) {
-            if (!!sessionId) {
-                loginIfTrueWithStartAppThunkCreator(sessionId, userEmail);
-            }
-        }
+        this.props.initializeApp();
     }
 
     render() {
+        if (!this.props.isInitialized) {
+            return (<div>
+                <Preloader/>
+            </div>)
+        }
         return (
             <div className={css.container}>
                 <Container fluid={true}>
@@ -33,4 +34,14 @@ class App extends React.Component {
     }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        isInitialized: state.app.isInitialized
+    }
+};
+let mpDispatchToProps = {
+    initializeApp
+};
+
+export default connect(mapStateToProps, mpDispatchToProps)(App);
+

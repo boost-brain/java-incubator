@@ -1,3 +1,6 @@
+import {loginAPI} from "../api/api";
+import {setCredential, setSuccessLogin, setUserEmail} from "./login-reducer";
+
 const INITIALZED_SUCCESS = "INITIALZED_SUCCESS";
 /**
  * Стоит ли вообще делать?
@@ -21,11 +24,29 @@ const appReducer = (state = InitialState, action) => {
     }
 };
 
-export const initialSuccess = ()=> ({type :INITIALZED_SUCCESS});
+export const initialSuccess = () => ({type: INITIALZED_SUCCESS});
 
-export const initializeApp=(dispatch)=>{
-// let result=dispatch(getAuthUserData());
+export const initializeApp = () => (dispatch) => {
+    let sessionId = localStorage.getItem('sessionId');
+    let userEmail = localStorage.getItem('userEmail');
+    if (!!userEmail) {
+        if (!!sessionId) {
+            loginAPI.checkSession().then(data => {
+                if (data) {
+                    let sessionData = {
+                        sessionId: sessionId,
+                        startTime: 0,
+                        validTime: 0
+                    }
+                    dispatch(setCredential(sessionData));
+                    dispatch(setSuccessLogin());
+                    dispatch(setUserEmail(userEmail));
+                    dispatch(initialSuccess())
+                }
+            })
+        } else dispatch(initialSuccess());
+    } else dispatch(initialSuccess());
+}
 
-};
-
+export default appReducer;
 

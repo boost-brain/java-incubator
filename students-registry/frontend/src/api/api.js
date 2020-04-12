@@ -221,7 +221,17 @@ export const Usersapi = {
     },
 
 };
+
+
+/**
+ * Сервис для сообщений
+ * @type {{countMessages(): *, setMessagesAsRead(*=): Promise<* | void>, readMessage(*): *, readAllMessagesForUser(*): *, deleteMessage(*): *, createNewMessage(*=): *, updateMessage(*=): Promise<* | void>, deleteAllMessagesForUser(*): *}}
+ */
 export const MessageAPI = {
+    /**
+     * Так выглядят поля объекта message со стороны сервера. JAVA вид
+     * OBJECT Message
+     */
     // private long id;
     // private String author;
     // private String recipient;
@@ -232,6 +242,17 @@ export const MessageAPI = {
     // private boolean edited;
     // private boolean read;
 
+    /**
+     * Функция создания нового сообщения.
+     * Обязательны поля:
+     * String author;
+     * String recipient
+     * String text
+     *
+     * Остальные поля сервер заполняет сам. можно null посылать
+     * @param newMessage  - это объект
+     * @returns {Q.Promise<any> | undefined}
+     */
     createNewMessage(newMessage) {
         let sessionId = localStorage.getItem('sessionId');
         return axios({
@@ -246,6 +267,13 @@ export const MessageAPI = {
                 console.log(error);
             })
     },
+
+    /**
+     * Удаляет сообщение по его id
+     * Надо сделать так, что бы удалить можно было только свое сообщение
+     * свой емайл можно найти в state.login.userEmail
+     * @param idMessage   - number
+     */
     deleteMessage(idMessage) {
         let sessionId = localStorage.getItem('sessionId');
         return axios({
@@ -259,11 +287,17 @@ export const MessageAPI = {
                 console.log(error);
             })
     },
-    deleteAllMessagesForUser(email) {
+    /**
+     * Удаляет все сообщения пользователя с email
+     * Видимо, надо удалять все сообщения со своим авторством автор
+     * свой емайл можно найти в state.login.userEmail
+     * @param userEmail
+     */
+    deleteAllMessagesForUser(userEmail) {
         let sessionId = localStorage.getItem('sessionId');
         return axios({
             method: 'DELETE',
-            url: DELETE_ALL_MESSAGES_FOR_USER + email,
+            url: DELETE_ALL_MESSAGES_FOR_USER + userEmail,
             headers: {sessionId: sessionId},
         }).then(function (response) {
             console.log(response);
@@ -272,6 +306,11 @@ export const MessageAPI = {
                 console.log(error);
             })
     },
+    /**
+     * Передает сообщение по переданному id
+     * результат в форме OBJECT Message (в начале описан)
+     * @param idMessage
+     */
     readMessage(idMessage) {
         let sessionId = localStorage.getItem('sessionId');
         return axios({
@@ -286,6 +325,10 @@ export const MessageAPI = {
                 console.log(error);
             })
     },
+    /**
+     * Считает количество всех сообщений для всех пользователей
+     * @returns {Q.Promise<any> | undefined}
+     */
     countMessages() {
         let sessionId = localStorage.getItem('sessionId');
         return axios({
@@ -300,6 +343,10 @@ export const MessageAPI = {
                 console.log(error);
             })
     },
+    /**
+     * Обновляет сообщение message на сервере
+     * @param message
+     */
     updateMessage(message) {
         let sessionId = localStorage.getItem('sessionId');
         return axios.patch(
@@ -313,6 +360,10 @@ export const MessageAPI = {
                 console.log(error);
             });
     },
+    /**
+     * Делает сообщения id которых перечисленны в массиве messages прочитанными
+     * @param messages
+     */
     setMessagesAsRead(messages) {
         let sessionId = localStorage.getItem('sessionId');
         return axios.patch(
@@ -326,6 +377,11 @@ export const MessageAPI = {
                 console.log(error);
             });
     },
+    /**
+     * Возвращает все сообщения для пользователя с email
+     * Чужие сообщения лучше не читать
+     * @param email
+     */
     readAllMessagesForUser(email) {
         let sessionId = localStorage.getItem('sessionId');
         return axios({

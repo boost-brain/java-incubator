@@ -7,6 +7,8 @@ const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
 const SET_FIRST_PAGE = "SET_FIRST_PAGE";
 const SET_LAST_PAGE = " SET_LAST_PAGE";
+const SET_NEXT_PAGE = " SET_NEXT_PAGE";
+const SET_PREV_PAGE = " SET_PREV_PAGE";
 const SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
 const CREATE_NEW_USER = "CREATE_NEW_USER";
 
@@ -18,8 +20,8 @@ const initialState = {
     users: [],
     numberForPage: 10,
     currentPage: firstPage,
-    totalPages: 0,
-    totalCount: 0,
+    totalPages: 1,
+    totalCount: 1,
     isFetching: false,
 };
 
@@ -64,11 +66,33 @@ let usersReducer = (state = initialState, action) => {
         case
         SET_CURRENT_PAGE: {
             if (action.currentPage > state.totalPages) action.currentPage = state.totalPages;
-            if (action.currentPage < 1) action.currentPage = 1;
+            if (action.currentPage < firstPage) action.currentPage = firstPage;
 
             return {
                 ...state,
                 currentPage: action.currentPage
+            }
+        }
+        case
+        SET_PREV_PAGE: {
+            let newCurrentPage = state.currentPage - 1;
+            if (newCurrentPage > state.totalPages) newCurrentPage = state.totalPages;
+            if (newCurrentPage < firstPage) newCurrentPage = firstPage;
+
+            return {
+                ...state,
+                currentPage: newCurrentPage
+            }
+        }
+        case
+        SET_NEXT_PAGE: {
+            let newCurrentPage = state.currentPage + 1;
+            if (newCurrentPage > state.totalPages) newCurrentPage = state.totalPages;
+            if (newCurrentPage < firstPage) newCurrentPage = firstPage;
+
+            return {
+                ...state,
+                currentPage: newCurrentPage
             }
         }
         case TOGGLE_IS_FETCHING: {
@@ -81,7 +105,7 @@ let usersReducer = (state = initialState, action) => {
         SET_FIRST_PAGE:
             return {
                 ...state,
-                currentPage: 0
+                currentPage: firstPage
             };
         case  SET_LAST_PAGE:
             return {
@@ -111,6 +135,9 @@ export const setTotalPages = (totalPages) => ({type: SET_TOTAL_PAGES, totalPages
 export const setFirstPage = () => ({type: SET_FIRST_PAGE});
 export const setLastPage = () => ({type: SET_LAST_PAGE});
 export const setCurrentPage = (currentPage) => ({type: SET_CURRENT_PAGE, currentPage});
+export const setNextPage = () => ({type: SET_NEXT_PAGE});
+export const setPrevPage = () => ({type: SET_PREV_PAGE});
+
 export const createNewUser = (user) => ({type: CREATE_NEW_USER});
 
 export const createNewUserThunkCreator = (newUser) => {
@@ -130,7 +157,7 @@ export const getUsersThunkCreator = (currentPage, numberForPage) => {
         });
         Usersapi.getNumberOfUsers().then(data => {
             dispatch(setTotalUsersCount(data));
-            dispatch(setTotalPages(Math.ceil(data / 10)))
+            dispatch(setTotalPages(Math.ceil(data / numberForPage)))
         })
     }
 };

@@ -5,7 +5,7 @@ const API_SERVER = 'http://185.255.135.104:9000/api/';
 const API_URL = API_SERVER;
 
 const loginEndPointURL = API_URL + 'auth/login';
-const LOGOUT_END_POINT_URL = API_URL + 'login/logout/';
+const LOGOUT_END_POINT_URL = API_URL + 'auth/logout/';
 
 const CREATE_NEW_USER_ENDPOINT = API_URL + 'users/create';
 const CREATE_NEW_USER_CREDENTIALS_ENDPOINT = API_URL + 'credentials/create';
@@ -134,9 +134,9 @@ export const ProjectsAPI = {
                 console.log(error);
             });
     },
-    deleteProject(idProject) {
+    deleteProject(projectId) {
         let sessionId = localStorage.getItem('sessionId');
-        return axios.delete(DELETE_PROJECT_ENDPOINT_URL + idProject, {headers: {sessionId: sessionId}}).then(response => {
+        return axios.delete(DELETE_PROJECT_ENDPOINT_URL + projectId, {headers: {sessionId: sessionId}}).then(response => {
             console.log(response);
             return response.data;
         })

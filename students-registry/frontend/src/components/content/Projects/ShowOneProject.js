@@ -42,7 +42,8 @@ export class ShowOneProject extends React.Component {
     };
 
     doDeleteProject=()=>{
-        this.props.deleteProjectThunkCreator(this.state.projectId);
+         this.props.deleteProjectThunkCreator(this.props.project.projectId);
+
     };
 
     nameOnChange = (e) => {

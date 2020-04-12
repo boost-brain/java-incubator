@@ -65,7 +65,7 @@ export class ShowOneTask extends React.Component {
     };
 
     doDeleteTask = () => {
-        this.props.deleteTaskThunkCreator(this.state.id);
+        this.props.deleteTaskThunkCreator(this.props.task.id);
     };
 
     nameOnChange = (e) => {
@@ -113,6 +113,7 @@ export class ShowOneTask extends React.Component {
 
                 {this.state.nameEditMode &&
                 <input autoFocus={true} onBlur={this.deActivateNameEditMode}
+
                        onChange={this.nameOnChange} value={this.state.name}/>
                 }
             </h4>

@@ -188,11 +188,11 @@ export const updateProjectThunkCreator = (project) => {
     }
 };
 
-export const deleteProjectThunkCreator = (id) => {
+export const deleteProjectThunkCreator = (projectId) => {
     return (dispatch) => {
         dispatch(setToggleFetching(true));
-        ProjectsAPI.deleteProject(id).then(data => {
-            dispatch(deleteProject(id));
+        ProjectsAPI.deleteProject(projectId).then(data => {
+            dispatch(deleteProject(projectId));
             dispatch(setToggleFetching(false));
         })
     }

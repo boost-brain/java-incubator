@@ -40,6 +40,7 @@ let loginReducer = (state = InitialState, action) => {
                 isAuthenticated: true
             };
         case SET_USER_EMAIL:
+            localStorage.setItem('userEmail', action.email);
             return {
                 ...state,
                 userEmail: action.email
@@ -95,8 +96,28 @@ export const loginThunkCreator = (formData) => {
         })
     }
 };
-export const logoutThunkCreator=()=>{
-    return(dispatch) =>{
+
+export const loginIfTrueWithStartAppThunkCreator = (sessionId, userEmail) => {
+    return (dispatch) => {
+            loginAPI.checkSession().then(data => {
+                if (data) {
+                    let sessionData = {
+                        sessionId: sessionId,
+                        startTime: 0,
+                        validTime: 0
+                    }
+                    dispatch(setCredential(sessionData));
+                    dispatch(setSuccessLogin());
+                    dispatch(setUserEmail(userEmail));
+                    return true;
+                }
+            })
+        }
+}
+
+
+export const logoutThunkCreator = () => {
+    return (dispatch) => {
         loginAPI.doLogout().then(data => {
             dispatch(logout());
         })

@@ -6,6 +6,8 @@ const API_URL = API_SERVER;
 
 const loginEndPointURL = API_URL + 'auth/login';
 const LOGOUT_END_POINT_URL = API_URL + 'auth/logout/';
+const CHECK_SESSION_POINT_URL = API_URL + 'auth/check/';
+
 
 const CREATE_NEW_USER_ENDPOINT = API_URL + 'users/create';
 const CREATE_NEW_USER_CREDENTIALS_ENDPOINT = API_URL + 'credentials/create';
@@ -48,6 +50,19 @@ export const loginAPI = {
             localStorage.setItem('sessionId', response.data.sessionId);
             return response.data;
         })
+    },
+    checkSession() {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios({
+            method: 'get',
+            url: CHECK_SESSION_POINT_URL + sessionId
+        }).then(function (response) {
+            return response.data;
+        })
+            .catch(function (error) {
+                console.log(error);
+                return false;
+            })
     },
     doLogout() {
         let sessionId = localStorage.getItem('sessionId');

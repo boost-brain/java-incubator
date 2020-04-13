@@ -21,16 +21,10 @@ services:
 
 
   frontend:
-    image: frontend:latest
-    context: .
-    dockerfile: Dockerfile
-    volumes:
-        - '.:/app'
-        - '/app/node_modules'
+    build: .
+    restart: always
     ports:
-        - 80:8080
-    environment:
-        - CHOKIDAR_USEPOLLING=true
+        - 80:80
 
 
   auth-service:

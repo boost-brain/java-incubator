@@ -20,13 +20,13 @@ services:
       - 9000:9000
 
 
-#  frontend:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    restart: always
-#    ports:
-#        - 80:80
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+        - 80:80
 
 
   auth-service:

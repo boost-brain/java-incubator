@@ -1,7 +1,7 @@
 import React from 'react';
 import css from './profile.module.css';
 import {Container} from "react-bootstrap";
-import {userStatus} from "../../common/userStatus";
+import {busyLogoChoice, userStatus} from "../../common/userStatus";
 
 class ShowProfile extends React.Component {
     state = {
@@ -123,7 +123,9 @@ class ShowProfile extends React.Component {
                 </div>
                 <div className={css.status}>
                     {!this.state.statusEditMode &&
-                    <span onClick={this.activateStatusEditMode}>Hours: {this.state.status} </span>
+                    <span onClick={this.activateStatusEditMode}>
+                        <img className={css.statusLogo} src={busyLogoChoice(this.state.status)}/>
+                        {this.state.status} </span>
                     }
 
                     {this.state.statusEditMode &&
@@ -131,7 +133,9 @@ class ShowProfile extends React.Component {
                            onChange={this.statusOnChange} value={this.state.status}>
                         {userStatus.map((userStatus, index) =>{
                             return(
-                                <option value={userStatus}>{userStatus}</option>
+                                <option value={userStatus}>{userStatus}
+
+                                </option>
                             )
                         })}
                     </select>

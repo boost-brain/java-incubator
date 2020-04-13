@@ -9,8 +9,10 @@ const LOGOUT_END_POINT_URL = API_URL + 'auth/logout/';
 const CHECK_SESSION_POINT_URL = API_URL + 'auth/check/';
 
 
-const CREATE_NEW_USER_ENDPOINT = API_URL + 'users/create';
+const CREATE_NEW_USER_ENDPOINT = API_URL + 'users/create/';
+const GET_USER_FROM_EMAIL_ENDPOINT = API_URL + 'users/read/';
 const CREATE_NEW_USER_CREDENTIALS_ENDPOINT = API_URL + 'credentials/create';
+
 
 const allprojectsEndPointURL = API_URL + 'projects/projects-all';
 const newProjectEndPointURL = API_URL + 'projects/createProject';
@@ -31,7 +33,6 @@ const GET_ALL_USERS_END_POINT = API_URL + 'users/users-all';
 const USERS_COUNT_END_POINT = API_URL + 'users/count';
 const GET_PAGINATION_END_POINT = API_URL + 'users/page/';
 
-// MESSAGES_CONTROLLER_PREFIX = API_PREFIX + "/messages";
 const CREATE_NEW_MESSAGE_END_POINT = API_URL + 'messages/create/';
 const DELETE_MESSAGE_END_POINT = API_URL + 'messages/delete/';
 const MESSAGES_COUNT_MESSAGE_END_POINT = API_URL + 'messages/count/';
@@ -213,7 +214,7 @@ export const TasksAPI = {
 };
 
 
-export const Usersapi = {
+export const UsersAPI = {
 
     getNumberOfUsers() {
         let sessionId = localStorage.getItem('sessionId');
@@ -235,6 +236,20 @@ export const Usersapi = {
         })
     },
 
+    readCurrentUserFromEmail() {
+        let sessionId = localStorage.getItem('sessionId');
+        let email = localStorage.getItem('userEmail');
+        return axios({
+            method: 'get',
+            url: GET_USER_FROM_EMAIL_ENDPOINT + email,
+            headers: {sessionId: sessionId},
+        }).then(function (response) {
+            return response.data
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
 };
 
 

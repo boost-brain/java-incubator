@@ -9,6 +9,7 @@ import CreateProject from "./Projects/CreateProject";
 import TasksContainer from "./Tasks/TasksContainer";
 import CreateTask from "./Tasks/CreateTask";
 import CreateUser from "../Login/CreateUser";
+import ProfileContainer from "./Profile/ProfileContainer";
 
 
 class Content extends React.Component {
@@ -18,6 +19,7 @@ class Content extends React.Component {
         return (
             <>
                 <Route path="/users" render={() => <UsersContainer/>}/>
+                <Route path="/profile" render={() => <ProfileContainer/>}/>
                 <Route path="/projects" render={() => <ProjectsContainer/>}/>
                 <Route path="/newproject" render={() => <CreateProject/>}/>
                 <Route path="/tasks" render={() => <TasksContainer/>}/>

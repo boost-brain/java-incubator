@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 class UserInfoLogo extends React.Component {
     state = {
@@ -25,8 +26,9 @@ class UserInfoLogo extends React.Component {
         console.log(`UserInfoLogo ` + this.userEmail + ' ' + this.props.userEmail)
         return (
             <div>
-                <h3 onClick={() => this.props.emailOnClick()}>
-                    {this.props.userEmail}
+                <h3>
+                    <Link to="/profile">{this.props.userEmail}</Link>
+
                 </h3>
                 <h3 onClick={() => this.props.logoutOnClick()}>
                     Logout

@@ -1,4 +1,4 @@
-import {CreateNewUser, Usersapi} from "../api/api";
+import {CreateNewUser, UsersAPI} from "../api/api";
 
 const SET_USERS = "SET_USERS";
 const SET_ALL_USERS = "SET_ALL_USERS";
@@ -152,10 +152,10 @@ export const createNewUserThunkCreator = (newUser) => {
 
 export const getUsersThunkCreator = (currentPage, numberForPage) => {
     return (dispatch) => {
-        Usersapi.getPaginationUsers(currentPage, numberForPage).then(data => {
+        UsersAPI.getPaginationUsers(currentPage, numberForPage).then(data => {
             dispatch(setUsers(data));
         });
-        Usersapi.getNumberOfUsers().then(data => {
+        UsersAPI.getNumberOfUsers().then(data => {
             dispatch(setTotalUsersCount(data));
             dispatch(setTotalPages(Math.ceil(data / numberForPage)))
         })
@@ -164,7 +164,7 @@ export const getUsersThunkCreator = (currentPage, numberForPage) => {
 
 export const getAllUsersThunkCreator = () => {
     return (dispatch) => {
-        Usersapi.getAllUsers().then(data => {
+        UsersAPI.getAllUsers().then(data => {
             dispatch(setAllUsers(data));
         });
     }

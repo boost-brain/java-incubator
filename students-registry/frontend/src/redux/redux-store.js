@@ -6,6 +6,7 @@ import projectsReducer from "./projects-reducer";
 import tasksReducer from "./tasks-reducer";
 import usersReducer from "./users-reducer";
 import appReducer from "./app-reducer";
+import profileReducer from "./profile-reducer";
 
 let reducers = combineReducers(
     {
@@ -19,7 +20,8 @@ let reducers = combineReducers(
         updateProjectForm: formReducer,
         createUser: formReducer,
         usersContent: usersReducer,
-        app: appReducer
+        app: appReducer,
+        profile: profileReducer
     });
 
 let store = createStore(reducers,

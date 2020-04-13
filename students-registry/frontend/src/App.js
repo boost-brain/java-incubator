@@ -7,11 +7,19 @@ import HeaderContainer from "./components/header/HeaderContainer";
 import {connect} from "react-redux";
 import {initializeApp} from "./redux/app-reducer";
 import Preloader from "./components/common/preloader/Preloader";
+import {setCredential, setSuccessLogin, setUserEmail} from "./redux/login-reducer";
 
 class App extends React.Component {
     componentDidMount() {
         this.props.initializeApp();
     }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.isInitialized!==prevProps.isInitialized){
+
+           setSuccessLogin();
+        }
+    }
+
 
     render() {
         if (!this.props.isInitialized) {
@@ -40,7 +48,8 @@ const mapStateToProps = (state) => {
     }
 };
 let mpDispatchToProps = {
-    initializeApp
+    initializeApp,
+    setSuccessLogin
 };
 
 export default connect(mapStateToProps, mpDispatchToProps)(App);

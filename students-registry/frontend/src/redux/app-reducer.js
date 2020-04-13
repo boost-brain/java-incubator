@@ -29,8 +29,8 @@ export const initialSuccess = () => ({type: INITIALZED_SUCCESS});
 export const initializeApp = () => (dispatch) => {
     let sessionId = localStorage.getItem('sessionId');
     let userEmail = localStorage.getItem('userEmail');
-    if (!!userEmail) {
-        if (!!sessionId) {
+    if (typeof (sessionId) != 'undefined' && sessionId != null) {
+        if (typeof (userEmail) != 'undefined' && userEmail != null) {
             loginAPI.checkSession().then(data => {
                 if (data) {
                     let sessionData = {
@@ -41,8 +41,9 @@ export const initializeApp = () => (dispatch) => {
                     dispatch(setCredential(sessionData));
                     dispatch(setSuccessLogin());
                     dispatch(setUserEmail(userEmail));
-                    dispatch(initialSuccess())
+
                 }
+                dispatch(initialSuccess())
             })
         } else dispatch(initialSuccess());
     } else dispatch(initialSuccess());

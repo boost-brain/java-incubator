@@ -90,29 +90,31 @@ export const createNewCredentialThunkCreator = (newCredentials) => {
 export const loginThunkCreator = (formData) => {
     return (dispatch) => {
         loginAPI.doLogin(formData).then(data => {
-            dispatch(setCredential(data));
-            dispatch(setSuccessLogin());
-            dispatch(setUserEmail(formData.login));
+            if (typeof (data.sessionId) != 'undefined' && data.sessionId != null) {
+                dispatch(setCredential(data));
+                dispatch(setSuccessLogin());
+                dispatch(setUserEmail(formData.login));
+            }
         })
     }
 };
 
 export const loginIfTrueWithStartAppThunkCreator = (sessionId, userEmail) => {
     return (dispatch) => {
-            loginAPI.checkSession().then(data => {
-                if (data) {
-                    let sessionData = {
-                        sessionId: sessionId,
-                        startTime: 0,
-                        validTime: 0
-                    }
-                    dispatch(setCredential(sessionData));
-                    dispatch(setSuccessLogin());
-                    dispatch(setUserEmail(userEmail));
-                    return true;
+        loginAPI.checkSession().then(data => {
+            if (data) {
+                let sessionData = {
+                    sessionId: sessionId,
+                    startTime: 0,
+                    validTime: 0
                 }
-            })
-        }
+                dispatch(setCredential(sessionData));
+                dispatch(setSuccessLogin());
+                dispatch(setUserEmail(userEmail));
+                return true;
+            }
+        })
+    }
 }
 
 

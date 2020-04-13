@@ -1,6 +1,6 @@
 
 FROM mhart/alpine-node AS builder
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY package.json package.json
 RUN yarn install

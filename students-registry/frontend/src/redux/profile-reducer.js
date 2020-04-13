@@ -1,5 +1,4 @@
 import {UsersAPI} from "../api/api";
-import {setAllProjects} from "./projects-reducer";
 
 const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
 const SET_CURRENT_USER = "SET_CURRENT_USER";
@@ -62,6 +61,14 @@ export const setUserFromServer = () => {
         })
     }
 };
+export const updateUserThunkCreator = (userForUpdate) => {
+    setToggleFetching(true);
+    return (dispatch) => {
+        UsersAPI.updateCurrentUser(userForUpdate).then(data => {
+            setToggleFetching(false);
+        })
+    }
+}
 
 
 export default profileReducer;

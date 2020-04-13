@@ -1,0 +1,37 @@
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.email {
+    justify-content: center;
+    flex: 3 1 100px;
+}
+
+.name {
+    justify-content: center;
+    flex: 9 3 300px;
+}
+
+.gitHubId {
+    justify-content: center;
+    flex: 6 2 200px;
+}
+
+.hours {
+    justify-content: center;
+    flex: 6 2 200px;
+}
+
+.descriptionInput {
+    width: 600px;
+}
+
+.urlInput {
+    width: 200px;
+}
+
+.delete {
+    width: 50px;
+}

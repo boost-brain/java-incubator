@@ -11,6 +11,7 @@ const CHECK_SESSION_POINT_URL = API_URL + 'auth/check/';
 
 const CREATE_NEW_USER_ENDPOINT = API_URL + 'users/create/';
 const GET_USER_FROM_EMAIL_ENDPOINT = API_URL + 'users/read/';
+const UPDATE_USER_ENDPOINT = API_URL + 'users/update/';
 const CREATE_NEW_USER_CREDENTIALS_ENDPOINT = API_URL + 'credentials/create';
 
 
@@ -243,6 +244,20 @@ export const UsersAPI = {
             method: 'get',
             url: GET_USER_FROM_EMAIL_ENDPOINT + email,
             headers: {sessionId: sessionId},
+        }).then(function (response) {
+            return response.data
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },
+    updateCurrentUser(userForUpdate) {
+        let sessionId = localStorage.getItem('sessionId');
+        return axios({
+            method: 'patch',
+            url: UPDATE_USER_ENDPOINT,
+            headers: {sessionId: sessionId},
+            data: userForUpdate
         }).then(function (response) {
             return response.data
         })

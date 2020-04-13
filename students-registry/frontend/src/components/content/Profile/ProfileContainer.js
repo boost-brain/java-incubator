@@ -4,7 +4,7 @@ import {withAuthRedirect} from "../../../HOC/withAuthRedirect";
 import {connect} from "react-redux";
 import Preloader from "../../common/preloader/Preloader";
 import ShowProfile from "./ShowProfile";
-import {setToggleFetching, setUserFromServer} from "../../../redux/profile-reducer";
+import {setToggleFetching, setUserFromServer, updateUserThunkCreator} from "../../../redux/profile-reducer";
 
 class ProfileContainer extends React.Component {
     componentDidMount() {
@@ -15,7 +15,8 @@ class ProfileContainer extends React.Component {
         return (
             <>
                 {this.props.isFetching ? <Preloader/> : null}
-                <ShowProfile userFromServer={this.props.userFromServer}/>
+                <ShowProfile userFromServer={this.props.userFromServer}
+                             updateUserThunkCreator={this.props.updateUserThunkCreator}/>
             </>
         )
     }
@@ -33,7 +34,8 @@ const
 const
     mapDispatchToProps = {
         setToggleFetching,
-        setUserFromServer
+        setUserFromServer,
+        updateUserThunkCreator
 
     };
 export default compose(

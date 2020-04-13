@@ -2,6 +2,7 @@
 FROM mhart/alpine-node AS builder
 WORKDIR /app
 COPY . .
+COPY package.json package.json
 RUN yarn install
 RUN yarn run build
 

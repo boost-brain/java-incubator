@@ -21,7 +21,9 @@ services:
 
 
   frontend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     ports:
         - 80:80

@@ -2,36 +2,28 @@
 .container {
     display: flex;
     flex-direction: column;
+    font-size: large;
 }
 
 .email {
     justify-content: center;
-    flex: 3 1 100px;
 }
 
 .name {
     justify-content: center;
-    flex: 9 3 300px;
 }
 
 .gitHubId {
     justify-content: center;
-    flex: 6 2 200px;
 }
 
 .hours {
     justify-content: center;
-    flex: 6 2 200px;
+}
+.created {
+    justify-content: center;
+}
+.status {
+    justify-content: center;
 }
 
-.descriptionInput {
-    width: 600px;
-}
-
-.urlInput {
-    width: 200px;
-}
-
-.delete {
-    width: 50px;
-}

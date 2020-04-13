@@ -1,5 +1,7 @@
 import React from 'react';
 import css from './profile.module.css';
+import {Container} from "react-bootstrap";
+import {userStatus} from "../../common/userStatus";
 
 class ShowProfile extends React.Component {
     state = {
@@ -61,6 +63,9 @@ class ShowProfile extends React.Component {
     hoursOnChange = (e) => {
         this.setState({hours: e.currentTarget.value});
     };
+    statusOnChange = (e) => {
+        this.setState({status: e.currentTarget.value});
+    };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.userFromServer.name !== this.props.userFromServer.name) {
@@ -75,53 +80,70 @@ class ShowProfile extends React.Component {
         if (prevProps.userFromServer.status !== this.props.userFromServer.status) {
             this.setState({status: this.props.userFromServer.status})
         }
-
-
     }
 
     render = () => {
+
         return (
-            <>
-                <container className={css.container}>
-                    Profile
-                    <h4 className={css.email}>
-                        email: {this.props.userFromServer.email}
-                    </h4>
-                    <h4 className={css.name}>
-                        {!this.state.nameEditMode &&
-                        <span onClick={this.activateNameEditMode}>Name: {this.state.name} </span>
-                        }
+            <Container className={css.container}>
+                Profile
+                <div className={css.email}>
+                    email: {this.props.userFromServer.email}
+                </div>
+                <div className={css.name}>
+                    {!this.state.nameEditMode &&
+                    <span onClick={this.activateNameEditMode}>Name: {this.state.name} </span>
+                    }
 
-                        {this.state.nameEditMode &&
-                        <input autoFocus={true} onBlur={this.deActivateNameEditMode}
-                               onChange={this.nameOnChange} value={this.state.name}/>
-                        }
-                    </h4>
-                    <h4 className={css.gitHubId}>
-                        {!this.state.gitHubIdEditMode &&
-                        <span onClick={this.activateGitHubIdEditMode}>gitHubId: {this.state.gitHubId} </span>
-                        }
+                    {this.state.nameEditMode &&
+                    <input autoFocus={true} onBlur={this.deActivateNameEditMode}
+                           onChange={this.nameOnChange} value={this.state.name}/>
+                    }
+                </div>
+                <div className={css.gitHubId}>
+                    {!this.state.gitHubIdEditMode &&
+                    <span onClick={this.activateGitHubIdEditMode}>gitHubId: {this.state.gitHubId} </span>
+                    }
 
-                        {this.state.gitHubIdEditMode &&
-                        <input autoFocus={true} onBlur={this.deActivateGitHubIdEditMod}
-                               onChange={this.gitHubIdOnChange} value={this.state.gitHubId}/>
-                        }
-                    </h4>
-                    <h4 className={css.hours}>
-                        {!this.state.hoursEditMode &&
-                        <span onClick={this.activateHoursEditMode}>gitHubId: {this.state.hours} </span>
-                        }
+                    {this.state.gitHubIdEditMode &&
+                    <input autoFocus={true} onBlur={this.deActivateGitHubIdEditMod}
+                           onChange={this.gitHubIdOnChange} value={this.state.gitHubId}/>
+                    }
+                    {this.state.gitHubId}
+                </div>
+                <div className={css.hours}>
+                    {!this.state.hoursEditMode &&
+                    <span onClick={this.activateHoursEditMode}>Hours: {this.state.hours} </span>
+                    }
 
-                        {this.state.hoursEditMode &&
-                        <input autoFocus={true} onBlur={this.deActivateHoursEditMode}
-                               onChange={this.hoursOnChange} value={this.state.hours}/>
-                        }
-                    </h4>
-                </container>
-                }
-                }
-                }
-            </>
+                    {this.state.hoursEditMode &&
+                    <input autoFocus={true} onBlur={this.deActivateHoursEditMode}
+                           onChange={this.hoursOnChange} value={this.state.hours}/>
+                    }
+                </div>
+                <div className={css.status}>
+                    {!this.state.statusEditMode &&
+                    <span onClick={this.activateStatusEditMode}>Hours: {this.state.status} </span>
+                    }
+
+                    {this.state.statusEditMode &&
+                    <select autoFocus={true} onBlur={this.deActivateStatusEditMode}
+                           onChange={this.statusOnChange} value={this.state.status}>
+                        {userStatus.map((userStatus, index) =>{
+                            return(
+                                <option value={userStatus}>{userStatus}</option>
+                            )
+                        })}
+                    </select>
+                    }
+                </div>
+                <div className={css.created}>
+                    Сreation date: {this.props.userFromServer.createDate}
+                </div>
+
+            </Container>
+
+
         );
     }
 }

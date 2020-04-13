@@ -1,6 +1,4 @@
 FROM node:latest AS builder
-ENTRYPOINT [ "yarn","start" ]
-FROM node:latest AS builder
 WORKDIR /app
 COPY . .
 RUN yarn run build

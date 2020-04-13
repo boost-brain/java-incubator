@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY package.json package.json
 RUN yarn install
-COPY . .
+COPY bui .
 RUN yarn run build
 
 FROM mhart/alpine-node

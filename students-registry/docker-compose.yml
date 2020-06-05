@@ -88,6 +88,7 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'students'
     volumes:
       - database_data:/var/lib/postgresql/data
 

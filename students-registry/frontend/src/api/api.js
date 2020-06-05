@@ -2,7 +2,7 @@ import * as axios from 'axios';
 
 const API_LOCALHOST = 'http://localhost:9000/api';
 const API_SERVER = 'http://185.255.135.104:9000/api/';
-const API_URL = API_SERVER;
+const API_URL = API_LOCALHOST;
 
 const loginEndPointURL = API_URL + 'auth/login';
 const LOGOUT_END_POINT_URL = API_URL + 'auth/logout/';

@@ -1,7 +1,11 @@
 FROM node:latest AS builder
 WORKDIR /app
-COPY . .
-RUN yarn run build
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+COPY . ./
+RUN npm run build
 
 FROM node:latest
 RUN yarn global add serve

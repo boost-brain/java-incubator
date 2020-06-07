@@ -1,7 +1,14 @@
-FROM openjdk:8-jdk-alpine
-
-ADD target/frontend.jar /app/
+FROM node:latest AS builder
 WORKDIR /app
-ENTRYPOINT ["java","-jar","frontend.jar"]
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+COPY . ./
+RUN npm run build
 
-EXPOSE 80 8080
+FROM node:latest
+RUN yarn global add serve
+WORKDIR /app
+COPY --from=builder /app/build .
+CMD ["serve", "-p", "80", "-s", "."]

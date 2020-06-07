@@ -88,6 +88,8 @@ public class ProjectController {
     @ResponseBody
     @GetMapping(value="/watch/{page}/{size}")
     public Page<ProjectDto> watch(@PathVariable int page, @PathVariable int size) {
+        //!!!Костыль
+        page--;
         if((page < 0) || (size < 1)) {
             throw new BadRequestException();
         }

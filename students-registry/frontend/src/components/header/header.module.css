@@ -1,0 +1,13 @@
+.logoImage {
+    width: 60px;
+    height: 60px;
+    margin-top: 10px;
+}
+
+.linkTo {
+    color: white;
+    text-decoration:none;
+}
+.loginBlock {
+    float:right;
+}

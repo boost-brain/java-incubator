@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * MessagesController сервиса обработки сообщений.
+ * в интерфейсе MessagesControllerApiMethodSwaggerAnnotationsAble содержится информация для сервиса документации Swagger
+ */
 @RestController
 @RequestMapping(Constants.MESSAGES_CONTROLLER_PREFIX)
-public class MessagesController {
+public class MessagesController implements MessagesControllerApiMethodSwaggerAnnotationsAble {
 
     private final MessagesRepository messagesRepository;
 

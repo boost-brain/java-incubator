@@ -1,0 +1,52 @@
+.thead {
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+    height: 10em;
+    align-items: center;
+    justify-content: center
+}
+
+.statusLogo {
+    height: 60px;
+    width: 60px;
+}
+
+.container {
+    display: flex;
+}
+
+.pagination {
+    alignment: right;
+}
+
+.name {
+    width:20%;
+    flex:  5 1 300px;
+}
+.email {
+    width: 20%;
+    flex:  4 1 200px;
+}
+
+.github {
+    width: 20%;
+    flex:  4 1 200px;
+}
+.hours {
+    width: 10%;
+    flex:  1 1 100px;
+}
+.createDate {
+    width: 15%;
+    flex:  3 1 200px;
+}
+.updateDate {
+    width:15%;
+    flex:  3 1 200px;
+}
+.status {
+    width: 20%;
+    flex:  5 1 200px;
+}
+

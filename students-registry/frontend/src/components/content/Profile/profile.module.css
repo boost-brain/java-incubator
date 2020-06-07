@@ -1,0 +1,32 @@
+
+.container {
+    display: flex;
+    flex-direction: column;
+    font-size: large;
+}
+
+.email {
+    justify-content: center;
+}
+
+.name {
+    justify-content: center;
+}
+
+.gitHubId {
+    justify-content: center;
+}
+
+.hours {
+    justify-content: center;
+}
+.created {
+    justify-content: center;
+}
+.status {
+    justify-content: center;
+}
+.statusLogo {
+
+}
+

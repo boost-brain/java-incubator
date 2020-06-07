@@ -27,6 +27,7 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(regex("/api.*"))
+
                 .build()
                 .useDefaultResponseMessages(false)
                 .apiInfo(getInfo());
@@ -84,12 +85,9 @@ public class SwaggerConfig {
      * @return описание
      */
     private String getDescription() {
-        return "Микросервис “tasks-service” предназначен для управления заданиями и комментарями к ним.\n" +
-                "Собирается в Docker-образ на основе openjdk:8-jdk-alpine, с использованием фреймворка SpringBoot, для хранения данных используется внешняя (не входящая в образ) Postgresql база данных.\n" +
-                "Для упрощения написания кода используется Lombok. \n" +
-                "Для документирования используется Swagger (swagger-ui).\n" +
-                "Работа с микросервисом осуществляется через REST API.\n" +
-                "Конфигурация сервиса производится переменными окружения.\n";
+
+        return "Микросервис “users-service”";
+
     }
 
     /**
@@ -98,7 +96,8 @@ public class SwaggerConfig {
      * @return Имя
      */
     private String getTitle() {
-        return "Сервис управления заданиями (TaskDto) и комментариями (CommentDto) к ним";
+
+        return "Сервис управления пользователями";
     }
 
     /**

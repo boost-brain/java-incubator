@@ -1,6 +1,9 @@
 package boost.brain.course.auth.controller;
 
-
+/**
+ * REST контроллер сервиса управления Сессиями (Session).
+ * в интерфейсе LoginControllerApiMethodSwaggerAnnotation содержится информация для сервиса документации Swagger
+ */
 import boost.brain.course.auth.Constants;
 import boost.brain.course.auth.repository.SessionsRepository;
 import boost.brain.course.common.auth.Credentials;
@@ -13,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Log
 @RequestMapping(path = Constants.LOGIN_CONTROLLER_PREFIX)
-public class LoginController {
+public class LoginController implements LoginControllerApiMethodSwaggerAnnotation{
     private final SessionsRepository sessionsRepository;
 
     @Autowired

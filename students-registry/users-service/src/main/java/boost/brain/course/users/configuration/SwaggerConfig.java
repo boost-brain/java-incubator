@@ -4,7 +4,6 @@ import boost.brain.course.users.controller.UsersController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -28,9 +27,12 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(regex("/api.*"))
-                .build().useDefaultResponseMessages(false)
+
+                .build()
+                .useDefaultResponseMessages(false)
                 .apiInfo(getInfo());
     }
+
     private ApiInfo getInfo() {
         return new ApiInfo(getTitle(), getDescription(), getVersion(), getTermsOfServiceUrl(), getContact(), getLicense(),
                 getLicenseUrl(), getVendorExtension());
@@ -83,7 +85,9 @@ public class SwaggerConfig {
      * @return описание
      */
     private String getDescription() {
+
         return "Микросервис “users-service”";
+
     }
 
     /**
@@ -92,6 +96,7 @@ public class SwaggerConfig {
      * @return Имя
      */
     private String getTitle() {
+
         return "Сервис управления пользователями";
     }
 

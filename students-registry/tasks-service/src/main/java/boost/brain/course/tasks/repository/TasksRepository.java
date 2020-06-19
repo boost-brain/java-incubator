@@ -5,9 +5,6 @@ import boost.brain.course.tasks.repository.entities.TaskEntity;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -21,8 +18,6 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
 
 @Repository
 @Transactional
@@ -39,22 +34,27 @@ public class TasksRepository{
         if (taskDto == null) {
             return Optional.empty();
         }
-        TaskEntity taskEntity = new TaskEntity();
-        BeanUtils.copyProperties(taskDto, taskEntity, "id");
-        entityManager.persist(taskEntity);
+        TaskEntity taskEntity =saveToBaseAloneTaskDto(taskDto) ;
         TaskDto result = new TaskDto();
         BeanUtils.copyProperties(taskEntity, result, "comments");
         return Optional.of(result);
     }
 
-    public TaskDto read(final long id) {
+    private TaskEntity saveToBaseAloneTaskDto(TaskDto taskDto) {
+        TaskEntity taskEntity = new TaskEntity();
+        BeanUtils.copyProperties(taskDto, taskEntity, "id");
+        entityManager.persist(taskEntity);
+        return taskEntity;
+    }
+
+    public Optional<TaskDto> read(final long id) {
         TaskEntity taskEntity = entityManager.find(TaskEntity.class, id);
         if (taskEntity == null) {
-            return null;
+            return Optional.empty();
         }
         TaskDto result = new TaskDto();
         BeanUtils.copyProperties(taskEntity, result);
-        return result;
+        return Optional.of(result);
     }
 
     public boolean update(final TaskDto taskDto) {

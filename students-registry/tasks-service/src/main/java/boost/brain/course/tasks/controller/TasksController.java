@@ -79,11 +79,11 @@ public class TasksController implements CommonApiMethodSwaggerAnnotationsAble<Ta
         if (id < 1) {
             throw new BadRequestException();
         }
-        TaskDto result = tasksRepository.read(id);
-        if (result == null) {
-            throw new NotFoundException();
+        Optional<TaskDto> result = tasksRepository.read(id);
+        if (result.isPresent()) {
+            return result.get();
         }
-        return result;
+        throw new NotFoundException();
     }
 
     @Override
@@ -101,19 +101,19 @@ public class TasksController implements CommonApiMethodSwaggerAnnotationsAble<Ta
                 StringUtils.isEmpty(taskDto.getText())) {
             throw new BadRequestException();
         }
-        TaskDto readTaskDto = tasksRepository.read(taskDto.getId());
-        if (readTaskDto == null) {
-            throw new NotFoundException();
-        }
-        taskDto.setUpdateDate(System.currentTimeMillis());
-        if (tasksRepository.update(taskDto)) {
-            if (!readTaskDto.getImplementer().equals(taskDto.getImplementer())) {
-                this.updateStatusForUser(taskDto.getImplementer(), UserStatus.BUSY);
+        Optional<TaskDto> readTaskDto = tasksRepository.read(taskDto.getId());
+        if (readTaskDto.isPresent()) {
+            taskDto.setUpdateDate(System.currentTimeMillis());
+            if (tasksRepository.update(taskDto)) {
+                if (!readTaskDto.get().getImplementer().equals(taskDto.getImplementer())) {
+                    this.updateStatusForUser(taskDto.getImplementer(), UserStatus.BUSY);
+                }
+                return HttpStatus.OK.getReasonPhrase();
+            } else {
+                throw new ConflictException();
             }
-            return HttpStatus.OK.getReasonPhrase();
-        } else {
-            throw new ConflictException();
         }
+        throw new NotFoundException();
     }
 
     @Override
@@ -131,19 +131,19 @@ public class TasksController implements CommonApiMethodSwaggerAnnotationsAble<Ta
                 StringUtils.isEmpty(taskDto.getText())) {
             throw new BadRequestException();
         }
-        TaskDto readTaskDto = tasksRepository.read(taskDto.getId());
-        if (readTaskDto == null) {
-            throw new NotFoundException();
-        }
-        taskDto.setUpdateDate(System.currentTimeMillis());
-        if (tasksRepository.update(taskDto)) {
-            if (!readTaskDto.getImplementer().equals(taskDto.getImplementer())) {
-                this.updateStatusForUser(taskDto.getImplementer(), UserStatus.BUSY);
+        Optional<TaskDto> readTaskDto = tasksRepository.read(taskDto.getId());
+        if (readTaskDto.isPresent()) {
+            taskDto.setUpdateDate(System.currentTimeMillis());
+            if (tasksRepository.update(taskDto)) {
+                if (!readTaskDto.get().getImplementer().equals(taskDto.getImplementer())) {
+                    this.updateStatusForUser(taskDto.getImplementer(), UserStatus.BUSY);
+                }
+                return HttpStatus.OK.getReasonPhrase();
+            } else {
+                throw new ConflictException();
             }
-            return HttpStatus.OK.getReasonPhrase();
-        } else {
-            throw new ConflictException();
         }
+        throw new NotFoundException();
     }
 
     @Override

@@ -29,6 +29,7 @@ public class MessagesController implements MessagesControllerApiMethodSwaggerAnn
         this.messagesRepository = messagesRepository;
     }
 
+    @Override
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -54,6 +55,7 @@ public class MessagesController implements MessagesControllerApiMethodSwaggerAnn
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.READ_PREFIX + "/{id}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public MessageDto read(@PathVariable long id) {
@@ -67,7 +69,7 @@ public class MessagesController implements MessagesControllerApiMethodSwaggerAnn
         return result;
     }
 
-
+    @Override
     @PatchMapping(path = Constants.UPDATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -84,6 +86,7 @@ public class MessagesController implements MessagesControllerApiMethodSwaggerAnn
         }
     }
 
+    @Override
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String delete(@PathVariable long id) {
@@ -97,12 +100,14 @@ public class MessagesController implements MessagesControllerApiMethodSwaggerAnn
         }
     }
 
+    @Override
     @GetMapping(path = Constants.COUNT_PREFIX)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody long count() {
         return messagesRepository.count();
     }
 
+    @Override
     @GetMapping(path = Constants.ALL_MESSAGES_FOR_USER + "/{email}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map<String, List<MessageDto>> allMessagesForUser(@PathVariable String email) {
@@ -116,6 +121,7 @@ public class MessagesController implements MessagesControllerApiMethodSwaggerAnn
         return result;
     }
 
+    @Override
     @DeleteMapping(path = Constants.DELETE_ALL_MESSAGES_FOR_USER + "/{email}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteAllMessagesForUser(@PathVariable String email) {
@@ -129,6 +135,7 @@ public class MessagesController implements MessagesControllerApiMethodSwaggerAnn
         }
     }
 
+    @Override
     @PatchMapping(path = Constants.MESSAGES_AS_READ)
     @ResponseStatus(HttpStatus.OK)
     public String messagesAsRead(@RequestBody List<Integer> ids) {

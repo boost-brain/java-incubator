@@ -31,7 +31,7 @@ public class TasksRepository{
     }
 
     public Optional<TaskDto> create(final TaskDto taskDto) {
-        if (taskDto == null) {
+        if (checkTaskDtoNOTCorrect(taskDto)) {
             return Optional.empty();
         }
         TaskEntity taskEntity =saveToBaseAloneTaskDto(taskDto) ;
@@ -49,7 +49,7 @@ public class TasksRepository{
 
     public Optional<TaskDto> read(final long id) {
         TaskEntity taskEntity = entityManager.find(TaskEntity.class, id);
-        if (taskEntity == null) {
+        if (checkTaskEntityNOTCorrect(taskEntity)) {
             return Optional.empty();
         }
         TaskDto result = new TaskDto();
@@ -58,11 +58,11 @@ public class TasksRepository{
     }
 
     public boolean update(final TaskDto taskDto) {
-        if (taskDto == null) {
+        if (checkTaskDtoNOTCorrect(taskDto)) {
             return false;
         }
         TaskEntity taskEntity = entityManager.find(TaskEntity.class, taskDto.getId());
-        if (taskEntity == null) {
+        if (checkTaskEntityNOTCorrect(taskEntity)) {
             return false;
         }
         BeanUtils.copyProperties(taskDto, taskEntity, "createDate", "author");
@@ -72,7 +72,7 @@ public class TasksRepository{
 
     public boolean delete(final long id) {
         TaskEntity taskEntity = entityManager.find(TaskEntity.class, id);
-        if (taskEntity == null) {
+        if (checkTaskEntityNOTCorrect(taskEntity)) {
             return false;
         }
         entityManager.remove(taskEntity);
@@ -189,5 +189,13 @@ public class TasksRepository{
             return false;
         }
         return true;
+    }
+
+    private boolean checkTaskDtoNOTCorrect(TaskDto taskDto) {
+        return taskDto == null;
+    }
+
+    private boolean checkTaskEntityNOTCorrect(TaskEntity taskEntity) {
+        return taskEntity == null;
     }
 }

@@ -45,6 +45,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         this.tasksRepository = tasksRepository;
     }
 
+    @Override
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -70,6 +71,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.READ_PREFIX + "/{id}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public TaskDto read(@PathVariable long id) {
@@ -83,6 +85,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         return result;
     }
 
+    @Override
     @PatchMapping(path = Constants.UPDATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -112,6 +115,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         }
     }
 
+    @Override
     @PutMapping(path = Constants.PUT_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -141,6 +145,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         }
     }
 
+    @Override
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String delete(@PathVariable long id) {
@@ -154,6 +159,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         }
     }
 
+    @Override
     @GetMapping(path = Constants.COUNT_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -176,6 +182,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.FOR_PREFIX + "/{implementer}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<TaskDto> tasksFor(@PathVariable String implementer) {
@@ -189,6 +196,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.FROM_PREFIX + "/{author}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<TaskDto> tasksFrom(@PathVariable String author) {
@@ -202,6 +210,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.IN_PREFIX + "/{project}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<TaskDto> tasksIn(@PathVariable int project) {
@@ -215,6 +224,7 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.FILTER_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<TaskDto> filter(@RequestParam(required = false, defaultValue = "0") int project,

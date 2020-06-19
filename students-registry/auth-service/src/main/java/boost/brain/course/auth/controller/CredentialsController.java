@@ -27,6 +27,7 @@ public class CredentialsController implements CredentialsControllerApiMethodSwag
         this.credentialsRepository = credentialsRepository;
     }
 
+    @Override
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -36,6 +37,7 @@ public class CredentialsController implements CredentialsControllerApiMethodSwag
         return credentialsRepository.create(credentials);
     }
 
+    @Override
     @PatchMapping(path = Constants.UPDATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -43,6 +45,7 @@ public class CredentialsController implements CredentialsControllerApiMethodSwag
         return credentialsRepository.update(credentials);
     }
 
+    @Override
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{login}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable String login){

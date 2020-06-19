@@ -24,6 +24,7 @@ public class LoginController implements LoginControllerApiMethodSwaggerAnnotatio
         this.sessionsRepository = sessionsRepository;
     }
 
+    @Override
     @PostMapping(path = Constants.LOGIN_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -33,6 +34,7 @@ public class LoginController implements LoginControllerApiMethodSwaggerAnnotatio
         return sessionsRepository.startSession(credentials);
     }
 
+    @Override
     @GetMapping(path = Constants.LOGOUT_PREFIX + "/{sessionId}")
     public boolean logout(@PathVariable String sessionId){
         Session session = new Session();
@@ -41,6 +43,7 @@ public class LoginController implements LoginControllerApiMethodSwaggerAnnotatio
         return sessionsRepository.closeSession(session);
     }
 
+    @Override
     @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
     public boolean checkSession(@PathVariable String sessionId){
         Session session = new Session();

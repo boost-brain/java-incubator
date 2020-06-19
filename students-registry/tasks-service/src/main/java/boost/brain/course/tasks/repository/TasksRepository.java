@@ -5,6 +5,9 @@ import boost.brain.course.tasks.repository.entities.TaskEntity;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -17,6 +20,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
 
 @Repository
 @Transactional
@@ -29,16 +35,16 @@ public class TasksRepository{
         this.entityManager = entityManager;
     }
 
-    public TaskDto create(final TaskDto taskDto) {
+    public Optional<TaskDto> create(final TaskDto taskDto) {
         if (taskDto == null) {
-            return null;
+            return Optional.empty();
         }
         TaskEntity taskEntity = new TaskEntity();
         BeanUtils.copyProperties(taskDto, taskEntity, "id");
         entityManager.persist(taskEntity);
         TaskDto result = new TaskDto();
         BeanUtils.copyProperties(taskEntity, result, "comments");
-        return result;
+        return Optional.of(result);
     }
 
     public TaskDto read(final long id) {
@@ -104,12 +110,17 @@ public class TasksRepository{
     }
 
     public List<TaskDto> tasksFor(final String implementer) {
-        List<TaskDto> result = new ArrayList<>();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<TaskEntity> criteriaQuery = criteriaBuilder.createQuery(TaskEntity.class);
         Root<TaskEntity> from = criteriaQuery.from(TaskEntity.class);
         Predicate where = criteriaBuilder.equal(from.get("implementer"), implementer);
+        return getTaskDtos( criteriaQuery, from, where);
+    }
+
+
+    private List<TaskDto> getTaskDtos( CriteriaQuery<TaskEntity> criteriaQuery, Root<TaskEntity> from, Predicate where) {
+        List<TaskDto> result = new ArrayList<>();
         CriteriaQuery<TaskEntity> select = criteriaQuery.select(from).where(where);
         TypedQuery<TaskEntity> typedQuery = entityManager.createQuery(select);
 
@@ -123,44 +134,23 @@ public class TasksRepository{
         return result;
     }
 
+
     public List<TaskDto> tasksFrom(final String author) {
-        List<TaskDto> result = new ArrayList<>();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<TaskEntity> criteriaQuery = criteriaBuilder.createQuery(TaskEntity.class);
         Root<TaskEntity> from = criteriaQuery.from(TaskEntity.class);
         Predicate where = criteriaBuilder.equal(from.get("author"), author);
-        CriteriaQuery<TaskEntity> select = criteriaQuery.select(from).where(where);
-        TypedQuery<TaskEntity> typedQuery = entityManager.createQuery(select);
-
-        List<TaskEntity> taskEntities = typedQuery.getResultList();
-
-        for (TaskEntity taskEntity: taskEntities) {
-            TaskDto taskDto = new TaskDto();
-            BeanUtils.copyProperties(taskEntity, taskDto, "comments");
-            result.add(taskDto);
-        }
-        return result;
+        return getTaskDtos(criteriaQuery, from, where);
     }
 
     public List<TaskDto> tasksIn(final int project) {
-        List<TaskDto> result = new ArrayList<>();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<TaskEntity> criteriaQuery = criteriaBuilder.createQuery(TaskEntity.class);
         Root<TaskEntity> from = criteriaQuery.from(TaskEntity.class);
         Predicate where = criteriaBuilder.equal(from.get("project"), project);
-        CriteriaQuery<TaskEntity> select = criteriaQuery.select(from).where(where);
-        TypedQuery<TaskEntity> typedQuery = entityManager.createQuery(select);
-
-        List<TaskEntity> taskEntities = typedQuery.getResultList();
-
-        for (TaskEntity taskEntity: taskEntities) {
-            TaskDto taskDto = new TaskDto();
-            BeanUtils.copyProperties(taskEntity, taskDto, "comments");
-            result.add(taskDto);
-        }
-        return result;
+        return getTaskDtos( criteriaQuery, from, where);
     }
 
     public List<TaskDto> filter(final int project, final String author, final String implementer) {

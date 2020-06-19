@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * RestController сервиса обработки Заданий.
@@ -33,7 +34,7 @@ import java.util.List;
 @RestController
 @RequestMapping(Constants.TASKS_CONTROLLER_PREFIX)
 @Api(value = "REST контроллер для управления заданиями (TaskDto)")
-public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <TaskDto>{
+public class TasksController implements CommonApiMethodSwaggerAnnotationsAble<TaskDto> {
 
     private final TasksRepository tasksRepository;
     @Value("${users-service-url}")
@@ -62,13 +63,13 @@ public class TasksController implements  CommonApiMethodSwaggerAnnotationsAble <
         long time = System.currentTimeMillis();
         taskDto.setCreateDate(time);
         taskDto.setUpdateDate(time);
-        TaskDto result = tasksRepository.create(taskDto);
-        if (result == null) {
+        Optional<TaskDto> result = tasksRepository.create(taskDto);
+        if (!result.isPresent()) {
             throw new ConflictException();
         } else {
-            this.updateStatusForUser(result.getImplementer(), UserStatus.BUSY);
+            this.updateStatusForUser(result.get().getImplementer(), UserStatus.BUSY);
         }
-        return result;
+        return result.get();
     }
 
     @Override

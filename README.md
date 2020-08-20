@@ -1,5 +1,6 @@
 # Инкубатор Java
 Проект обучающих командных проектов канала BoostBrain - https://www.youtube.com/BoostBrainCourse
+
 Wiki проекта - https://github.com/boost-brain/java-incubator/wiki
 
 Для проектов продвинутого уровня создана ветка advanced-release

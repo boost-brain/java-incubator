@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.annotation.WebFilter;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ public class UsersController {
         this.usersRepository = usersRepository;
     }
 
+
     @PostMapping(path = Constants.CREATE_PREFIX,
                 consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
                 produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -42,10 +44,12 @@ public class UsersController {
                 (userDto.getHours() < 1)) {
             throw new BadRequestException();
         }
+
         userDto.setStatus(UserStatus.BUSY);
         long time = System.currentTimeMillis();
         userDto.setCreateDate(time);
         userDto.setUpdateDate(time);
+
         UserDto result = usersRepository.create(userDto);
         if (result == null) {
             throw new ConflictException();

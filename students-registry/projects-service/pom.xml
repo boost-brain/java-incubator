@@ -61,7 +61,12 @@
             <groupId>boost.brain.course</groupId>
             <artifactId>common-types</artifactId>
         </dependency>
+        <dependency>
+            <groupId>boost.brain.course</groupId>
+            <artifactId>common-auth</artifactId>
+        </dependency>
     </dependencies>
+
     <build>
         <finalName>projects-service</finalName>
         <plugins>

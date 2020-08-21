@@ -13,3 +13,5 @@ spring:
                         non_contextual_creation: true
 server:
     port: ${SERVER_PORT:8080}
+
+auth-login-check-url: http://${AUTH_SERV_LOGIN_CHECK_URL:localhost:8080/api/login/check/}

@@ -1,4 +1,4 @@
-package boost.brain.course.messages.configuration;
+package boost.brain.course.users.configuration;
 
 import boost.brain.course.common.auth.bean.CheckHeaderSession;
 import boost.brain.course.common.auth.bean.CheckHeaderSessionBean;
@@ -25,7 +25,7 @@ public class FilterConfig {
     public FilterRegistrationBean<CheckSessionFilter> checkSessionFilter(){
         FilterRegistrationBean<CheckSessionFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new CheckSessionFilter(getCheckHeaderSession()));
-        registrationBean.addUrlPatterns("/api/*");
+        registrationBean.addUrlPatterns("/api/users/secured/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }

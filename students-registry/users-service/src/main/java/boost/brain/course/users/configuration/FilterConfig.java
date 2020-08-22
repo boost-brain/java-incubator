@@ -24,7 +24,7 @@ public class FilterConfig {
         List<String> skipUriPatterns = new ArrayList<String>() {{
             add("^\\/api\\/users\\/create$");
             add("^\\/api\\/users\\/update-statuses-for-emails$");
-            add("^^\\/api\\/users\\/update-status\\/.*");
+            add("^\\/api\\/users\\/update-status\\/.*");
         }};
         return new CheckHeaderSessionBean(authUrl, skipUriPatterns);
     }

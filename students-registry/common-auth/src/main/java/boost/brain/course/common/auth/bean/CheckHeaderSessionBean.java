@@ -21,59 +21,58 @@ import java.util.List;
 public class CheckHeaderSessionBean implements CheckHeaderSession {
 
     private String authUrl;
-    private String skipUrlPatterns;
+    private List<String> skipUriPatterns;
+    private RestTemplate restTemplate = new RestTemplate();
 
     public CheckHeaderSessionBean(String authUrl) {
         this.authUrl = authUrl;
     }
 
-
-    public CheckHeaderSessionBean(String authUrl, String skipUrlPatterns) {
+    public CheckHeaderSessionBean(String authUrl, List<String> skipUriPatterns) {
         this.authUrl = authUrl;
-        this.skipUrlPatterns = skipUrlPatterns;
+        this.skipUriPatterns = skipUriPatterns;
     }
 
-    public void check(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
-        if (servletRequest.getLocalAddr().contentEquals(skipUrlPatterns)) {
-            System.out.println("Работает отмена фильтра");
-            try {
-                filterChain.doFilter(servletRequest,servletResponse);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ServletException e) {
-                log.severe("CheckHeaderSessionBean throws the exception!");
-                e.printStackTrace();
-                this.setHttpStatusForResponse(servletResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    public void check(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        log.info("DO CheckHeaderSessionBean.check");
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        boolean checkSkip = this.checkSkipUriPatterns(request.getRequestURI(), skipUriPatterns);
+        if (checkSkip) {
+            filterChain.doFilter(servletRequest,servletResponse);
             return;
         }
 
-        log.info("DO CheckHeaderSessionBean.check");
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
         String sessionId = request.getHeader("sessionId");
         if (StringUtils.isEmpty(sessionId)) {
             log.severe(" The header(sessionId) not found!");
-            this.setHttpStatusForResponse(servletResponse, HttpStatus.FORBIDDEN);
+            response.setStatus(HttpStatus.FORBIDDEN.value());
             return;
         }
+
         try {
-            RestTemplate restTemplate = new RestTemplate();
             Boolean sessionIsActive = restTemplate.getForObject(authUrl + sessionId, Boolean.class);
             if (sessionIsActive == null || !sessionIsActive) {
                 log.severe("The header(sessionId) is invalid!" + authUrl + sessionId);
-                this.setHttpStatusForResponse(servletResponse, HttpStatus.FORBIDDEN);
+                response.setStatus(HttpStatus.FORBIDDEN.value());
                 return;
             }
-            filterChain.doFilter(servletRequest,servletResponse);
         } catch (Exception e) {
             log.severe("CheckHeaderSessionBean throws the exception!");
             e.printStackTrace();
-            this.setHttpStatusForResponse(servletResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
         }
+        filterChain.doFilter(servletRequest,servletResponse);
     }
 
-    private void setHttpStatusForResponse(ServletResponse servletResponse, HttpStatus status) {
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.setStatus(status.value());
+    private boolean checkSkipUriPatterns(String requestURI, List<String> skipUriPatterns) {
+        if (StringUtils.isEmpty(requestURI) || skipUriPatterns == null) {
+            return false;
+        }
+        return skipUriPatterns.stream().anyMatch(requestURI::matches);
     }
+
+
 }

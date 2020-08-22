@@ -21,8 +21,6 @@ public class FilterConfig {
         return new CheckHeaderSessionBean(authUrl);
     }
 
-
-
     @Bean
     public FilterRegistrationBean<CheckSessionFilter> checkSessionFilter(){
         FilterRegistrationBean<CheckSessionFilter> registrationBean = new FilterRegistrationBean<>();

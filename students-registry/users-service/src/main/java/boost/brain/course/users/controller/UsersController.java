@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.annotation.WebFilter;
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +25,12 @@ import java.util.Map;
 public class UsersController {
 
     private final UsersRepository usersRepository;
+    EmailValidator emailValidator = new EmailValidator();
 
     @Autowired
     public UsersController(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
-
 
     @PostMapping(path = Constants.CREATE_PREFIX,
                 consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -214,8 +213,8 @@ public class UsersController {
     }
 
     private boolean checkEmail(final String email) {
-        EmailValidator emailValidator = new EmailValidator();
         if (!emailValidator.isValid(email, null)) {
+            log.severe("Email is not valid!");
             return false;
         }
         return true;

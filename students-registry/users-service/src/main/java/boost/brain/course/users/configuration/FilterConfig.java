@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 @Profile("default")
 public class FilterConfig {
@@ -18,14 +21,19 @@ public class FilterConfig {
 
     @Bean
     public CheckHeaderSession getCheckHeaderSession(){
-        return new CheckHeaderSessionBean(authUrl);
+        List<String> skipUriPatterns = new ArrayList<String>() {{
+            add("^\\/api\\/users\\/create$");
+            add("^\\/api\\/users\\/update-statuses-for-emails$");
+            add("^^\\/api\\/users\\/update-status\\/.*");
+        }};
+        return new CheckHeaderSessionBean(authUrl, skipUriPatterns);
     }
 
     @Bean
     public FilterRegistrationBean<CheckSessionFilter> checkSessionFilter(){
         FilterRegistrationBean<CheckSessionFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new CheckSessionFilter(getCheckHeaderSession()));
-        registrationBean.addUrlPatterns("/api/users/secured/*");
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }

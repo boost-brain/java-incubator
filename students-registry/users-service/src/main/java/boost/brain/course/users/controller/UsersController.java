@@ -25,6 +25,7 @@ import java.util.Map;
 public class UsersController {
 
     private final UsersRepository usersRepository;
+    EmailValidator emailValidator = new EmailValidator();
 
     @Autowired
     public UsersController(UsersRepository usersRepository) {
@@ -42,10 +43,12 @@ public class UsersController {
                 (userDto.getHours() < 1)) {
             throw new BadRequestException();
         }
+
         userDto.setStatus(UserStatus.BUSY);
         long time = System.currentTimeMillis();
         userDto.setCreateDate(time);
         userDto.setUpdateDate(time);
+
         UserDto result = usersRepository.create(userDto);
         if (result == null) {
             throw new ConflictException();
@@ -210,8 +213,8 @@ public class UsersController {
     }
 
     private boolean checkEmail(final String email) {
-        EmailValidator emailValidator = new EmailValidator();
         if (!emailValidator.isValid(email, null)) {
+            log.severe("Email is not valid!");
             return false;
         }
         return true;

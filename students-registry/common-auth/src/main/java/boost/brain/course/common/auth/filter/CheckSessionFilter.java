@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.java.Log;
 
 import javax.servlet.*;
+import java.io.IOException;
 
 @Log
 @Data
@@ -22,7 +23,7 @@ public class CheckSessionFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         log.info("DO CheckSessionFilter");
         checkHeaderSession.check(servletRequest, servletResponse, filterChain);
     }

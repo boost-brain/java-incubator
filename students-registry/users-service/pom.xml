@@ -19,6 +19,11 @@
         </dependency>
 
         <dependency>
+            <groupId>boost.brain.course</groupId>
+            <artifactId>common-auth</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>

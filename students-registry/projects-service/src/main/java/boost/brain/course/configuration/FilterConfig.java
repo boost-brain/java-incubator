@@ -1,4 +1,4 @@
-package boost.brain.course.messages.configuration;
+package boost.brain.course.configuration;
 
 import boost.brain.course.common.auth.bean.CheckHeaderSession;
 import boost.brain.course.common.auth.bean.CheckHeaderSessionImpl;
@@ -39,7 +39,7 @@ public class FilterConfig {
     public FilterRegistrationBean<CheckSessionFilter> checkSessionFilter(){
         FilterRegistrationBean<CheckSessionFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(getCheckSessionFilter());
-        registrationBean.addUrlPatterns("/api/*");
+        registrationBean.addUrlPatterns("*"); //TODO нужно REST API вынести в отдельный раздел, чтобы потом на него повесить фильтр, тогда swagger-ui.html будет доступен
         registrationBean.setOrder(1);
         return registrationBean;
     }

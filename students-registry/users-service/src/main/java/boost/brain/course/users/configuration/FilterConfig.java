@@ -1,4 +1,4 @@
-package boost.brain.course.messages.configuration;
+package boost.brain.course.users.configuration;
 
 import boost.brain.course.common.auth.bean.CheckHeaderSession;
 import boost.brain.course.common.auth.bean.CheckHeaderSessionImpl;
@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @Profile("default")
@@ -27,7 +30,12 @@ public class FilterConfig {
 
     @Bean
     public CheckHeaderSession getCheckHeaderSession(){
-        return new CheckHeaderSessionImpl(authUrl, restTemplate);
+        List<String> skipUriPatterns = new ArrayList<String>() {{
+            add("^\\/api\\/users\\/create$");
+            add("^\\/api\\/users\\/update-statuses-for-emails$");
+            add("^\\/api\\/users\\/update-status\\/.*");
+        }};
+        return new CheckHeaderSessionImpl(authUrl, skipUriPatterns, restTemplate);
     }
 
     @Bean

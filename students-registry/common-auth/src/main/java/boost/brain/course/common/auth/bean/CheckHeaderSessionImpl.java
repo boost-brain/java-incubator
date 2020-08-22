@@ -3,6 +3,8 @@ package boost.brain.course.common.auth.bean;
 
 import lombok.Data;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
@@ -18,19 +20,22 @@ import java.util.List;
 
 @Log
 @Data
-public class CheckHeaderSessionBean implements CheckHeaderSession {
+public class CheckHeaderSessionImpl implements CheckHeaderSession {
 
     private String authUrl;
     private List<String> skipUriPatterns;
-    private RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate;
 
-    public CheckHeaderSessionBean(String authUrl) {
+    public CheckHeaderSessionImpl(String authUrl, RestTemplate restTemplate) {
         this.authUrl = authUrl;
+        this.restTemplate = restTemplate;
+
     }
 
-    public CheckHeaderSessionBean(String authUrl, List<String> skipUriPatterns) {
+    public CheckHeaderSessionImpl(String authUrl, List<String> skipUriPatterns, RestTemplate restTemplate) {
         this.authUrl = authUrl;
         this.skipUriPatterns = skipUriPatterns;
+        this.restTemplate = restTemplate;
     }
 
     public void check(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

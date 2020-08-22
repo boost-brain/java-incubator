@@ -3,8 +3,6 @@ package boost.brain.course.common.auth.bean;
 
 import lombok.Data;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;

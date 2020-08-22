@@ -73,10 +73,10 @@
 
     <modules>
         <module>frontend</module>
-		<module>jsf-frontend</module>
-		<module>proxy</module>
+        <module>jsf-frontend</module>
+        <module>proxy</module>
 		
-		<module>common-types</module>
+        <module>common-types</module>
         <module>common-auth</module>
 		
         <module>users-service</module>
@@ -88,7 +88,6 @@
 
         <module>test-util</module>
         <module>users-service-test-util</module>
-      
     </modules>
 
     <profiles>

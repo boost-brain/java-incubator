@@ -1,4 +1,4 @@
-package boost.brain.course.projects.controller;
+package boost.brain.course.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

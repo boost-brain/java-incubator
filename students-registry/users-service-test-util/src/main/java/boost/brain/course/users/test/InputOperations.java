@@ -1,4 +1,4 @@
-package boost.brain.course.projects.controller;
+package boost.brain.course.users.test;
 
 public enum InputOperations {
     COUNT,

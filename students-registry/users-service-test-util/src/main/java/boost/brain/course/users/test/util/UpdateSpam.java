@@ -1,7 +1,7 @@
-package boost.brain.course.projects.controller.util;
+package boost.brain.course.users.test.util;
 
 import boost.brain.course.common.users.UserStatus;
-import boost.brain.course.projects.controller.Constants;
+import boost.brain.course.users.test.Constants;
 import boost.brain.course.common.users.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.RecursiveTask;
 
-import static boost.brain.course.projects.controller.Constants.*;
+import static boost.brain.course.users.test.Constants.*;
 
 @Log
 public class UpdateSpam extends RecursiveTask<Boolean> {

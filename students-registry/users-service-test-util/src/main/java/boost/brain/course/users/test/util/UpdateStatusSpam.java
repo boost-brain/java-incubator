@@ -1,4 +1,4 @@
-package boost.brain.course.projects.controller.util;
+package boost.brain.course.users.test.util;
 
 import boost.brain.course.common.users.UserDto;
 import boost.brain.course.common.users.UserStatus;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.RecursiveTask;
 
-import static boost.brain.course.projects.controller.Constants.*;
+import static boost.brain.course.users.test.Constants.*;
 
 @Log
 public class UpdateStatusSpam extends RecursiveTask<Boolean> {

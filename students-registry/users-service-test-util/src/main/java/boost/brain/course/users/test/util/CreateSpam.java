@@ -1,4 +1,4 @@
-package boost.brain.course.projects.controller.util;
+package boost.brain.course.users.test.util;
 
 import boost.brain.course.common.users.UserDto;
 import lombok.extern.java.Log;
@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Random;
 import java.util.concurrent.RecursiveTask;
 
-import static boost.brain.course.projects.controller.Constants.*;
+import static boost.brain.course.users.test.Constants.*;
 
 @Log
 public class CreateSpam extends RecursiveTask<Boolean> {

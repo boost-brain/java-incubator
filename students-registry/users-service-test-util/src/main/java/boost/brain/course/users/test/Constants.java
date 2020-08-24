@@ -1,4 +1,4 @@
-package boost.brain.course.projects.controller;
+package boost.brain.course.users.test;
 
 public interface Constants {
     String URL_ARG = "-url";

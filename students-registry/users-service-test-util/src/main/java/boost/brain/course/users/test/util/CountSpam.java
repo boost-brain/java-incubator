@@ -1,6 +1,6 @@
-package boost.brain.course.projects.controller.util;
+package boost.brain.course.users.test.util;
 
-import boost.brain.course.projects.controller.Constants;
+import boost.brain.course.users.test.Constants;
 import lombok.extern.java.Log;
 import org.springframework.web.client.RestTemplate;
 

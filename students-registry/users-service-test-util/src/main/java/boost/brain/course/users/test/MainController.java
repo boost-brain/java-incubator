@@ -1,7 +1,7 @@
-package boost.brain.course.projects.controller;
+package boost.brain.course.users.test;
 
 
-import boost.brain.course.projects.controller.util.*;
+import boost.brain.course.users.test.util.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;

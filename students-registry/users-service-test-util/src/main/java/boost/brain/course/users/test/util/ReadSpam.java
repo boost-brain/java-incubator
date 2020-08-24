@@ -1,4 +1,4 @@
-package boost.brain.course.projects.controller.util;
+package boost.brain.course.users.test.util;
 
 import boost.brain.course.common.users.UserDto;
 import lombok.extern.java.Log;
@@ -11,19 +11,19 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.RecursiveTask;
 
-import static boost.brain.course.projects.controller.Constants.*;
+import static boost.brain.course.users.test.Constants.*;
 
 @Log
-public class DeleteSpam extends RecursiveTask<Boolean> {
+public class ReadSpam extends RecursiveTask<Boolean> {
     private Long count;
     private String url;
     private RestTemplate restTemplate;
     private Random random = new Random();
 
-    public DeleteSpam() {
+    public ReadSpam() {
     }
 
-    public DeleteSpam(String url, Long count, RestTemplate restTemplate) {
+    public ReadSpam(String url, Long count, RestTemplate restTemplate) {
         this.count = count;
         this.restTemplate = restTemplate;
         this.url = url;
@@ -33,20 +33,20 @@ public class DeleteSpam extends RecursiveTask<Boolean> {
     protected Boolean compute() {
         if (count / 2 > 0) {
             if(count % 2 == 1){
-                executeDelete();
+                executeRead();
             }
-            DeleteSpam deleteSpamOne = new DeleteSpam(url, count / 2, restTemplate);
-            deleteSpamOne.fork();
-            DeleteSpam deleteSpamTwo = new DeleteSpam(url, count / 2, restTemplate);
-            deleteSpamTwo.fork();
+            ReadSpam readSpamOne = new ReadSpam(url, count / 2, restTemplate);
+            readSpamOne.fork();
+            ReadSpam readSpamTwo = new ReadSpam(url, count / 2, restTemplate);
+            readSpamTwo.fork();
         } else {
-            executeDelete();
+            executeRead();
             return  true;
         }
         return  true;
     }
 
-    private void executeDelete() {
+    private void executeRead() {
         int randomPage = random.nextInt(1000);
         long startTime = System.currentTimeMillis();
 
@@ -63,15 +63,11 @@ public class DeleteSpam extends RecursiveTask<Boolean> {
         for (UserDto user: users) {
             email = user.getEmail();
             startTime = System.currentTimeMillis();
-            try {
-                restTemplate.delete(url + USERS_CONTROLLER_PREFIX + "/" + DELETE_PREFIX + "/" + email);
-            }catch (Exception e){
-                log.info(e.getLocalizedMessage());
-            }
+            UserDto readUser = restTemplate.getForObject(url + USERS_CONTROLLER_PREFIX + "/" + READ_PREFIX + "/" + email, UserDto.class);
 
             stopTime = System.currentTimeMillis();
             elapsedTime = stopTime - startTime;
-            log.info("Delete " + email + " time :" + elapsedTime + "ms " );
+            log.info("Read " + readUser.getEmail() + " time :" + elapsedTime + "ms " );
         }
     }
 

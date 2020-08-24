@@ -1,4 +1,4 @@
-package boost.brain.course.configuration;
+package boost.brain.course.projects.configuration;
 
 import boost.brain.course.common.auth.bean.CheckHeaderSession;
 import boost.brain.course.common.auth.bean.CheckHeaderSessionImpl;
@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @Profile("default")
@@ -27,7 +30,10 @@ public class FilterConfig {
 
     @Bean
     public CheckHeaderSession getCheckHeaderSession(){
-        return new CheckHeaderSessionImpl(authUrl, restTemplate);
+        List<String> skipUriPatterns = new ArrayList<String>() {{
+            add("^\\/api\\/projects\\/if-exists\\/.*");
+        }};
+        return new CheckHeaderSessionImpl(authUrl, skipUriPatterns, restTemplate);
     }
 
     @Bean
@@ -39,7 +45,7 @@ public class FilterConfig {
     public FilterRegistrationBean<CheckSessionFilter> checkSessionFilter(){
         FilterRegistrationBean<CheckSessionFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(getCheckSessionFilter());
-        registrationBean.addUrlPatterns("*"); //TODO нужно REST API вынести в отдельный раздел, чтобы потом на него повесить фильтр, тогда swagger-ui.html будет доступен
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }

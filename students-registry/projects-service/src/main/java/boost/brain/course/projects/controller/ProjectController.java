@@ -1,24 +1,25 @@
-package boost.brain.course.controller;
+package boost.brain.course.projects.controller;
 
-import boost.brain.course.controller.exceptions.BadRequestException;
-import boost.brain.course.controller.exceptions.NotFoundException;
 import boost.brain.course.common.projects.ProjectDto;
-import boost.brain.course.model.ProjectMapper;
-import boost.brain.course.repository.ProjectRepository;
+import boost.brain.course.projects.Constants;
+import boost.brain.course.projects.controller.exceptions.BadRequestException;
+import boost.brain.course.projects.controller.exceptions.NotFoundException;
+import boost.brain.course.projects.model.ProjectMapper;
+import boost.brain.course.projects.repository.ProjectRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Log
-@Controller
+@RestController
+@RequestMapping(Constants.PROJECTS_CONTROLLER_PREFIX)
 public class ProjectController {
 
     private ProjectRepository projectRepository;
@@ -31,8 +32,8 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @PostMapping(value = "/createProject")
-    public ProjectDto createProject(@RequestBody ProjectDto projectDto) {
+    @PostMapping(Constants.CREATE_PREFIX)
+    public ProjectDto create(@RequestBody ProjectDto projectDto) {
         if (StringUtils.isEmpty(projectDto.getProjectName()) ||
                 StringUtils.isEmpty(projectDto.getDescription()) ||
                 StringUtils.isEmpty(projectDto.getProjectUrl())) {
@@ -46,13 +47,13 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping(value="/findById/{projectId}")
-    public ProjectDto findById(@PathVariable int projectId) {
-        if (projectId < 1) {
+    @GetMapping(Constants.READ_PREFIX + "/{id}")
+    public ProjectDto read(@PathVariable int id) {
+        if (id < 1) {
             throw new BadRequestException();
         }
-        log.info("inside findById(projectId) method; id: " + projectId);
-        ProjectDto result = projectMapper.toProjectDto(projectRepository.findByProjectId(projectId));
+        log.info("inside findById(projectId) method; id: " + id);
+        ProjectDto result = projectMapper.toProjectDto(projectRepository.findByProjectId(id));
         if (result == null) {
             log.severe("not found project");
             throw new NotFoundException();
@@ -62,22 +63,22 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping(value="/countProjects")
-    public int countProjects(){
+    @GetMapping(Constants.COUNT_PREFIX)
+    public int count(){
         int result = projectRepository.countAllBy();
         log.info("method: countProjects(); count: "+ result);
         return result;
     }
 
     @ResponseBody
-    @DeleteMapping("/delete/{projectId}")
+    @DeleteMapping(Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String delete(@PathVariable int projectId) {
-        log.info("deleting project with id: "+ projectId);
-        if (projectId < 1) {
+    public String delete(@PathVariable int id) {
+        log.info("deleting project with id: "+ id);
+        if (id < 1) {
             throw new BadRequestException();
         }
-        if (projectRepository.deleteProjectByProjectId(projectId) == 1) {
+        if (projectRepository.deleteProjectByProjectId(id) == 1) {
             return HttpStatus.OK.getReasonPhrase();
         } else {
             log.severe("not found project");
@@ -86,8 +87,10 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping(value="/watch/{page}/{size}")
-    public Page<ProjectDto> watch(@PathVariable int page, @PathVariable int size) {
+    @GetMapping(Constants.PAGE + "/{page}/{size}")
+    public Page<ProjectDto> page(
+            @PathVariable int page,
+            @PathVariable int size) {
         if((page < 0) || (size < 1)) {
             throw new BadRequestException();
         }
@@ -100,7 +103,7 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @PatchMapping(value="/update")
+    @PatchMapping(Constants.UPDATE_PREFIX)
     @ResponseStatus(HttpStatus.OK)
     public String update(@RequestBody ProjectDto projectDto) {
         log.info("method: update");
@@ -123,8 +126,8 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @PostMapping("/projects-for-ids")
-    public List<ProjectDto> projectsForIds(@RequestBody List<Integer> ids) {
+    @PostMapping(Constants.FOR_IDS_PREFIX)
+    public List<ProjectDto> forIds(@RequestBody List<Integer> ids) {
         if (ids == null || ids.isEmpty()) {
             throw new BadRequestException();
         }
@@ -136,8 +139,8 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping("/projects-all")
-    public List<ProjectDto> allProject() {
+    @GetMapping(Constants.ALL)
+    public List<ProjectDto> all() {
         List<ProjectDto> result =  projectMapper.toProjectDtos(projectRepository.findAll());
         if (result == null) {
             throw new NotFoundException();
@@ -146,12 +149,12 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping("/check-if-exists/{projectId}")
-    public boolean checkIfExists(@PathVariable int projectId) {
-        if (projectId < 1) {
+    @GetMapping(Constants.IF_EXISTS + "/{id}")
+    public boolean ifExists(@PathVariable int id) {
+        if (id < 1) {
             throw new BadRequestException();
         }
-        return projectRepository.existsByProjectId(projectId);
+        return projectRepository.existsByProjectId(id);
     }
 
 }

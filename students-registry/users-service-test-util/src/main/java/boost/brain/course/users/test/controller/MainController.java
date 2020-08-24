@@ -1,6 +1,8 @@
-package boost.brain.course.users.test;
+package boost.brain.course.users.test.controller;
 
 
+import boost.brain.course.users.test.Constants;
+import boost.brain.course.users.test.InputOperations;
 import boost.brain.course.users.test.util.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;

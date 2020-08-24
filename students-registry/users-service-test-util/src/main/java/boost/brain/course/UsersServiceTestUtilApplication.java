@@ -1,7 +1,7 @@
 package boost.brain.course;
 
 
-import boost.brain.course.controller.MainController;
+import boost.brain.course.projects.controller.MainController;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

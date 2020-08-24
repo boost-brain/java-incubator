@@ -1,12 +1,10 @@
 package boost.brain.course.service.register;
 
-import boost.brain.course.email.SendEmail;
 import boost.brain.course.entity.EmailEntity;
 import boost.brain.course.exceptions.EmailOrNameExistException;
-import boost.brain.course.repository.EmailRepository;
+import boost.brain.course.projects.repository.EmailRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;

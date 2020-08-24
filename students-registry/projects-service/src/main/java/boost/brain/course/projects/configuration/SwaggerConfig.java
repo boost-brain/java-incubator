@@ -1,6 +1,6 @@
-package boost.brain.course.cofiguration;
+package boost.brain.course.projects.configuration;
 
-import boost.brain.course.projects.controller.Controller;
+import boost.brain.course.projects.model.ProjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@ComponentScan(basePackageClasses = Controller.class)
+@ComponentScan(basePackageClasses = ProjectMapper.class)
 public class SwaggerConfig {
     @Bean
     public Docket api() {
@@ -22,4 +22,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
     }
+
+  //  @Bean
+  //  public ProjectMapper projectMapper(){return new ProjectMapper();}
 }

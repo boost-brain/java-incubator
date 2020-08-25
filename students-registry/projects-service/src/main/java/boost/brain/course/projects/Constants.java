@@ -12,7 +12,7 @@ public interface Constants {
 
     String COUNT_PREFIX = "/count";
     String FOR_IDS_PREFIX = "/for-ids";
-    String ALL = "/all";
-    String IF_EXISTS = "/if-exists";
-    String PAGE = "/page";
+    String ALL_PREFIX = "/all";
+    String IF_EXISTS_PREFIX = "/if-exists";
+    String PAGE_PREFIX = "/page";
 }

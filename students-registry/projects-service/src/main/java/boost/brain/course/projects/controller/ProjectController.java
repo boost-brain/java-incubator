@@ -87,7 +87,7 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping(Constants.PAGE + "/{page}/{size}")
+    @GetMapping(Constants.PAGE_PREFIX + "/{page}/{size}")
     public Page<ProjectDto> page(
             @PathVariable int page,
             @PathVariable int size) {
@@ -139,7 +139,7 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping(Constants.ALL)
+    @GetMapping(Constants.ALL_PREFIX)
     public List<ProjectDto> all() {
         List<ProjectDto> result =  projectMapper.toProjectDtos(projectRepository.findAll());
         if (result == null) {
@@ -149,7 +149,7 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping(Constants.IF_EXISTS + "/{id}")
+    @GetMapping(Constants.IF_EXISTS_PREFIX + "/{id}")
     public boolean ifExists(@PathVariable int id) {
         if (id < 1) {
             throw new BadRequestException();

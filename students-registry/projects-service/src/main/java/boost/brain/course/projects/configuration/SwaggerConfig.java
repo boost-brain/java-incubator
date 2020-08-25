@@ -1,6 +1,6 @@
-package boost.brain.course.configuration;
+package boost.brain.course.projects.configuration;
 
-import boost.brain.course.model.ProjectMapper;
+import boost.brain.course.projects.model.ProjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package boost.brain.course.repository;
+package boost.brain.course.projects.repository;
 
-import boost.brain.course.model.Project;
+import boost.brain.course.projects.model.Project;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;

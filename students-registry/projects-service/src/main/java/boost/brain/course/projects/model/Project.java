@@ -1,4 +1,4 @@
-package boost.brain.course.model;
+package boost.brain.course.projects.model;
 
 import javax.persistence.*;
 

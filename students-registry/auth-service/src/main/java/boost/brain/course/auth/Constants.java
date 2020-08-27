@@ -7,12 +7,14 @@ public interface Constants {
     String LOGIN_CONTROLLER_PREFIX = API_PREFIX + "/login";
 
     String CREATE_PREFIX = "/create";
+    String READ_PREFIX = "/read";
     String UPDATE_PREFIX = "/update";
     String DELETE_PREFIX = "/delete";
 
     String LOGIN_PREFIX = "/login";
     String LOGOUT_PREFIX = "/logout";
     String CHECK_PREFIX = "/check";
+    String USER_ROLE_PREFIX = "/role";
 
     long TIME_DELAY_FOR_TEMPORARILY_INACTIVE = 7 * 24 * 60 * 60 * 1000;
     long TIME_DELAY_FOR_ACADEMIC_LEAVE = 14 * 24 * 60 * 60 * 1000;

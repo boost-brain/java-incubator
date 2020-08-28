@@ -20,7 +20,7 @@ import java.util.List;
 @Log
 @RestController
 @RequestMapping(Constants.PROJECTS_CONTROLLER_PREFIX)
-public class ProjectController {
+public class ProjectController implements ProjectControllerSwaggerAnnotations {
 
     private ProjectRepository projectRepository;
     private ProjectMapper projectMapper;
@@ -31,6 +31,7 @@ public class ProjectController {
         this.projectMapper = projectMapper;
     }
 
+    @Override
     @ResponseBody
     @PostMapping(Constants.CREATE_PREFIX)
     public ProjectDto create(@RequestBody ProjectDto projectDto) {
@@ -46,6 +47,7 @@ public class ProjectController {
         return result;
     }
 
+    @Override
     @ResponseBody
     @GetMapping(Constants.READ_PREFIX + "/{id}")
     public ProjectDto read(@PathVariable int id) {
@@ -62,6 +64,7 @@ public class ProjectController {
         return result;
     }
 
+    @Override
     @ResponseBody
     @GetMapping(Constants.COUNT_PREFIX)
     public int count(){
@@ -70,6 +73,7 @@ public class ProjectController {
         return result;
     }
 
+    @Override
     @ResponseBody
     @DeleteMapping(Constants.DELETE_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -86,6 +90,7 @@ public class ProjectController {
         }
     }
 
+    @Override
     @ResponseBody
     @GetMapping(Constants.PAGE_PREFIX + "/{page}/{size}")
     public Page<ProjectDto> page(
@@ -102,6 +107,7 @@ public class ProjectController {
         return result;
     }
 
+    @Override
     @ResponseBody
     @PatchMapping(Constants.UPDATE_PREFIX)
     @ResponseStatus(HttpStatus.OK)
@@ -125,6 +131,7 @@ public class ProjectController {
         }
     }
 
+    @Override
     @ResponseBody
     @PostMapping(Constants.FOR_IDS_PREFIX)
     public List<ProjectDto> forIds(@RequestBody List<Integer> ids) {
@@ -138,6 +145,7 @@ public class ProjectController {
         return result;
     }
 
+    @Override
     @ResponseBody
     @GetMapping(Constants.ALL_PREFIX)
     public List<ProjectDto> all() {
@@ -148,6 +156,7 @@ public class ProjectController {
         return result;
     }
 
+    @Override
     @ResponseBody
     @GetMapping(Constants.IF_EXISTS_PREFIX + "/{id}")
     public boolean ifExists(@PathVariable int id) {

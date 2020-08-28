@@ -1,0 +1,93 @@
+version: '2'
+
+services:
+
+  proxy:
+    image: proxy:latest
+    depends_on:
+      - auth-service
+      - projects-service
+      - register-service
+      - tasks-service
+      - users-service
+      - messages-service
+    environment:
+      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
+      - TASKS_SERV_TASKS_URL=tasks-service:8080/api/tasks
+      - USERS_SERV_URL=users-service:8080/api/users
+      - PROJECTS_SERV_URL=projects-service:8080
+    ports:
+      - 9000:9000
+
+  frontend:
+    image: frontend:latest
+    depends_on:
+      - proxy
+      - register-service
+    ports:
+      - 80:8080
+
+  auth-service:
+    image: auth-service:latest
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - USERS_SERV_URL=users-service:8080/api/users
+    ports:
+      - 8081:8080
+
+  projects-service:
+    image: projects-service:latest
+    environment:
+      DB_HOST: postgres
+    ports:
+      - 8083:8080
+
+  register-service:
+    image: register-service:latest
+    depends_on:
+      - auth-service
+      - users-service
+    environment:
+      #      - AUTH_SERV_LOGIN_URL=auth-service:8080/api/login
+      #      - AUTH_SERV_CRED_URL=register-service:8080/api/credentials
+      #      - USERS_SERV_URL=users-service:8080/api/users
+      DB_HOST: postgres
+
+  tasks-service:
+    image: tasks-service:latest
+    environment:
+      - AUTH_SERV_LOGIN_CHECK_URL=auth-service:8080/api/login/check/
+      - DB_HOST=postgres
+    ports:
+      - 8084:8080
+
+  users-service:
+    image: users-service:latest
+    environment:
+      DB_HOST: postgres
+    ports:
+      - 8082:8080
+
+  messages-service:
+    image: messages-service:latest
+    environment:
+      - AUTH_SERV_LOGIN_CHECK_URL=auth-service:8080/api/login/check/
+      - DB_HOST=postgres
+    ports:
+      - 8085:8080
+
+  postgres:
+    image: postgres:11
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+volumes:
+  database_data:
+    driver: local

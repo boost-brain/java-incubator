@@ -17,7 +17,7 @@ import java.util.Set;
 @RestController
 @Log
 @RequestMapping(path = Constants.CREDENTIALS_CONTROLLER_PREFIX)
-public class CredentialsController {
+public class CredentialsController implements CredentialsControllerSwaggerAnnotations {
     private final CredentialsRepository credentialsRepository;
 
     @Autowired
@@ -25,6 +25,7 @@ public class CredentialsController {
         this.credentialsRepository = credentialsRepository;
     }
 
+    @Override
     @PostMapping(path = Constants.CREATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -34,6 +35,7 @@ public class CredentialsController {
         return credentialsRepository.create(credentials);
     }
 
+    @Override
     @PatchMapping(path = Constants.UPDATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -41,6 +43,7 @@ public class CredentialsController {
         return credentialsRepository.update(credentials);
     }
 
+    @Override
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{login}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable String login){
@@ -49,11 +52,13 @@ public class CredentialsController {
         }
     }
 
+    @Override
     @GetMapping(path = Constants.USER_ROLE_PREFIX + Constants.READ_PREFIX + "/{login}")
     public Set<UserRole> readUserRoles(@PathVariable String login) {
         return credentialsRepository.readUserRoles(login);
     }
 
+    @Override
     @PatchMapping(path = Constants.USER_ROLE_PREFIX + Constants.UPDATE_PREFIX + "/{login}",
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

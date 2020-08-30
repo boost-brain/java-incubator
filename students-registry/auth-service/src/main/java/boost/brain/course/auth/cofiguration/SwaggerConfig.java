@@ -100,7 +100,7 @@ public class SwaggerConfig {
      * @return Имя
      */
     private String getTitle() {
-        return "Сервис управления проектами (ProjectDto)";
+        return "Сервис управления авторизацией пользователей.";
     }
 
     /**

@@ -17,7 +17,7 @@ import java.util.Map;
 @Api
 public interface UsersControllerSwaggerAnnotation {
 
-    @ApiOperation(value = "Добавление нового пользователя. Обязательно должны быть заполнены поля слздаваемого объекта.")
+    @ApiOperation(value = "Добавление нового пользователя. Обязательно должны быть заполнены поля создаваемого объекта.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Создание нового пользователя."),
             @ApiResponse(code = 400, message = "Не заполнены обязательные поля у нового пользователя."),

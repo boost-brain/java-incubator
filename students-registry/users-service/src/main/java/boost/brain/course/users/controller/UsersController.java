@@ -22,7 +22,7 @@ import java.util.Map;
 @Log
 @RestController
 @RequestMapping(Constants.USERS_CONTROLLER_PREFIX)
-public class UsersController {
+public class UsersController implements UsersControllerSwaggerAnnotation {
 
     private final UsersRepository usersRepository;
     EmailValidator emailValidator = new EmailValidator();
@@ -32,6 +32,7 @@ public class UsersController {
         this.usersRepository = usersRepository;
     }
 
+    @Override
     @PostMapping(path = Constants.CREATE_PREFIX,
                 consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
                 produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -56,6 +57,7 @@ public class UsersController {
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.READ_PREFIX + "/{email}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public UserDto read(@PathVariable String email) {
@@ -69,6 +71,7 @@ public class UsersController {
         return result;
     }
 
+    @Override
     @PatchMapping(path = Constants.UPDATE_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -89,6 +92,7 @@ public class UsersController {
         }
     }
 
+    @Override
     @PutMapping(path = Constants.PUT_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -109,6 +113,7 @@ public class UsersController {
         }
     }
 
+    @Override
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{email}")
     @ResponseStatus(HttpStatus.OK)
     public String delete(@PathVariable final String email) {
@@ -122,6 +127,7 @@ public class UsersController {
         }
     }
 
+    @Override
     @GetMapping(path = Constants.COUNT_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -129,6 +135,7 @@ public class UsersController {
         return usersRepository.count();
     }
 
+    @Override
     @GetMapping(path = Constants.PAGE_PREFIX + "/{page}/{size}",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserDto> page(@PathVariable int page, @PathVariable int size) {
@@ -142,6 +149,7 @@ public class UsersController {
         return result;
     }
 
+    @Override
     @PostMapping(path = Constants.USERS_FOR_EMAILS_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -156,6 +164,7 @@ public class UsersController {
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.USERS_ALL_PREFIX,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<UserDto> allUsers() {
@@ -166,6 +175,7 @@ public class UsersController {
         return result;
     }
 
+    @Override
     @GetMapping(path = Constants.CHECK_IF_EXISTS_PREFIX + "/{email}")
     public boolean checkIfExists(@PathVariable String email) {
         if (StringUtils.isEmpty(email) || !this.checkEmail(email)) {
@@ -174,6 +184,7 @@ public class UsersController {
         return usersRepository.checkIfExists(email);
     }
 
+    @Override
     @PostMapping(path = Constants.UPDATE_STATUS_PREFIX + "/{email}",
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -195,6 +206,7 @@ public class UsersController {
         }
     }
 
+    @Override
     @PostMapping(path = Constants.UPDATE_STATUSES_FOR_EMAILS_PREFIX,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)

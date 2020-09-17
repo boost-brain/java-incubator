@@ -65,7 +65,7 @@ public class CheckHeaderSessionImpl implements CheckHeaderSession {
             log.severe("CheckHeaderSessionBean throws the exception!");
             e.printStackTrace();
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-
+            return;
         }
         filterChain.doFilter(servletRequest,servletResponse);
     }

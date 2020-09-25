@@ -70,27 +70,30 @@
         </dependencies>
     </dependencyManagement>
 
-
-    <modules>
-        <module>frontend</module>
-        <module>jsf-frontend</module>
-        <module>proxy</module>
-		
-        <module>common-types</module>
-        <module>common-auth</module>
-		
-        <module>users-service</module>
-        <module>register-service</module>
-        <module>auth-service</module>
-        <module>tasks-service</module>
-        <module>projects-service</module>
-        <module>messages-service</module>
-
-        <module>test-util</module>
-        <module>users-service-test-util</module>
-    </modules>
-
     <profiles>
+
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>frontend</module>
+                <module>jsf-frontend</module>
+                <module>proxy</module>
+                <module>common-types</module>
+                <module>common-auth</module>
+                <module>users-service</module>
+                <module>register-service</module>
+                <module>auth-service</module>
+                <module>tasks-service</module>
+                <module>projects-service</module>
+                <module>messages-service</module>
+                <module>test-util</module>
+                <module>users-service-test-util</module>
+            </modules>
+        </profile>
+
         <profile>
             <id>Docker</id>
             <build>
@@ -116,6 +119,134 @@
                     </plugins>
                 </pluginManagement>
             </build>
+            <modules>
+                <module>frontend</module>
+                <module>jsf-frontend</module>
+                <module>proxy</module>
+                <module>common-types</module>
+                <module>common-auth</module>
+                <module>users-service</module>
+                <module>register-service</module>
+                <module>auth-service</module>
+                <module>tasks-service</module>
+                <module>projects-service</module>
+                <module>messages-service</module>
+            </modules>
         </profile>
+
+        <profile>
+            <id>Docker-vue</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.spotify</groupId>
+                            <artifactId>dockerfile-maven-plugin</artifactId>
+                            <version>1.4.12</version>
+                            <executions>
+                                <execution>
+                                    <id>build-docker</id>
+                                    <goals>
+                                        <goal>build</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <repository>${project.name}</repository>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+            <modules>
+                <module>frontend</module>
+                <module>proxy</module>
+                <module>common-types</module>
+                <module>common-auth</module>
+                <module>users-service</module>
+                <module>register-service</module>
+                <module>auth-service</module>
+                <module>tasks-service</module>
+                <module>projects-service</module>
+                <module>messages-service</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>Docker-jsf</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.spotify</groupId>
+                            <artifactId>dockerfile-maven-plugin</artifactId>
+                            <version>1.4.12</version>
+                            <executions>
+                                <execution>
+                                    <id>build-docker</id>
+                                    <goals>
+                                        <goal>build</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <repository>${project.name}</repository>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+            <modules>
+                <module>jsf-frontend</module>
+                <module>common-types</module>
+                <module>common-auth</module>
+                <module>users-service</module>
+                <module>register-service</module>
+                <module>auth-service</module>
+                <module>tasks-service</module>
+                <module>projects-service</module>
+                <module>messages-service</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>Docker-onlybackend</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.spotify</groupId>
+                            <artifactId>dockerfile-maven-plugin</artifactId>
+                            <version>1.4.12</version>
+                            <executions>
+                                <execution>
+                                    <id>build-docker</id>
+                                    <goals>
+                                        <goal>build</goal>
+                                        <goal>push</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <repository>${project.name}</repository>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+            <modules>
+                <module>common-types</module>
+                <module>common-auth</module>
+                <module>users-service</module>
+                <module>register-service</module>
+                <module>auth-service</module>
+                <module>tasks-service</module>
+                <module>projects-service</module>
+                <module>messages-service</module>
+            </modules>
+        </profile>
+
     </profiles>
 </project>

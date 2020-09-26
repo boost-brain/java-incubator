@@ -6,7 +6,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @ServletComponentScan
-@EnableZuulProxy
 @SpringBootApplication
 public class JsfFrontend {
     public static void main(String[] args){

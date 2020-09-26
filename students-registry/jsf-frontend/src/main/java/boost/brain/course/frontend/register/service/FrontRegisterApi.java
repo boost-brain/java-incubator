@@ -16,14 +16,8 @@ import javax.inject.Named;
 @Log
 public class FrontRegisterApi {
 
-    @Value("${url.host}")
-    private String host;
-
-    @Value("${url.port.register}")
-    private String port;
-
-    @Value("${url.path.register}")
-    private String path;
+    @Value("${register-service-url}")
+    private String registerUrl;
 
     private RestTemplate template = new RestTemplate();
 
@@ -35,7 +29,7 @@ public class FrontRegisterApi {
 
     public String addAccount(){
 
-        String url = this.host + ":" + this.port + this.path + "/create";
+        String url = this.getRegisterUrl() + "/create";
 
         UserRegDto userRegDto = new UserRegDto(this.email, this.name, this.gitHubId, this.hours, this.password);
 

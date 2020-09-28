@@ -1,0 +1,131 @@
+version: '3.3'
+
+services:
+
+  jsf-frontend:
+    image: jsf-frontend:latest
+    depends_on:
+      - users-service
+      - register-service
+      - auth-service
+      - projects-service
+      - tasks-service
+      - messages-service
+    environment:
+      AUTH_SERV_LOGIN_URL: auth-service:8080/api/login
+      AUTH_SERV_CREDENTIALS_URL: auth-service:8080/api/credentials
+      TASKS_SERV_TASKS_URL: tasks-service:8080/api/tasks
+      USERS_SERV_URL: users-service:8080/api/users
+      PROJECTS_SERV_URL: projects-service:8080/api/projects
+      MESSAGES_SERV_URL: messages-service:8080/api/messages
+    ports:
+      - 8080:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+
+  auth-service:
+    image: auth-service:latest
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      USERS_SERV_URL: users-service:8080/api/users
+    ports:
+      - 8081:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+
+  users-service:
+    image: users-service:latest
+    environment:
+      AUTH_SERV_LOGIN_CHECK_URL: auth-service:8080/api/login/check/
+      DB_HOST: postgres
+    ports:
+      - 8082:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+
+  projects-service:
+    image: projects-service:latest
+    environment:
+      AUTH_SERV_LOGIN_CHECK_URL: auth-service:8080/api/login/check/
+      DB_HOST: postgres
+    ports:
+      - 8083:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+
+  tasks-service:
+    image: tasks-service:latest
+    environment:
+      USERS_SERV_URL: localhost:8080/api/users
+      AUTH_SERV_LOGIN_CHECK_URL: auth-service:8080/api/login/check/
+      DB_HOST: postgres
+    ports:
+      - 8084:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+
+  messages-service:
+    image: messages-service:latest
+    environment:
+      AUTH_SERV_LOGIN_CHECK_URL: auth-service:8080/api/login/check/
+      DB_HOST: postgres
+    ports:
+      - 8085:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+
+  register-service:
+    image: register-service:latest
+    environment:
+      #      AUTH_SERV_LOGIN_URL: auth-service:8080/api/login
+      #      AUTH_SERV_CRED_URL: register-service:8080/api/credentials
+      #      USERS_SERV_URL: users-service:8080/api/users
+      DB_HOST: postgres
+    ports:
+      - 8086:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+
+  postgres:
+    image: postgres:11
+    restart: always
+    ports:
+      - 5431:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: students
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.001'
+          memory: 512M
+
+volumes:
+  database_data:
+    driver: local

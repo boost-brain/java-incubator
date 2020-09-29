@@ -78,7 +78,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>frontend</module>
                 <module>jsf-frontend</module>
                 <module>proxy</module>
                 <module>common-types</module>
@@ -120,7 +119,6 @@
                 </pluginManagement>
             </build>
             <modules>
-                <module>frontend</module>
                 <module>jsf-frontend</module>
                 <module>proxy</module>
                 <module>common-types</module>

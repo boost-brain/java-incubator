@@ -6,12 +6,12 @@ import boost.brain.course.common.users.UserDto;
 import boost.brain.course.frontend.auth.bean.HttpSessionBean;
 import lombok.Data;
 import lombok.extern.java.Log;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.RequestScope;
 

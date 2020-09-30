@@ -34,6 +34,7 @@ public class LoginController implements LoginControllerSwaggerAnnotations {
     @Override
     @GetMapping(path = Constants.LOGOUT_PREFIX + "/{sessionId}")
     public boolean logout(@PathVariable String sessionId){
+        log.info("LoginController: logout");
         Session session = new Session();
         session.setSessionId(sessionId);
 
@@ -43,9 +44,7 @@ public class LoginController implements LoginControllerSwaggerAnnotations {
     @Override
     @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
     public boolean checkSession(@PathVariable String sessionId){
-        Session session = new Session();
-        session.setSessionId(sessionId);
-
-        return sessionsRepository.checkSession(session);
+        log.info("LoginController: checkSession");
+        return sessionsRepository.checkSession(sessionId);
     }
 }

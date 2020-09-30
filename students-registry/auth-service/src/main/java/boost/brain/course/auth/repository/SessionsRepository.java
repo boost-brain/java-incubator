@@ -93,12 +93,12 @@ public class SessionsRepository {
         return true;
     }
 
-    public boolean checkSession(Session session){
-        if (session == null || StringUtils.isEmpty(session.getSessionId())) {
+    public boolean checkSession(String sessionId){
+        if (StringUtils.isEmpty(sessionId)) {
             return false;
         }
 
-        SessionEntity sessionEntity = entityManager.find(SessionEntity.class, session.getSessionId());
+        SessionEntity sessionEntity = entityManager.find(SessionEntity.class, sessionId);
         if(sessionEntity == null){
             return false;
         }

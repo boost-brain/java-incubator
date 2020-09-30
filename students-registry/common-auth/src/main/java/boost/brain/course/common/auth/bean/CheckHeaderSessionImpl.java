@@ -55,7 +55,11 @@ public class CheckHeaderSessionImpl implements CheckHeaderSession {
         }
 
         try {
+            long startTime = System.currentTimeMillis();
             Boolean sessionIsActive = restTemplate.getForObject(authUrl + sessionId, Boolean.class);
+
+            log.info("Success sessionIsActive " + (System.currentTimeMillis() - startTime) + " ms");
+
             if (sessionIsActive == null || !sessionIsActive) {
                 log.severe("The header(sessionId) is invalid!" + authUrl + sessionId);
                 response.setStatus(HttpStatus.FORBIDDEN.value());

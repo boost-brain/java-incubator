@@ -18,8 +18,8 @@ import java.util.UUID;
 @Log
 public class TestUtil {
     public static void main(String[] args) {
-        String credentialsUrl = "http://localhost:8080/api/credentials";
-        String loginUrl = "http://localhost:8080/api/login";
+        String credentialsUrl = "http://localhost:8081/api/credentials";
+        String loginUrl = "http://localhost:8081/api/login";
 
         RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
         restTemplateBuilder.additionalMessageConverters(new MappingJackson2HttpMessageConverter());
@@ -29,7 +29,7 @@ public class TestUtil {
         HttpEntity<Credentials> credentialsRequest = new HttpEntity<>(credentials);
 
         for (int i = 0; i < 100; i++) {
-            credentials.setLogin(UUID.randomUUID().toString());
+            credentials.setLogin(UUID.randomUUID().toString() + "@testmail.ru");
             credentials.setPassword(UUID.randomUUID().toString());
             Boolean result = restTemplate.postForObject(credentialsUrl + "/create", credentialsRequest, Boolean.class);
 

@@ -7,7 +7,6 @@ services:
     depends_on:
       - users-service
       - register-service
-      - auth-service
       - projects-service
       - tasks-service
       - messages-service

@@ -1,9 +1,11 @@
 package boost.brain.course.projects.controller;
 
 import boost.brain.course.common.projects.ProjectDto;
+import boost.brain.course.common.projects.ProjectStatus;
 import boost.brain.course.projects.Constants;
 import boost.brain.course.projects.controller.exceptions.BadRequestException;
 import boost.brain.course.projects.controller.exceptions.NotFoundException;
+import boost.brain.course.projects.model.Project;
 import boost.brain.course.projects.model.ProjectMapper;
 import boost.brain.course.projects.repository.ProjectRepository;
 import lombok.extern.java.Log;
@@ -40,6 +42,7 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
                 StringUtils.isEmpty(projectDto.getProjectUrl())) {
             throw new BadRequestException();
         }
+        projectDto.setStatus(ProjectStatus.PREPARATION);
         ProjectDto result = projectMapper.toProjectDto(projectRepository.save(projectMapper.toProject(projectDto)));
         if (result == null) {
             throw new BadRequestException();
@@ -69,7 +72,7 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
     @GetMapping(Constants.COUNT_PREFIX)
     public int count(){
         int result = projectRepository.countAllBy();
-        log.info("method: countProjects(); count: "+ result);
+        log.info("method: count(); count: "+ result);
         return result;
     }
 
@@ -116,13 +119,15 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
         if (projectDto.getProjectId() < 1 ||
                 StringUtils.isEmpty(projectDto.getProjectName()) ||
                 StringUtils.isEmpty(projectDto.getDescription()) ||
-                StringUtils.isEmpty(projectDto.getProjectUrl())) {
+                StringUtils.isEmpty(projectDto.getProjectUrl()) ||
+                projectDto.getStatus() == null) {
             throw new BadRequestException();
         }
         if (projectRepository.update(
                 projectDto.getProjectUrl(),
                 projectDto.getDescription(),
                 projectDto.getProjectName(),
+                projectDto.getStatus(),
                 projectDto.getProjectId()) == 1) {
             log.info("Success");
             return HttpStatus.OK.getReasonPhrase();
@@ -164,6 +169,33 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
             throw new BadRequestException();
         }
         return projectRepository.existsByProjectId(id);
+    }
+
+    @Override
+    @ResponseBody
+    @PatchMapping(Constants.UPDATE_PREFIX + Constants.STATUS_PREFIX + "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String updateStatus(@RequestBody ProjectStatus status, @PathVariable int id) {
+        // Input validation
+        if (id < 1 || status == null) {
+            throw new BadRequestException();
+        }
+
+        // Getting a project by ID
+        Project project = projectRepository.findByProjectId(id);
+        if (project == null) {
+            throw new NotFoundException();
+        }
+
+        // Project status update
+        project.setStatus(status);
+
+        // Saving the updated project to the database
+        if (projectRepository.save(project) == null) {
+            throw new BadRequestException();
+        }
+
+        return HttpStatus.OK.getReasonPhrase();
     }
 
 }

@@ -15,4 +15,5 @@ public interface Constants {
     String ALL_PREFIX = "/all";
     String IF_EXISTS_PREFIX = "/if-exists";
     String PAGE_PREFIX = "/page";
+    String STATUS_PREFIX = "/status";
 }

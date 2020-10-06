@@ -1,6 +1,7 @@
 package boost.brain.course.projects.controller;
 
 import boost.brain.course.common.projects.ProjectDto;
+import boost.brain.course.common.projects.ProjectStatus;
 import boost.brain.course.projects.Constants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -107,4 +108,15 @@ public interface ProjectControllerSwaggerAnnotations {
     @ResponseBody
     @GetMapping(Constants.IF_EXISTS_PREFIX + "/{id}")
     boolean ifExists(@PathVariable int id);
+
+    @ApiOperation(value = "Обновление статуса проекта.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Статус проекта обновлён."),
+            @ApiResponse(code = 400, message = "Ошибка во входных данных или при сохранении в базу."),
+            @ApiResponse(code = 404, message = "Проект с указанным Id не найден.")
+    })
+    @ResponseBody
+    @PatchMapping(Constants.UPDATE_PREFIX + Constants.STATUS_PREFIX + "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    String updateStatus(@RequestBody ProjectStatus status, @PathVariable int id);
 }

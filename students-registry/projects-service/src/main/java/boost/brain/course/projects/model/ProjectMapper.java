@@ -17,6 +17,7 @@ public class ProjectMapper {
         projectDTO.setDescription(project.getDescription());
         projectDTO.setProjectName(project.getProjectName());
         projectDTO.setProjectUrl(project.getProjectUrl());
+        projectDTO.setStatus(project.getStatus());
         return projectDTO;
     }
 
@@ -27,6 +28,7 @@ public class ProjectMapper {
         project.setProjectId(projectDTO.getProjectId());
         project.setProjectName(projectDTO.getProjectName());
         project.setProjectUrl(projectDTO.getProjectUrl());
+        project.setStatus(projectDTO.getStatus());
         return project;
     }
     public List<ProjectDto> toProjectDtos(List<Project> projects) {
@@ -38,6 +40,7 @@ public class ProjectMapper {
             projectDto.setDescription(project.getDescription());
             projectDto.setProjectName(project.getProjectName());
             projectDto.setProjectUrl(project.getProjectUrl());
+            projectDto.setStatus(project.getStatus());
             projectDtos.add(projectDto);
         }
         return projectDtos;

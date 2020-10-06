@@ -44,7 +44,7 @@ public class SwaggerConfig {
      * @return контакт
      */
     private Contact getContact() {
-        return new Contact("Николай Кожокарь BoostBrain- Youtube канал", "https://www.youtube.com/channel/UCcORCILcBXus2e4vWSS1k2Q",
+        return new Contact("Николай Кожокарь BoostBrain - Youtube канал", "https://www.youtube.com/channel/UCcORCILcBXus2e4vWSS1k2Q",
                 "");
     }
 

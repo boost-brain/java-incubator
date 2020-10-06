@@ -1,5 +1,6 @@
 package boost.brain.course.projects.repository;
 
+import boost.brain.course.common.projects.ProjectStatus;
 import boost.brain.course.projects.model.Project;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,8 +22,8 @@ public interface ProjectRepository extends PagingAndSortingRepository<Project,In
     int countAllBy();
 
     @Modifying
-    @Query("update Project u set u.projectUrl=?1, u.description=?2, u.projectName=?3 where u.projectId=?4")
-    int update(String Url, String desc, String Name, int id);
+    @Query("update Project u set u.projectUrl=?1, u.description=?2, u.projectName=?3, u.status=?4 where u.projectId=?5")
+    int update(String Url, String desc, String Name, ProjectStatus status, int id);
 
     List<Project> findAll();
 

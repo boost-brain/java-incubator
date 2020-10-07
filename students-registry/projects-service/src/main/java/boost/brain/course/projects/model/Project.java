@@ -4,6 +4,7 @@ import boost.brain.course.common.projects.ProjectStatus;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @Table(name="project")
@@ -16,5 +17,7 @@ public class Project {
     private String description;
     private String projectName;
     private ProjectStatus status;
+    @Email
+    private String author;
 
 }

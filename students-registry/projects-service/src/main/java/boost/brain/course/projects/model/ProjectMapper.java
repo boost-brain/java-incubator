@@ -18,6 +18,7 @@ public class ProjectMapper {
         projectDTO.setProjectName(project.getProjectName());
         projectDTO.setProjectUrl(project.getProjectUrl());
         projectDTO.setStatus(project.getStatus());
+        projectDTO.setAuthor(project.getAuthor());
         return projectDTO;
     }
 
@@ -29,19 +30,14 @@ public class ProjectMapper {
         project.setProjectName(projectDTO.getProjectName());
         project.setProjectUrl(projectDTO.getProjectUrl());
         project.setStatus(projectDTO.getStatus());
+        project.setAuthor(projectDTO.getAuthor());
         return project;
     }
     public List<ProjectDto> toProjectDtos(List<Project> projects) {
         List<ProjectDto> projectDtos = new ArrayList<>();
         if (projects == null || projects.isEmpty()) return projectDtos;
         for (Project project : projects){
-            ProjectDto projectDto = new ProjectDto();
-            projectDto.setProjectId(project.getProjectId());
-            projectDto.setDescription(project.getDescription());
-            projectDto.setProjectName(project.getProjectName());
-            projectDto.setProjectUrl(project.getProjectUrl());
-            projectDto.setStatus(project.getStatus());
-            projectDtos.add(projectDto);
+            projectDtos.add(this.toProjectDto(project));
         }
         return projectDtos;
     }

@@ -10,5 +10,6 @@ public class ProjectDto {
         private String description;
         private String projectName;
         private ProjectStatus status;
+        private String author;
 
 }

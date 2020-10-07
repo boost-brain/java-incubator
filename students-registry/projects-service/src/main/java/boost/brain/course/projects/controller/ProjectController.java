@@ -37,12 +37,17 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
     @ResponseBody
     @PostMapping(Constants.CREATE_PREFIX)
     public ProjectDto create(@RequestBody ProjectDto projectDto) {
+        // Input validation
         if (StringUtils.isEmpty(projectDto.getProjectName()) ||
                 StringUtils.isEmpty(projectDto.getDescription()) ||
+                StringUtils.isEmpty(projectDto.getAuthor()) ||
                 StringUtils.isEmpty(projectDto.getProjectUrl())) {
             throw new BadRequestException();
         }
+        //Setting default values
         projectDto.setStatus(ProjectStatus.PREPARATION);
+
+        //Creating a new project in the database
         ProjectDto result = projectMapper.toProjectDto(projectRepository.save(projectMapper.toProject(projectDto)));
         if (result == null) {
             throw new BadRequestException();
@@ -116,24 +121,29 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
     @ResponseStatus(HttpStatus.OK)
     public String update(@RequestBody ProjectDto projectDto) {
         log.info("method: update");
+        // Input validation
         if (projectDto.getProjectId() < 1 ||
                 StringUtils.isEmpty(projectDto.getProjectName()) ||
                 StringUtils.isEmpty(projectDto.getDescription()) ||
                 StringUtils.isEmpty(projectDto.getProjectUrl()) ||
+                StringUtils.isEmpty(projectDto.getAuthor()) ||
                 projectDto.getStatus() == null) {
             throw new BadRequestException();
         }
+        // Updating the project in the database
         if (projectRepository.update(
                 projectDto.getProjectUrl(),
                 projectDto.getDescription(),
                 projectDto.getProjectName(),
                 projectDto.getStatus(),
+                projectDto.getAuthor(),
                 projectDto.getProjectId()) == 1) {
             log.info("Success");
-            return HttpStatus.OK.getReasonPhrase();
         } else {
             throw new NotFoundException();
         }
+
+        return HttpStatus.OK.getReasonPhrase();
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.List;
 @Api
 public interface ProjectControllerSwaggerAnnotations {
     @ApiOperation(value = "Добавление нового проекта. Обязательно должны быть заполнены поля: название, " +
-            "описание и Url проекта, в противном случае вернется ошибка 400.")
+            "описание, автор и Url проекта, в противном случае вернется ошибка 400.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Создан новый проект."),
             @ApiResponse(code = 400, message = "Название, описание  и URL должны быть заполнены. Или ошибка сохранения в базу")
@@ -73,7 +73,7 @@ public interface ProjectControllerSwaggerAnnotations {
     @ApiOperation(value = "Обновление данных существующего проекта.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Обновлены данные проекта."),
-            @ApiResponse(code = 400, message = "Название, описание  и URL должны быть заполнены. Или ошибка сохранения в базу"),
+            @ApiResponse(code = 400, message = "Название, описание, автор(должен быть неизменным)  и URL должны быть заполнены. Или ошибка сохранения в базу"),
             @ApiResponse(code = 404, message = "Проект с указанным Id не найден.")
     })
     @ResponseBody

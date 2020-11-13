@@ -16,4 +16,6 @@ public interface Constants {
     String IF_EXISTS_PREFIX = "/if-exists";
     String PAGE_PREFIX = "/page";
     String STATUS_PREFIX = "/status";
+    String PARTICIPATING_USERS = "/participating-users";
+    String WAITING_USERS = "/waiting-users";
 }

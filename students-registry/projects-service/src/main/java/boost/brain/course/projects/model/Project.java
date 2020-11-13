@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Set;
 
 @Entity
 @Table(name="project")
@@ -19,5 +20,11 @@ public class Project {
     private ProjectStatus status;
     @Email
     private String author;
+
+    @ElementCollection
+    private Set<String> participatingUsers;
+
+    @ElementCollection
+    private Set<String> waitingUsers;
 
 }

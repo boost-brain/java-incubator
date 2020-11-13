@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Log
 @RestController
@@ -26,6 +28,7 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
 
     private ProjectRepository projectRepository;
     private ProjectMapper projectMapper;
+    EmailValidator emailValidator = new EmailValidator();
 
     @Autowired
     public ProjectController(ProjectRepository projectRepository, ProjectMapper projectMapper) {
@@ -208,4 +211,148 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
         return HttpStatus.OK.getReasonPhrase();
     }
 
+    @ResponseBody
+    @GetMapping("/{projectId}" + Constants.PARTICIPATING_USERS + Constants.CREATE_PREFIX + "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public String createParticipatingUser(@PathVariable String email, @PathVariable int projectId) {
+        log.info("create participating user: " + email);
+        // Input validation
+        if (projectId < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+            throw new BadRequestException();
+        }
+        // Getting a project by ID
+        Project project = projectRepository.findByProjectId(projectId);
+        if (project == null) {
+            log.severe("not found project");
+            throw new NotFoundException();
+        }
+        //Moving a user from waiting users to participating users
+        project.getParticipatingUsers().add(email);
+        project.getWaitingUsers().remove(email);
+        projectRepository.save(project);
+
+        return HttpStatus.OK.getReasonPhrase();
+    }
+
+    @ResponseBody
+    @GetMapping("/{projectId}" + Constants.PARTICIPATING_USERS + Constants.ALL_PREFIX)
+    public Set<String> allParticipatingUsers(@PathVariable int projectId) {
+        log.info("all participating users for: " + projectId);
+        // Input validation
+        if (projectId < 1) {
+            throw new BadRequestException();
+        }
+        // Getting a project by ID
+        Project project = projectRepository.findByProjectId(projectId);
+        if (project == null) {
+            log.severe("not found project");
+            throw new NotFoundException();
+        }
+
+        return project.getParticipatingUsers();
+    }
+
+    @ResponseBody
+    @DeleteMapping("/{projectId}" + Constants.PARTICIPATING_USERS + Constants.DELETE_PREFIX + "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteParticipatingUser(@PathVariable String email, @PathVariable int projectId) {
+        log.info("delete participating user: " + email);
+        // Input validation
+        if (projectId < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+            throw new BadRequestException();
+        }
+        // Getting a project by ID
+        Project project = projectRepository.findByProjectId(projectId);
+        if (project == null) {
+            log.severe("not found project");
+            throw new NotFoundException();
+        }
+        if (!project.getParticipatingUsers().contains(email)) {
+            log.severe("User is not found");
+            throw new NotFoundException();
+        }
+        //Deleting a user from participating users
+        project.getParticipatingUsers().remove(email);
+        projectRepository.save(project);
+
+        return HttpStatus.OK.getReasonPhrase();
+    }
+
+    @ResponseBody
+    @GetMapping("/{projectId}" + Constants.WAITING_USERS + Constants.CREATE_PREFIX + "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public String createWaitingUser(@PathVariable String email, @PathVariable int projectId) {
+        log.info("create waiting user: " + email);
+        // Input validation
+        if (projectId < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+            throw new BadRequestException();
+        }
+        // Getting a project by ID
+        Project project = projectRepository.findByProjectId(projectId);
+        if (project == null) {
+            log.severe("not found project");
+            throw new NotFoundException();
+        }
+        if (project.getParticipatingUsers().contains(email)) {
+            log.severe("User is in participating users!");
+            throw new BadRequestException();
+        }
+        //Creating a user to waiting users
+        project.getWaitingUsers().add(email);
+        projectRepository.save(project);
+
+        return HttpStatus.OK.getReasonPhrase();
+    }
+
+    @ResponseBody
+    @GetMapping("/{projectId}" + Constants.WAITING_USERS + Constants.ALL_PREFIX)
+    public Set<String> allWaitingUsers(@PathVariable int projectId) {
+        log.info("all waiting users for: " + projectId);
+        // Input validation
+        if (projectId < 1) {
+            throw new BadRequestException();
+        }
+        // Getting a project by ID
+        Project project = projectRepository.findByProjectId(projectId);
+        if (project == null) {
+            log.severe("not found project");
+            throw new NotFoundException();
+        }
+
+        return project.getWaitingUsers();
+    }
+
+    @ResponseBody
+    @DeleteMapping("/{projectId}" + Constants.WAITING_USERS + Constants.DELETE_PREFIX + "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteWaitingUser(@PathVariable String email, @PathVariable int projectId) {
+        log.info("delete waiting user: " + email);
+        // Input validation
+        if (projectId < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+            throw new BadRequestException();
+        }
+        // Getting a project by ID
+        Project project = projectRepository.findByProjectId(projectId);
+        if (project == null) {
+            log.severe("not found project");
+            throw new NotFoundException();
+        }
+        if (!project.getWaitingUsers().contains(email)) {
+            log.severe("User is not found");
+            throw new NotFoundException();
+        }
+        //Deleting a user from waiting users
+        project.getWaitingUsers().remove(email);
+        projectRepository.save(project);
+
+        return HttpStatus.OK.getReasonPhrase();
+    }
+
+    private boolean checkEmail(final String email) {
+        if (!emailValidator.isValid(email, null)) {
+            log.severe("Email is not valid!");
+            return false;
+        }
+        return true;
+    }
 }

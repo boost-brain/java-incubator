@@ -211,17 +211,18 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
         return HttpStatus.OK.getReasonPhrase();
     }
 
+    @Override
     @ResponseBody
-    @GetMapping("/{projectId}" + Constants.PARTICIPATING_USERS + Constants.CREATE_PREFIX + "/{email}")
+    @GetMapping("/{id}" + Constants.PARTICIPATING_USERS + Constants.CREATE_PREFIX + "/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public String createParticipatingUser(@PathVariable String email, @PathVariable int projectId) {
+    public String createParticipatingUser(@PathVariable String email, @PathVariable int id) {
         log.info("create participating user: " + email);
         // Input validation
-        if (projectId < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+        if (id < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
             throw new BadRequestException();
         }
         // Getting a project by ID
-        Project project = projectRepository.findByProjectId(projectId);
+        Project project = projectRepository.findByProjectId(id);
         if (project == null) {
             log.severe("not found project");
             throw new NotFoundException();
@@ -234,16 +235,17 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
         return HttpStatus.OK.getReasonPhrase();
     }
 
+    @Override
     @ResponseBody
-    @GetMapping("/{projectId}" + Constants.PARTICIPATING_USERS + Constants.ALL_PREFIX)
-    public Set<String> allParticipatingUsers(@PathVariable int projectId) {
-        log.info("all participating users for: " + projectId);
+    @GetMapping("/{id}" + Constants.PARTICIPATING_USERS + Constants.ALL_PREFIX)
+    public Set<String> allParticipatingUsers(@PathVariable int id) {
+        log.info("all participating users for: " + id);
         // Input validation
-        if (projectId < 1) {
+        if (id < 1) {
             throw new BadRequestException();
         }
         // Getting a project by ID
-        Project project = projectRepository.findByProjectId(projectId);
+        Project project = projectRepository.findByProjectId(id);
         if (project == null) {
             log.severe("not found project");
             throw new NotFoundException();
@@ -252,17 +254,18 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
         return project.getParticipatingUsers();
     }
 
+    @Override
     @ResponseBody
-    @DeleteMapping("/{projectId}" + Constants.PARTICIPATING_USERS + Constants.DELETE_PREFIX + "/{email}")
+    @DeleteMapping("/{id}" + Constants.PARTICIPATING_USERS + Constants.DELETE_PREFIX + "/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteParticipatingUser(@PathVariable String email, @PathVariable int projectId) {
+    public String deleteParticipatingUser(@PathVariable String email, @PathVariable int id) {
         log.info("delete participating user: " + email);
         // Input validation
-        if (projectId < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+        if (id < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
             throw new BadRequestException();
         }
         // Getting a project by ID
-        Project project = projectRepository.findByProjectId(projectId);
+        Project project = projectRepository.findByProjectId(id);
         if (project == null) {
             log.severe("not found project");
             throw new NotFoundException();
@@ -278,17 +281,18 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
         return HttpStatus.OK.getReasonPhrase();
     }
 
+    @Override
     @ResponseBody
-    @GetMapping("/{projectId}" + Constants.WAITING_USERS + Constants.CREATE_PREFIX + "/{email}")
+    @GetMapping("/{id}" + Constants.WAITING_USERS + Constants.CREATE_PREFIX + "/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public String createWaitingUser(@PathVariable String email, @PathVariable int projectId) {
+    public String createWaitingUser(@PathVariable String email, @PathVariable int id) {
         log.info("create waiting user: " + email);
         // Input validation
-        if (projectId < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+        if (id < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
             throw new BadRequestException();
         }
         // Getting a project by ID
-        Project project = projectRepository.findByProjectId(projectId);
+        Project project = projectRepository.findByProjectId(id);
         if (project == null) {
             log.severe("not found project");
             throw new NotFoundException();
@@ -304,16 +308,17 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
         return HttpStatus.OK.getReasonPhrase();
     }
 
+    @Override
     @ResponseBody
-    @GetMapping("/{projectId}" + Constants.WAITING_USERS + Constants.ALL_PREFIX)
-    public Set<String> allWaitingUsers(@PathVariable int projectId) {
-        log.info("all waiting users for: " + projectId);
+    @GetMapping("/{id}" + Constants.WAITING_USERS + Constants.ALL_PREFIX)
+    public Set<String> allWaitingUsers(@PathVariable int id) {
+        log.info("all waiting users for: " + id);
         // Input validation
-        if (projectId < 1) {
+        if (id < 1) {
             throw new BadRequestException();
         }
         // Getting a project by ID
-        Project project = projectRepository.findByProjectId(projectId);
+        Project project = projectRepository.findByProjectId(id);
         if (project == null) {
             log.severe("not found project");
             throw new NotFoundException();
@@ -322,17 +327,18 @@ public class ProjectController implements ProjectControllerSwaggerAnnotations {
         return project.getWaitingUsers();
     }
 
+    @Override
     @ResponseBody
-    @DeleteMapping("/{projectId}" + Constants.WAITING_USERS + Constants.DELETE_PREFIX + "/{email}")
+    @DeleteMapping("/{id}" + Constants.WAITING_USERS + Constants.DELETE_PREFIX + "/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteWaitingUser(@PathVariable String email, @PathVariable int projectId) {
+    public String deleteWaitingUser(@PathVariable String email, @PathVariable int id) {
         log.info("delete waiting user: " + email);
         // Input validation
-        if (projectId < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
+        if (id < 1 || StringUtils.isEmpty(email) || !this.checkEmail(email)) {
             throw new BadRequestException();
         }
         // Getting a project by ID
-        Project project = projectRepository.findByProjectId(projectId);
+        Project project = projectRepository.findByProjectId(id);
         if (project == null) {
             log.severe("not found project");
             throw new NotFoundException();

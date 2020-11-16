@@ -12,11 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Api
 public interface ProjectControllerSwaggerAnnotations {
     @ApiOperation(value = "Добавление нового проекта. Обязательно должны быть заполнены поля: название, " +
-            "описание и Url проекта, в противном случае вернется ошибка 400.")
+            "описание, автор и Url проекта, в противном случае вернется ошибка 400.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Создан новый проект."),
             @ApiResponse(code = 400, message = "Название, описание  и URL должны быть заполнены. Или ошибка сохранения в базу")
@@ -73,7 +74,7 @@ public interface ProjectControllerSwaggerAnnotations {
     @ApiOperation(value = "Обновление данных существующего проекта.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Обновлены данные проекта."),
-            @ApiResponse(code = 400, message = "Название, описание  и URL должны быть заполнены. Или ошибка сохранения в базу"),
+            @ApiResponse(code = 400, message = "Название, описание, автор(должен быть неизменным)  и URL должны быть заполнены. Или ошибка сохранения в базу"),
             @ApiResponse(code = 404, message = "Проект с указанным Id не найден.")
     })
     @ResponseBody
@@ -119,4 +120,70 @@ public interface ProjectControllerSwaggerAnnotations {
     @PatchMapping(Constants.UPDATE_PREFIX + Constants.STATUS_PREFIX + "/{id}")
     @ResponseStatus(HttpStatus.OK)
     String updateStatus(@RequestBody ProjectStatus status, @PathVariable int id);
+
+    @ApiOperation(value = "Добавление пользователя в список участвующих в проекте, " +
+            "если пользователь был в списке ожидающих, то он из него удаляется.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь добавлен в список участвующих в проекте."),
+            @ApiResponse(code = 400, message = "Ошибка во входных данных."),
+            @ApiResponse(code = 404, message = "Проект с указанным Id не найден.")
+    })
+    @ResponseBody
+    @GetMapping("/{id}" + Constants.PARTICIPATING_USERS + Constants.CREATE_PREFIX + "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    String createParticipatingUser(@PathVariable String email, @PathVariable int id);
+
+    @ApiOperation(value = "Получение коллекции всех пользователей участвующих в проекте.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Коллекция всех пользователей участвующих в проекте."),
+            @ApiResponse(code = 400, message = "Ошибка во входных данных."),
+            @ApiResponse(code = 404, message = "Проект с указанным Id не найден.")
+    })
+    @ResponseBody
+    @GetMapping("/{id}" + Constants.PARTICIPATING_USERS + Constants.ALL_PREFIX)
+    Set<String> allParticipatingUsers(@PathVariable int id);
+
+    @ApiOperation(value = "Удаление пользователя из списка участвующих в проекте.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь удалён из списка участвующих в проекте."),
+            @ApiResponse(code = 400, message = "Ошибка во входных данных."),
+            @ApiResponse(code = 404, message = "Проект с указанным Id не найден или ненайден пользователь.")
+    })
+    @ResponseBody
+    @DeleteMapping("/{id}" + Constants.PARTICIPATING_USERS + Constants.DELETE_PREFIX + "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    String deleteParticipatingUser(@PathVariable String email, @PathVariable int id);
+
+    @ApiOperation(value = "Добавление пользователя в список ожидающих участия в проекте.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь добавлен в список ожидающих участия в проекте."),
+            @ApiResponse(code = 400, message = "Ошибка во входных данных, " +
+                    "или если пользователь уже есть в списке участвующих в проекте."),
+            @ApiResponse(code = 404, message = "Проект с указанным Id не найден.")
+    })
+    @ResponseBody
+    @GetMapping("/{id}" + Constants.WAITING_USERS + Constants.CREATE_PREFIX + "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    String createWaitingUser(@PathVariable String email, @PathVariable int id);
+
+    @ApiOperation(value = "Получение коллекции всех пользователей ожидающих участия в проекте.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Коллекция всех пользователей ожидающих участия в проекте."),
+            @ApiResponse(code = 400, message = "Ошибка во входных данных."),
+            @ApiResponse(code = 404, message = "Проект с указанным Id не найден.")
+    })
+    @ResponseBody
+    @GetMapping("/{id}" + Constants.WAITING_USERS + Constants.ALL_PREFIX)
+    Set<String> allWaitingUsers(@PathVariable int id);
+
+    @ApiOperation(value = "Удаление пользователя из списка ожидающих участия в проекте.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь удалён из списка ожидающих участия в проекте."),
+            @ApiResponse(code = 400, message = "Ошибка во входных данных."),
+            @ApiResponse(code = 404, message = "Проект с указанным Id не найден или ненайден пользователь.")
+    })
+    @ResponseBody
+    @DeleteMapping("/{id}" + Constants.WAITING_USERS + Constants.DELETE_PREFIX + "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    String deleteWaitingUser(@PathVariable String email, @PathVariable int id);
 }

@@ -2,6 +2,7 @@ package boost.brain.course.common.projects;
 
 import lombok.Data;
 
+
 @Data
 public class ProjectDto {
 
@@ -10,5 +11,6 @@ public class ProjectDto {
         private String description;
         private String projectName;
         private ProjectStatus status;
+        private String author;
 
 }

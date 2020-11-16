@@ -20,7 +20,7 @@ services:
       resources:
         limits:
           cpus: '0.001'
-          memory: 512M
+          memory: 256M
 
   users-service:
     image: users-service:latest
@@ -33,7 +33,7 @@ services:
       resources:
         limits:
           cpus: '0.001'
-          memory: 512M
+          memory: 256M
 
   projects-service:
     image: projects-service:latest
@@ -46,7 +46,7 @@ services:
       resources:
         limits:
           cpus: '0.001'
-          memory: 512M
+          memory: 256M
 
   tasks-service:
     image: tasks-service:latest
@@ -60,7 +60,7 @@ services:
       resources:
         limits:
           cpus: '0.001'
-          memory: 512M
+          memory: 256M
 
   messages-service:
     image: messages-service:latest
@@ -73,7 +73,7 @@ services:
       resources:
         limits:
           cpus: '0.001'
-          memory: 512M
+          memory: 256M
 
   register-service:
     image: register-service:latest
@@ -88,7 +88,7 @@ services:
       resources:
         limits:
           cpus: '0.001'
-          memory: 512M
+          memory: 256M
 
   postgres:
     image: postgres:11
@@ -105,7 +105,7 @@ services:
       resources:
         limits:
           cpus: '0.001'
-          memory: 512M
+          memory: 256M
 
 volumes:
   database_data:

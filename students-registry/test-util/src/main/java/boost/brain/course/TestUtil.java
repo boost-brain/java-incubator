@@ -11,10 +11,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
-/**
- * Hello world!
- */
-
 @Log
 public class TestUtil {
     public static void main(String[] args) {
@@ -27,10 +23,14 @@ public class TestUtil {
 
         Credentials credentials = new Credentials();
         HttpEntity<Credentials> credentialsRequest = new HttpEntity<>(credentials);
+        String uuid = UUID.randomUUID().toString();
 
-        for (int i = 0; i < 100; i++) {
-            credentials.setLogin(UUID.randomUUID().toString() + "@testmail.ru");
-            credentials.setPassword(UUID.randomUUID().toString());
+        int countCycles = 10;
+        for (int i = 0; i < countCycles; i++) {
+            credentials.setLogin(uuid + i + "@testmail.ru");
+            credentials.setPassword(credentials.getLogin());
+
+
             Boolean result = restTemplate.postForObject(credentialsUrl + "/create", credentialsRequest, Boolean.class);
 
             if (result == null || !result) {
@@ -68,8 +68,10 @@ public class TestUtil {
                 log.severe(e.getLocalizedMessage());
             }
 
-            log.info("Success");
+            log.info("Success cycle №" + (i + 1) + " of " + countCycles);
 
         }
+
+        log.info("Finish!");
     }
 }

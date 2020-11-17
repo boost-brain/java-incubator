@@ -6,6 +6,7 @@ import boost.brain.course.auth.repository.entity.SessionEntity;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -15,8 +16,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Repository
@@ -24,10 +23,12 @@ import java.util.*;
 public class SessionsRepository {
 
     private final EntityManager entityManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SessionsRepository(EntityManager entityManager) {
+    public SessionsRepository(EntityManager entityManager, PasswordEncoder passwordEncoder) {
         this.entityManager = entityManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Session startSession(Credentials credentials) {
@@ -42,13 +43,7 @@ public class SessionsRepository {
             return result;
         }
 
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            byte[] receivedHash = messageDigest.digest(credentials.getPassword().getBytes());
-            if (!Arrays.equals(receivedHash, credentialsEntity.getPasswordHash())) {
-                return result;
-            }
-        } catch (NoSuchAlgorithmException e) {
+        if (!passwordEncoder.matches(credentials.getPassword(), credentialsEntity.getPasswordHash())) {
             return result;
         }
 
@@ -77,13 +72,13 @@ public class SessionsRepository {
         return result;
     }
 
-    public boolean closeSession(Session session) {
-        if (session == null || StringUtils.isEmpty(session.getSessionId())) {
+    public boolean closeSession(String sessionId) {
+        if (StringUtils.isEmpty(sessionId)) {
             return false;
         }
 
-        SessionEntity sessionEntity = entityManager.find(SessionEntity.class, session.getSessionId());
-        if(sessionEntity == null){
+        SessionEntity sessionEntity = entityManager.find(SessionEntity.class, sessionId);
+        if(sessionEntity == null) {
             return false;
         }
 
@@ -93,12 +88,12 @@ public class SessionsRepository {
         return true;
     }
 
-    public boolean checkSession(Session session){
-        if (session == null || StringUtils.isEmpty(session.getSessionId())) {
+    public boolean checkSession(String sessionId){
+        if (StringUtils.isEmpty(sessionId)) {
             return false;
         }
 
-        SessionEntity sessionEntity = entityManager.find(SessionEntity.class, session.getSessionId());
+        SessionEntity sessionEntity = entityManager.find(SessionEntity.class, sessionId);
         if(sessionEntity == null){
             return false;
         }

@@ -28,24 +28,31 @@ public class LoginController implements LoginControllerSwaggerAnnotations {
     public Session login(@RequestBody Credentials credentials){
         log.info("LoginController: login method started");
         log.info("credentials=" + credentials.toString());
-        return sessionsRepository.startSession(credentials);
+        long startTime = System.currentTimeMillis();
+        Session startedSession = sessionsRepository.startSession(credentials);
+        log.info("lag of sessionsRepository.startSession(credentials) = " + (System.currentTimeMillis() - startTime));
+        return startedSession;
     }
 
     @Override
     @GetMapping(path = Constants.LOGOUT_PREFIX + "/{sessionId}")
     public boolean logout(@PathVariable String sessionId){
-        Session session = new Session();
-        session.setSessionId(sessionId);
+        log.info("LoginController: logout method started");
+        long startTime = System.currentTimeMillis();
+        boolean closedSession = sessionsRepository.closeSession(sessionId);
+        log.info("lag of sessionsRepository.closeSession(sessionId) = " + (System.currentTimeMillis() - startTime));
 
-        return sessionsRepository.closeSession(session);
+        return closedSession;
     }
 
     @Override
     @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
     public boolean checkSession(@PathVariable String sessionId){
-        Session session = new Session();
-        session.setSessionId(sessionId);
+        log.info("LoginController: checkSession method started");
+        long startTime = System.currentTimeMillis();
+        boolean checkedSession = sessionsRepository.checkSession(sessionId);
+        log.info("lag of sessionsRepository.checkSession(sessionId) = " + (System.currentTimeMillis() - startTime));
 
-        return sessionsRepository.checkSession(session);
+        return checkedSession;
     }
 }

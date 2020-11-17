@@ -9,7 +9,6 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -32,7 +31,10 @@ public class CredentialsController implements CredentialsControllerSwaggerAnnota
     public boolean create(@RequestBody Credentials credentials){
         log.info("CredentialsController: create method started");
         log.info("credentials=" + credentials.toString());
-        return credentialsRepository.create(credentials);
+        long startTime = System.currentTimeMillis();
+        boolean credentialsCreated = credentialsRepository.create(credentials);
+        log.info("lag of credentialsRepository.create(credentials) = " + (System.currentTimeMillis() - startTime));
+        return credentialsCreated;
     }
 
     @Override
@@ -40,16 +42,25 @@ public class CredentialsController implements CredentialsControllerSwaggerAnnota
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public boolean update(@RequestBody Credentials credentials){
-        return credentialsRepository.update(credentials);
+        log.info("CredentialsController: update method started");
+        log.info("credentials=" + credentials.toString());
+        long startTime = System.currentTimeMillis();
+        boolean credentialsUpdated = credentialsRepository.update(credentials);
+        log.info("lag of credentialsRepository.update(credentials) = " + (System.currentTimeMillis() - startTime));
+        return credentialsUpdated;
     }
 
     @Override
     @DeleteMapping(path = Constants.DELETE_PREFIX + "/{login}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable String login){
+        log.info("CredentialsController: delete method started");
+        log.info("login = " + login);
+        long startTime = System.currentTimeMillis();
         if(!credentialsRepository.delete(login)){
             throw new NotFoundException();
         }
+        log.info("lag of credentialsRepository.delete(login) = " + (System.currentTimeMillis() - startTime));
     }
 
     @Override

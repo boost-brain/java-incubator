@@ -5,13 +5,12 @@ import boost.brain.course.auth.repository.entity.CredentialsEntity;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.users.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,10 +18,12 @@ import java.util.Set;
 @Transactional
 public class CredentialsRepository {
     private final EntityManager entityManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public CredentialsRepository(EntityManager entityManager) {
+    public CredentialsRepository(EntityManager entityManager, PasswordEncoder passwordEncoder) {
         this.entityManager = entityManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Set<UserRole> readUserRoles(String login) {
@@ -50,20 +51,15 @@ public class CredentialsRepository {
             return false;
         }
 
-        credentialsEntity = new CredentialsEntity();
-        credentialsEntity.setUserId(credentials.getLogin());
-        credentialsEntity.setRoles(new HashSet<UserRole>() {{
+        CredentialsEntity newCredentialsEntity = new CredentialsEntity();
+        newCredentialsEntity.setUserId(credentials.getLogin());
+        newCredentialsEntity.setRoles(new HashSet<UserRole>() {{
             add(UserRole.UNACTIVATED);
         }});
+        newCredentialsEntity.setPasswordHash(passwordEncoder.encode(credentials.getPassword()));
+        entityManager.persist(newCredentialsEntity);
 
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            credentialsEntity.setPasswordHash(messageDigest.digest(credentials.getPassword().getBytes()));
-            entityManager.persist(credentialsEntity);
-            return true;
-        } catch (NoSuchAlgorithmException e) {
-            return false;
-        }
+        return true;
     }
 
     public boolean update(Credentials credentials) {
@@ -77,16 +73,11 @@ public class CredentialsRepository {
         if (credentialsEntity == null) {
             return false;
         }
+        credentialsEntity.setPasswordHash(passwordEncoder.encode(credentials.getPassword()));
+        credentialsEntity.setRoles(credentials.getRoles());
+        entityManager.merge(credentialsEntity);
 
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            credentialsEntity.setPasswordHash(messageDigest.digest(credentials.getPassword().getBytes()));
-            credentialsEntity.setRoles(credentials.getRoles());
-            entityManager.merge(credentialsEntity);
-            return true;
-        } catch (NoSuchAlgorithmException e) {
-            return false;
-        }
+        return true;
     }
 
     public boolean delete(String login) {

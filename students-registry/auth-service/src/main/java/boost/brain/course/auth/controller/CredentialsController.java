@@ -30,10 +30,10 @@ public class CredentialsController implements CredentialsControllerSwaggerAnnota
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public boolean create(@RequestBody Credentials credentials){
         log.info("CredentialsController: create method started");
-        log.info("credentials=" + credentials.toString());
-        long startTime = System.currentTimeMillis();
-        boolean credentialsCreated = credentialsRepository.create(credentials);
-        log.info("lag of credentialsRepository.create(credentials) = " + (System.currentTimeMillis() - startTime));
+        log.info("credentials = " + credentials.toString());
+        long startTime = System.nanoTime();
+        Boolean credentialsCreated = credentialsRepository.create(credentials);
+        log.info("lag of credentialsRepository.create(credentials) = " + (System.nanoTime() - startTime) / 1000000);
         return credentialsCreated;
     }
 
@@ -43,10 +43,10 @@ public class CredentialsController implements CredentialsControllerSwaggerAnnota
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public boolean update(@RequestBody Credentials credentials){
         log.info("CredentialsController: update method started");
-        log.info("credentials=" + credentials.toString());
-        long startTime = System.currentTimeMillis();
+        log.info("credentials = " + credentials.toString());
+        long startTime = System.nanoTime();
         boolean credentialsUpdated = credentialsRepository.update(credentials);
-        log.info("lag of credentialsRepository.update(credentials) = " + (System.currentTimeMillis() - startTime));
+        log.info("lag of credentialsRepository.update(credentials) = " + (System.nanoTime() - startTime) / 1000000);
         return credentialsUpdated;
     }
 
@@ -56,11 +56,11 @@ public class CredentialsController implements CredentialsControllerSwaggerAnnota
     public void delete(@PathVariable String login){
         log.info("CredentialsController: delete method started");
         log.info("login = " + login);
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         if(!credentialsRepository.delete(login)){
             throw new NotFoundException();
         }
-        log.info("lag of credentialsRepository.delete(login) = " + (System.currentTimeMillis() - startTime));
+        log.info("lag of credentialsRepository.delete(login) = " + (System.nanoTime() - startTime) / 1000000);
     }
 
     @Override

@@ -28,19 +28,20 @@ public class LoginController implements LoginControllerSwaggerAnnotations {
     public Session login(@RequestBody Credentials credentials){
         log.info("LoginController: login method started");
         log.info("credentials=" + credentials.toString());
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         Session startedSession = sessionsRepository.startSession(credentials);
-        log.info("lag of sessionsRepository.startSession(credentials) = " + (System.currentTimeMillis() - startTime));
+        log.info("lag of sessionsRepository.startSession(credentials) = " + (System.nanoTime() - startTime) / 1000000);
         return startedSession;
     }
 
     @Override
-    @GetMapping(path = Constants.LOGOUT_PREFIX + "/{sessionId}")
+    @GetMapping(path = Constants.LOGOUT_PREFIX + "/{sessionId}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public boolean logout(@PathVariable String sessionId){
         log.info("LoginController: logout method started");
-        long startTime = System.currentTimeMillis();
-        boolean closedSession = sessionsRepository.closeSession(sessionId);
-        log.info("lag of sessionsRepository.closeSession(sessionId) = " + (System.currentTimeMillis() - startTime));
+        long startTime = System.nanoTime();
+        Boolean closedSession = sessionsRepository.closeSession(sessionId);
+        log.info("lag of sessionsRepository.closeSession(sessionId) = " + (System.nanoTime() - startTime) / 1000000);
 
         return closedSession;
     }
@@ -49,9 +50,9 @@ public class LoginController implements LoginControllerSwaggerAnnotations {
     @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
     public boolean checkSession(@PathVariable String sessionId){
         log.info("LoginController: checkSession method started");
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         boolean checkedSession = sessionsRepository.checkSession(sessionId);
-        log.info("lag of sessionsRepository.checkSession(sessionId) = " + (System.currentTimeMillis() - startTime));
+        log.info("lag of sessionsRepository.checkSession(sessionId) = " + (System.nanoTime() - startTime) / 1000000);
 
         return checkedSession;
     }

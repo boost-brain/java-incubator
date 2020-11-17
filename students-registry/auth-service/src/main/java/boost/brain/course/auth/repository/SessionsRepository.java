@@ -63,7 +63,6 @@ public class SessionsRepository {
         }
 
         SessionEntity sessionEntity = new SessionEntity();
-        sessionEntity.setId(UUID.randomUUID().toString());
         sessionEntity.setCredentialsEntity(credentialsEntity);
         sessionEntity.setStartTime(System.currentTimeMillis());
         sessionEntity.setValidTime(Long.MAX_VALUE);

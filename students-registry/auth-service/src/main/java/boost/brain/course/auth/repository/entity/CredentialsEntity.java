@@ -16,7 +16,7 @@ public class CredentialsEntity {
     @Id
     @Email
     private String userId;
-    private byte[] passwordHash;
+    private String passwordHash;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "credentialsEntity")
     @MapKey(name = "id")

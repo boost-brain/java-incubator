@@ -2,9 +2,10 @@ package boost.brain.course;
 
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
+import boost.brain.course.common.auth.SessionCheck;
 import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
+import org.springframework.http.*;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
@@ -47,7 +48,7 @@ public class TestUtil {
                 continue;
             }
 
-            result = isValidCheck(loginUrl, restTemplate, session);
+            result = isValidGetSessionCheck(loginUrl, restTemplate, session);
             if (result == null || !result) {
                 log.severe("Error check");
                 continue;
@@ -59,8 +60,8 @@ public class TestUtil {
                 continue;
             }
 
-            result = isInvalidCheck(loginUrl, restTemplate, session);
-            if (result == null || result) {
+            result = isInvalidGetSessionCheck(loginUrl, restTemplate, session);
+            if (result == null || !result) {
                 log.severe("Error check after logout");
                 continue;
             }
@@ -84,11 +85,23 @@ public class TestUtil {
         System.out.println("lag of delete = " + (System.nanoTime() - startTime) / 1000000);
     }
 
-    private static Boolean isInvalidCheck(String loginUrl, RestTemplate restTemplate, Session session) {
+    private static Boolean isInvalidGetSessionCheck(String loginUrl, RestTemplate restTemplate, Session session) {
         Boolean result;
         long startTime = System.nanoTime();
-        result = restTemplate.getForObject(loginUrl + "/check/" + session.getSessionId(), Boolean.class);
-        System.out.println("lag of invalid check = " + (System.nanoTime() - startTime) / 1000000);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("sessionId", session.getSessionId());
+        try {
+            ResponseEntity<SessionCheck> responseEntity = restTemplate.exchange(
+                    loginUrl + "/check/",
+                    HttpMethod.GET,
+                    new HttpEntity(headers),
+                    SessionCheck.class
+            );
+            result = false;
+        } catch (Exception e) {
+            result = true;
+        }
+        System.out.println("lag of isInvalidGetSessionCheck = " + (System.nanoTime() - startTime) / 1000000);
         return result;
     }
 
@@ -96,22 +109,32 @@ public class TestUtil {
         Boolean result;
         long startTime = System.nanoTime();
         result = restTemplate.getForObject(loginUrl + "/logout/" + session.getSessionId(), Boolean.class);
-        System.out.println("lag of logout = " + (System.nanoTime() - startTime) / 1000000);
+        System.out.println("lag of isLogout = " + (System.nanoTime() - startTime) / 1000000);
         return result;
     }
 
-    private static Boolean isValidCheck(String loginUrl, RestTemplate restTemplate, Session session) {
-        Boolean result;
+    private static Boolean isValidGetSessionCheck(String loginUrl, RestTemplate restTemplate, Session session) {
         long startTime = System.nanoTime();
-        result = restTemplate.getForObject(loginUrl + "/check/" + session.getSessionId(), Boolean.class);
-        System.out.println("lag of check = " + (System.nanoTime() - startTime) / 1000000);
-        return result;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("sessionId", session.getSessionId());
+        ResponseEntity<SessionCheck> responseEntity = restTemplate.exchange(
+                loginUrl + "/check/",
+                HttpMethod.GET,
+                new HttpEntity(headers),
+                SessionCheck.class
+        );
+        SessionCheck sessionCheck = responseEntity.getBody();
+        if (sessionCheck == null || StringUtils.isEmpty(sessionCheck.getEmail()) || sessionCheck.getRoles() == null) {
+            return false;
+        }
+        System.out.println("lag of isValidGetSessionCheck = " + (System.nanoTime() - startTime) / 1000000);
+        return true;
     }
 
     private static Session getNewSession(String loginUrl, RestTemplate restTemplate, HttpEntity<Credentials> credentialsRequest) {
         long startTime = System.nanoTime();
         Session session = restTemplate.postForObject(loginUrl + "/login", credentialsRequest, Session.class);
-        System.out.println("lag of login = " + (System.nanoTime() - startTime) / 1000000);
+        System.out.println("lag of getNewSession = " + (System.nanoTime() - startTime) / 1000000);
         return session;
     }
 
@@ -119,7 +142,7 @@ public class TestUtil {
         Boolean result;
         long startTime = System.nanoTime();
         result = restTemplate.postForObject(credentialsUrl + "/create", credentialsRequest, Boolean.class);
-        System.out.println("lag of create = " + (System.nanoTime() - startTime) / 1000000);
+        System.out.println("lag of isCreate = " + (System.nanoTime() - startTime) / 1000000);
         return result;
     }
 }

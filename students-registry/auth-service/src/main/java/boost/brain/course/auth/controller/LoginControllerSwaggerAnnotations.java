@@ -3,15 +3,13 @@ package boost.brain.course.auth.controller;
 import boost.brain.course.auth.Constants;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
+import boost.brain.course.common.auth.SessionCheck;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Api
 public interface LoginControllerSwaggerAnnotations {
@@ -35,11 +33,11 @@ public interface LoginControllerSwaggerAnnotations {
     @GetMapping(path = Constants.LOGOUT_PREFIX + "/{sessionId}")
     boolean logout(@PathVariable String sessionId);
 
-    @ApiOperation(value = "Проверка дейстьвительности sessionId.")
+    @ApiOperation(value = "Получение email и roles пользователя по sessionId, который передаётся в заголовке запроса.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Если sessionId валидный, то в ответе будет - true. " +
-                    "Иначе false."),
+            @ApiResponse(code = 200, message = "Сессия валидная, выдаётся email и roles пользователя"),
+            @ApiResponse(code = 404, message = "Сессия не найдена или неактивна.")
     })
-    @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
-    boolean checkSession(@PathVariable String sessionId);
+    @GetMapping(path = Constants.CHECK_PREFIX)
+    SessionCheck getCheckSession(@RequestHeader("sessionId") String sessionId);
 }

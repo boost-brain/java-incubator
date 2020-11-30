@@ -1,10 +1,12 @@
 package boost.brain.course.auth.repository;
 
 
+import boost.brain.course.auth.exception.NotFoundException;
 import boost.brain.course.auth.repository.entity.CredentialsEntity;
 import boost.brain.course.auth.repository.entity.SessionEntity;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
+import boost.brain.course.common.auth.SessionCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -29,6 +31,26 @@ public class SessionsRepository {
     public SessionsRepository(EntityManager entityManager, PasswordEncoder passwordEncoder) {
         this.entityManager = entityManager;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public SessionCheck getCheckSession(String sessionId) {
+        SessionCheck result = new SessionCheck();
+
+        if (StringUtils.isEmpty(sessionId)) {
+            throw new NotFoundException();
+        }
+
+        SessionEntity sessionEntity = entityManager.find(SessionEntity.class, sessionId);
+        if (sessionEntity == null || !sessionEntity.isActive()){
+            throw new NotFoundException();
+        }
+
+        CredentialsEntity credentialsEntity = sessionEntity.getCredentialsEntity();
+
+        result.setEmail(credentialsEntity.getUserId());
+        result.setRoles(credentialsEntity.getRoles());
+
+        return result;
     }
 
     public Session startSession(Credentials credentials) {

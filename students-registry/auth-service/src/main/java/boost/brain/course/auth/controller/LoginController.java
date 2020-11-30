@@ -5,8 +5,10 @@ import boost.brain.course.auth.Constants;
 import boost.brain.course.auth.repository.SessionsRepository;
 import boost.brain.course.common.auth.Credentials;
 import boost.brain.course.common.auth.Session;
+import boost.brain.course.common.auth.SessionCheck;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,13 +49,12 @@ public class LoginController implements LoginControllerSwaggerAnnotations {
     }
 
     @Override
-    @GetMapping(path = Constants.CHECK_PREFIX + "/{sessionId}")
-    public boolean checkSession(@PathVariable String sessionId){
-        log.info("LoginController: checkSession method started");
+    @GetMapping(path = Constants.CHECK_PREFIX)
+    public SessionCheck getCheckSession(@RequestHeader("sessionId") String sessionId) {
+        log.info("LoginController: getCheckSession method started");
         long startTime = System.nanoTime();
-        boolean checkedSession = sessionsRepository.checkSession(sessionId);
+        SessionCheck sessionCheck = sessionsRepository.getCheckSession(sessionId);
         log.info("lag of sessionsRepository.checkSession(sessionId) = " + (System.nanoTime() - startTime) / 1000000);
-
-        return checkedSession;
+        return sessionCheck;
     }
 }

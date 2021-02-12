@@ -3,7 +3,7 @@ package boost.brain.course.auth.repository;
 import boost.brain.course.auth.exception.NotFoundException;
 import boost.brain.course.auth.repository.entity.CredentialsEntity;
 import boost.brain.course.common.auth.Credentials;
-import boost.brain.course.common.users.UserRole;
+import boost.brain.course.common.auth.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -74,7 +74,6 @@ public class CredentialsRepository {
             return false;
         }
         credentialsEntity.setPasswordHash(passwordEncoder.encode(credentials.getPassword()));
-        credentialsEntity.setRoles(credentials.getRoles());
         entityManager.merge(credentialsEntity);
 
         return true;
@@ -96,7 +95,7 @@ public class CredentialsRepository {
 
 
     public boolean updateUserRoles(Set<UserRole> roles, String login) {
-        if (StringUtils.isEmpty(login) || roles == null || roles.size() == 0) {
+        if (StringUtils.isEmpty(login) || roles == null || roles.size() == 0 || roles.contains(UserRole.ADMINISTRATOR)) {
             return false;
         }
 

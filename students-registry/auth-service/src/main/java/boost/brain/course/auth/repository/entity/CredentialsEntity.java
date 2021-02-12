@@ -1,6 +1,6 @@
 package boost.brain.course.auth.repository.entity;
 
-import boost.brain.course.common.users.UserRole;
+import boost.brain.course.common.auth.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 

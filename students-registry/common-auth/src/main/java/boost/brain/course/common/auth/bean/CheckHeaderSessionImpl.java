@@ -65,7 +65,7 @@ public class CheckHeaderSessionImpl implements CheckHeaderSession {
 
             ResponseEntity<SessionCheck> responseEntity = restTemplate.exchange(
                     authUrl,
-                    HttpMethod.GET,
+                    HttpMethod.POST,
                     new HttpEntity(headers),
                     SessionCheck.class
             );

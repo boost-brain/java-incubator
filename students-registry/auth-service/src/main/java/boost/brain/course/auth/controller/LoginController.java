@@ -8,7 +8,6 @@ import boost.brain.course.common.auth.Session;
 import boost.brain.course.common.auth.SessionCheck;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,33 +27,30 @@ public class LoginController implements LoginControllerSwaggerAnnotations {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Session login(@RequestBody Credentials credentials){
-        log.info("LoginController: login method started");
-        log.info("credentials=" + credentials.toString());
-        long startTime = System.nanoTime();
+        log.info("LoginController: login method started with credentials.getLogin =" + credentials.getLogin());
+        //Creating new active session for user
         Session startedSession = sessionsRepository.startSession(credentials);
-        log.info("lag of sessionsRepository.startSession(credentials) = " + (System.nanoTime() - startTime) / 1000000);
+        log.info("LoginController: login method completed.");
         return startedSession;
     }
 
     @Override
-    @GetMapping(path = Constants.LOGOUT_PREFIX + "/{sessionId}",
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public boolean logout(@PathVariable String sessionId){
-        log.info("LoginController: logout method started");
-        long startTime = System.nanoTime();
-        Boolean closedSession = sessionsRepository.closeSession(sessionId);
-        log.info("lag of sessionsRepository.closeSession(sessionId) = " + (System.nanoTime() - startTime) / 1000000);
-
+    @PostMapping(path = Constants.LOGOUT_PREFIX)
+    public boolean logout(@RequestHeader("sessionId") String sessionId) {
+        log.info("LoginController: logout method started with sessionId = " + sessionId);
+        //Closing session
+        boolean closedSession = sessionsRepository.closeSession(sessionId);
+        log.info("LoginController: logout method completed.");
         return closedSession;
     }
 
     @Override
-    @GetMapping(path = Constants.CHECK_PREFIX)
+    @PostMapping(path = Constants.CHECK_PREFIX)
     public SessionCheck getCheckSession(@RequestHeader("sessionId") String sessionId) {
-        log.info("LoginController: getCheckSession method started");
-        long startTime = System.nanoTime();
+        log.info("LoginController: getCheckSession method started with sessionId = " + sessionId);
+        //Checking and getting session information
         SessionCheck sessionCheck = sessionsRepository.getCheckSession(sessionId);
-        log.info("lag of sessionsRepository.checkSession(sessionId) = " + (System.nanoTime() - startTime) / 1000000);
+        log.info("LoginController: getCheckSession method completed.");
         return sessionCheck;
     }
 }

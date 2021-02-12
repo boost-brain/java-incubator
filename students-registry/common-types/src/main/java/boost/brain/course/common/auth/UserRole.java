@@ -1,4 +1,4 @@
-package boost.brain.course.common.users;
+package boost.brain.course.common.auth;
 
 public enum UserRole {
 

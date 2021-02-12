@@ -25,13 +25,13 @@ public interface LoginControllerSwaggerAnnotations {
     Session login(@RequestBody Credentials credentials);
 
 
-    @ApiOperation(value = "Выход из системы для пользователя, который залогинен в системе.")
+    @ApiOperation(value = "Выход из системы для пользователя по sessionId, который передаётся в заголовке запроса.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "В случае успешного выхода из системы в ответе будет - true. " +
                     "Если выход неуспешный, то false."),
     })
-    @GetMapping(path = Constants.LOGOUT_PREFIX + "/{sessionId}")
-    boolean logout(@PathVariable String sessionId);
+    @PostMapping(path = Constants.LOGOUT_PREFIX)
+    boolean logout(@RequestHeader("sessionId") String sessionId);
 
     @ApiOperation(value = "Получение email и roles пользователя по sessionId, который передаётся в заголовке запроса.")
     @ApiResponses(value = {

@@ -99,7 +99,7 @@ public class SessionsRepository {
         }
 
         SessionEntity sessionEntity = entityManager.find(SessionEntity.class, sessionId);
-        if(sessionEntity == null) {
+        if(sessionEntity == null || !sessionEntity.isActive()) {
             return false;
         }
 
@@ -107,19 +107,6 @@ public class SessionsRepository {
         entityManager.merge(sessionEntity);
 
         return true;
-    }
-
-    public boolean checkSession(String sessionId){
-        if (StringUtils.isEmpty(sessionId)) {
-            return false;
-        }
-
-        SessionEntity sessionEntity = entityManager.find(SessionEntity.class, sessionId);
-        if(sessionEntity == null){
-            return false;
-        }
-
-        return sessionEntity.isActive();
     }
 
     public Map<String, Long> getEmailsWithStartTimeMap() {
